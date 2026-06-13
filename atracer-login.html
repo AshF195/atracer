@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&T Racer — Sign In</title>
+<!-- Load shared styles before page renders to prevent flicker -->
+<script>const PAGE_ID = 'login';</script>
+<script src="atracer-shared.js"></script>
+<style>
+/* Login-only styles — shared.js handles tokens and reset */
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
+  font-size:14px;line-height:1.5;min-height:100vh;
+  display:flex;flex-direction:column;transition:background 0.2s,color 0.2s}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:52px;background:transparent}
+.logo-text{font-size:20px;font-weight:800;letter-spacing:-0.04em;font-style:italic;color:var(--text)}
+.logo-text .amp{color:var(--accent)}
+.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border2);
+  background:var(--bg2);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:14px;color:var(--text2);transition:all 0.15s}
+.theme-btn:hover{background:var(--bg4);color:var(--text)}
+.bg-art{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-art svg{width:100%;height:100%;opacity:0.04}
+.wrap{flex:1;display:flex;align-items:center;justify-content:center;
+  padding:72px 20px 24px;position:relative;z-index:1}
+.login-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+  padding:40px 36px;width:100%;max-width:380px;box-shadow:var(--shadow);
+  position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),#ff8844,#f0a030)}
+.logo-block{text-align:center;margin-bottom:28px}
+.logo-mark{display:inline-flex;align-items:center;justify-content:center;
+  width:60px;height:60px;border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),#ff6600);
+  margin-bottom:10px;box-shadow:0 4px 16px rgba(232,57,42,0.3)}
+.logo-mark svg{width:34px;height:34px;fill:#fff}
+.logo-block h1{font-size:22px;font-weight:800;letter-spacing:-0.04em;font-style:italic}
+.logo-block h1 .amp{color:var(--accent)}
+.logo-block p{font-size:11px;color:var(--text3);margin-top:3px;
+  text-transform:uppercase;letter-spacing:0.06em}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;color:var(--text2);margin-bottom:5px;
+  text-transform:uppercase;letter-spacing:0.05em}
+.field input{width:100%;padding:12px 14px;border:1px solid var(--border);
+  border-radius:8px;font-size:15px;background:var(--bg3);color:var(--text);
+  font-family:inherit;transition:border-color 0.15s;min-height:48px}
+.field input:focus{outline:none;border-color:var(--accent)}
+.field input::placeholder{color:var(--text3)}
+.error{background:var(--accentbg);border:1px solid var(--accentbdr);
+  border-radius:8px;padding:10px 12px;font-size:13px;color:var(--accent);
+  margin-bottom:14px;display:none;text-align:center}
+.error.show{display:block}
+.submit-btn{width:100%;padding:13px;border:none;border-radius:8px;
+  background:var(--accent);color:#fff;font-size:15px;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:all 0.15s;margin-top:4px}
+.submit-btn:hover{background:var(--accent2);transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(232,57,42,0.3)}
+.beta-note{text-align:center;font-size:11px;color:var(--text3);
+  margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+.beta-note strong{color:var(--text2)}
+.footer{position:relative;z-index:1;text-align:center;
+  padding:14px;font-size:11px;color:var(--text3)}
+.loading{position:fixed;inset:0;z-index:100;background:var(--bg);
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px}
+.loading.show{display:flex}
+.loading-logo{font-size:26px;font-weight:800;letter-spacing:-0.04em;font-style:italic}
+.loading-logo .amp{color:var(--accent)}
+.loading-bar-wrap{width:180px;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.loading-bar{height:100%;background:linear-gradient(90deg,var(--accent),#ff8844);
+  border-radius:2px;width:0;transition:width 0.04s}
+.loading-msg{font-size:12px;color:var(--text3)}
+@media(max-width:480px){
+  .login-card{padding:28px 20px;border-radius:14px}
+  .wrap{padding:64px 14px 20px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-art">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <path d="M80 720 Q180 620 320 640 Q480 670 520 510 Q560 350 720 295 Q870 245 920 140 Q960 70 1120 90"
+      stroke="currentColor" stroke-width="44" fill="none" stroke-linecap="round"/>
+    <path d="M80 720 Q180 600 320 620 Q480 650 520 490 Q560 330 720 275 Q870 225 920 120 Q960 50 1120 70"
+      stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="18 12" opacity="0.4"/>
+    <circle cx="320" cy="630" r="5" fill="currentColor" opacity="0.5"/>
+    <circle cx="520" cy="500" r="5" fill="currentColor" opacity="0.5"/>
+    <circle cx="720" cy="285" r="5" fill="currentColor" opacity="0.5"/>
+    <circle cx="920" cy="130" r="5" fill="currentColor" opacity="0.5"/>
+    <text x="332" y="616" font-size="10" fill="currentColor" opacity="0.45">T1</text>
+    <text x="532" y="486" font-size="10" fill="currentColor" opacity="0.45">T2</text>
+    <text x="732" y="271" font-size="10" fill="currentColor" opacity="0.45">T3</text>
+    <text x="932" y="116" font-size="10" fill="currentColor" opacity="0.45">T4</text>
+  </svg>
+</div>
+
+<div class="topbar">
+  <div class="logo-text">A<span class="amp">&amp;</span>T Racer</div>
+  <button class="theme-btn" id="themeBtn" onclick="AT.toggleTheme()">🌙</button>
+</div>
+
+<div class="wrap">
+  <div class="login-card">
+    <div class="logo-block">
+      <div class="logo-mark">
+        <svg viewBox="0 0 34 34">
+          <circle cx="17" cy="17" r="15" stroke="#fff" stroke-width="2.5" fill="none"/>
+          <circle cx="17" cy="17" r="5" fill="#fff"/>
+          <line x1="17" y1="2" x2="17" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="17" y1="25" x2="17" y2="32" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="2" y1="17" x2="9" y2="17" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="25" y1="17" x2="32" y2="17" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1>A<span class="amp">&amp;</span>T Racer</h1>
+      <p>Beta Access</p>
+    </div>
+    <div class="error" id="errMsg">Incorrect username or password</div>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="uname" placeholder="Enter username" autocomplete="username"
+        onkeydown="if(event.key==='Enter')document.getElementById('pw').focus()">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="pw" placeholder="Enter password" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="submit-btn" onclick="doLogin()">Sign in →</button>
+    <div class="beta-note"><strong>Beta build</strong> — contact the team for access</div>
+  </div>
+</div>
+
+<div class="footer">A&amp;T Racer © 2026 · Beta v0.1</div>
+
+<div class="loading" id="loading">
+  <div class="loading-logo">A<span class="amp">&amp;</span>T Racer</div>
+  <div class="loading-bar-wrap"><div class="loading-bar" id="loadBar"></div></div>
+  <div class="loading-msg" id="loadMsg">Starting engine...</div>
+</div>
+
+<!-- Page-specific JS -->
+<script>
+const ACCOUNTS = [
+  {username:'User1',password:'Pass1',name:'Ashley Eyre',   nationality:'Moldovan',     flag:'🇲🇩',initials:'AE'},
+  {username:'User2',password:'Pass2',name:'Thomas Eyre',   nationality:'British',      flag:'🇬🇧',initials:'TE'},
+  {username:'User3',password:'Pass3',name:'Kieren Winter', nationality:'San Marinese', flag:'🇸🇲',initials:'KW'},
+  {username:'User4',password:'Pass4',name:'Elliot Orme',   nationality:'British',      flag:'🇬🇧',initials:'EO'},
+  {username:'User5',password:'Pass5',name:'Craig Charles', nationality:'British',      flag:'🇬🇧',initials:'CC'},
+];
+const MSGS = ['Starting engine...','Loading carset data...','Preparing the grid...','Checking tyre allocations...','Ready to race...'];
+
+function doLogin(){
+  const u = document.getElementById('uname').value.trim();
+  const p = document.getElementById('pw').value;
+  const acct = ACCOUNTS.find(a => a.username.toLowerCase()===u.toLowerCase() && a.password===p);
+  if(!acct){
+    document.getElementById('errMsg').classList.add('show');
+    document.getElementById('pw').value='';
+    document.getElementById('pw').focus();
+    return;
+  }
+  document.getElementById('errMsg').classList.remove('show');
+  sessionStorage.setItem('atracer_user', JSON.stringify(acct));
+  const ov=document.getElementById('loading');
+  const bar=document.getElementById('loadBar');
+  const msg=document.getElementById('loadMsg');
+  ov.classList.add('show');
+  let pct=0, mi=0;
+  const iv=setInterval(()=>{
+    pct+=2; bar.style.width=pct+'%';
+    if(pct%20===0 && mi<MSGS.length-1){ mi++; msg.textContent=MSGS[mi]; }
+    if(pct>=100){
+      clearInterval(iv);
+      msg.textContent='Welcome, '+acct.name+'!';
+      setTimeout(()=>window.location.href='atracer-home.html', 500);
+    }
+  }, 28);
+}
+document.getElementById('uname').focus();
+</script>
+</body>
+</html>
