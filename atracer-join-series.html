@@ -491,6 +491,7 @@ function initCarset(data) {
     data.cars.forEach(function(car) {
       if (car.imgFile) {
         car.imgUrl = data.assetBase + '/' + car.imgFile;
+        console.log('Car image URL:', car.model, '→', car.imgUrl);
       }
     });
   }
