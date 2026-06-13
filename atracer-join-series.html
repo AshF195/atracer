@@ -439,12 +439,14 @@ var SERIES = {
        {id:'jazz_l3',name:'Slate Grey',  bg:'linear-gradient(135deg,#555,#888)'},
      ]},
     {id:'fiat',   model:'Fiat 500',            colour:'#20a040', status:'available', perf:59,rel:66,spd:58,
+     imgUrl:'https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge/cars/fiat500-yellow.png',
      liveries:[
        {id:'fiat_l1',name:'Italian Green',bg:'linear-gradient(135deg,#006600,#00aa00)'},
        {id:'fiat_l2',name:'Vintage Cream',bg:'linear-gradient(135deg,#d4c06a,#e8d880)'},
        {id:'fiat_l3',name:'Rosso Corsa', bg:'linear-gradient(135deg,#cc0000,#ff0000)'},
      ]},
     {id:'yaris',  model:'Toyota Yaris',        colour:'#e06010', status:'available', perf:60,rel:76,spd:59,
+     imgUrl:'https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge/cars/toyotayaris_yellow.png',
      liveries:[
        {id:'yar_l1',name:'Gazoo Orange', bg:'linear-gradient(135deg,#cc4400,#ff6600)'},
        {id:'yar_l2',name:'Alpine White', bg:'linear-gradient(135deg,#dddddd,#ffffff)'},
@@ -476,7 +478,10 @@ function fmtTime(s) { return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
 
 // ── RENDER GRID ──
 function makeRow(car, section) {
-  var img = '<div class="car-image-panel"><div class="car-placeholder" style="background:'+car.colour+'22;border-radius:8px">'+carEmoji(car.model)+'</div></div>';
+  var imgInner = car.imgUrl
+    ? '<img src="'+car.imgUrl+'" style="width:96px;height:54px;object-fit:contain" alt="'+car.model+'">'
+    : '<div class="car-placeholder" style="background:'+car.colour+'22;border-radius:8px">'+carEmoji(car.model)+'</div>';
+  var img = '<div class="car-image-panel">'+imgInner+'</div>';
 
   if (section === 'vacancy') {
     var d = car.team.drivers[0];
