@@ -211,331 +211,87 @@ document.addEventListener('DOMContentLoaded',function(){
   if(window.PAGE_ID!=='login') injectNav();
   AT.init();
 });</script>
-<style>.seasons-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}.seasons-header h1{font-size:21px;font-weight:700;margin-bottom:3px}.seasons-header p{font-size:13px;color:var(--text2)}.season-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow2);margin-bottom:12px;cursor:pointer;transition:border-color 0.15s}.season-card:hover{border-color:var(--border2)}.season-card-top{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border)}.season-stripe{width:4px;align-self:stretch;border-radius:2px;flex-shrink:0}.season-card-meta{flex:1;min-width:0}.season-card-meta h2{font-size:15px;font-weight:600;margin-bottom:3px}.season-card-meta .sub{font-size:12px;color:var(--text2)}.season-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}.season-pos{font-size:26px;font-weight:700;line-height:1}.season-pos-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em}.session-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border)}.session-strip-item{padding:9px 12px;border-right:1px solid var(--border);font-size:12px}.session-strip-item:last-child{border-right:none}.ssname{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px}.ssval{font-size:12px;font-weight:500;color:var(--text2)}.ssval.live{color:var(--green)}.ssval.next{color:var(--accent)}.ssval.done{color:var(--text3)}.season-card-bottom{padding:10px 18px;display:flex;align-items:center;gap:10px}.mini-pos{width:22px;height:22px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2)}.mini-pos.you{background:var(--accentbg);border-color:var(--accentbdr);color:var(--accent)}.season-detail{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow2);margin-bottom:12px;overflow:hidden}.season-detail.open{display:block}.detail-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap}.detail-header h2{font-size:15px;font-weight:600;flex:1}.detail-body{padding:16px}.detail-grid{display:grid;grid-template-columns:1fr 280px;gap:14px;align-items:start}.session-timeline{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}.tl-item{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg3)}.tl-item.live{border-color:var(--greenbdr);background:var(--greenbg)}.tl-item.next{border-color:var(--accentbdr);background:var(--accentbg)}.tl-item.done{opacity:0.6}.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--border2)}.tl-item.live .tl-dot{background:var(--green);box-shadow:0 0 6px var(--green)}.tl-item.next .tl-dot{background:var(--accent)}.tl-name{font-size:13px;font-weight:500;flex:1}.tl-item.done .tl-name{color:var(--text3)}.tl-time{font-size:12px;color:var(--text2);text-align:right;white-space:nowrap}.tl-time strong{display:block;font-size:12px}.tl-item.live .tl-time strong{color:var(--green)}.tl-item.next .tl-time strong{color:var(--accent)}.countdown-wrap{text-align:center;padding:12px;border-top:1px solid var(--border);margin-top:12px}.cd-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}.countdown-row{display:flex;gap:8px;justify-content:center}.cd-block{text-align:center}.cd-num{font-size:22px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1;display:block}.cd-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em}.cd-sep{font-size:20px;color:var(--border2);font-weight:300;align-self:flex-start;padding-top:2px}.perf-stat{margin-bottom:6px}.perf-stat-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:3px}.perf-bar-wrap{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}.perf-bar{height:100%;border-radius:2px}.standings-table{width:100%;border-collapse:collapse;font-size:13px}.standings-table th{text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600}.standings-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:middle}.standings-table tr:last-child td{border-bottom:none}.standings-table tr.you-row td{background:var(--accentbg)}.car-chip{display:inline-flex;align-items:center;justify-content:center;width:26px;height:15px;border-radius:3px;font-size:9px;font-weight:700;color:#fff}.empty-state{text-align:center;padding:60px 24px;color:var(--text3)}.empty-icon{font-size:48px;margin-bottom:14px;opacity:0.4}.empty-state h2{font-size:18px;font-weight:600;color:var(--text2);margin-bottom:8px}.empty-state p{font-size:13px;margin-bottom:20px}@media(max-width:700px){.detail-grid{grid-template-columns:1fr}.session-strip{grid-template-columns:1fr 1fr}}</style>
+<style>.ms-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}.ms-header h1{font-size:21px;font-weight:700;margin-bottom:3px}.ms-header p{font-size:13px;color:var(--text2)}.season-card{display:flex;align-items:stretch;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow2);margin-bottom:10px;text-decoration:none;color:var(--text);transition:border-color 0.15s,box-shadow 0.15s}.season-card:hover{border-color:var(--border2);box-shadow:var(--shadow)}.sc-stripe{width:5px;flex-shrink:0}.sc-body{flex:1;padding:14px 16px;min-width:0}.sc-series{font-size:15px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.sc-sub{font-size:12px;color:var(--text2);margin-bottom:8px}.sc-pills{display:flex;gap:6px;flex-wrap:wrap}.sc-stats{padding:14px 16px;border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:flex-end;gap:6px;flex-shrink:0;min-width:140px}.sc-pos{font-size:26px;font-weight:700;line-height:1}.sc-pos-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em}.sc-pts{font-size:12px;color:var(--text2)}.sc-timer{font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums}.sc-timer.urgent{color:var(--accent);font-weight:600}.empty-state{text-align:center;padding:60px 24px}.empty-state .icon{font-size:44px;margin-bottom:12px;opacity:0.4}.empty-state h2{font-size:17px;font-weight:600;color:var(--text2);margin-bottom:6px}.empty-state p{font-size:13px;color:var(--text3);margin-bottom:18px}</style>
 </head>
 <body>
-<div class="page">
-  <div class="seasons-header">
+<div class="page" style="max-width:800px">
+  <div class="ms-header">
     <div>
       <h1>My Seasons</h1>
-      <p id="seasonsSubtitle">Loading your seasons...</p>
+      <p id="msSubtitle">Loading...</p>
     </div>
     <a href="atracer-join.html" class="btn btn-accent">+ Join a season</a>
   </div>
   <div id="seasonsList"></div>
 </div>
 <script>
+var SEASONS = [{"id": "ccc-s1", "name": "City Car Challenge", "season": "Season 1", "colour": "#7030c0", "queue": "classic", "round": 4, "totalRounds": 8, "car": "Citroën C3 Cactus", "team": "Sabelt Racing", "pos": 4, "pts": 142, "posColour": "var(--amber)", "activeSession": "Qualifying open", "nextUpdate": 15737, "href": "atracer-weekend.html", "liveBadge": true}];
 
-// ── SEASON DATA ──
-// In production this comes from the backend.
-// For beta, we read from sessionStorage (written by atracer-join-series.html on confirmJoin).
-// Also includes a hardcoded demo season so the page isn't empty during testing.
+var timers = {};
 
-var DEMO_SEASONS = [
-  {
-    id: 'ccc-s1',
-    name: 'City Car Challenge',
-    season: 'Season 1',
-    colour: '#7030c0',
-    queueType: 'classic',
-    car: 'Citro\u00EBn C3 Cactus',
-    carColour: '#7030c0',
-    carChip: 'C3',
-    team: 'Sabelt Racing',
-    round: 4,
-    totalRounds: 8,
-    championship: { pos: 4, pts: 142, gap: '-18', leader: 'Marcus Holt' },
-    activeSession: {
-      name: 'Practice',
-      type: 'live',         // 'live' (interactive), 'simulating', 'done', 'scheduled'
-      closesIn: (4 * 3600) + (22 * 60) + 17,
-      action: 'Submit setup runs',
-      link: '#'             // will be atracer-practice.html
-    },
-    sessions: [
-      { name: 'Practice',  type: 'live',      result: null,    date: 'Today',     action: 'Submit now' },
-      { name: 'Qualifying',type: 'scheduled', result: null,    date: 'Mon 10 Jun', action: null },
-      { name: 'Warm-up',   type: 'scheduled', result: null,    date: 'Tue 11 Jun', action: null },
-      { name: 'Race',      type: 'scheduled', result: null,    date: 'Wed 12 Jun', action: null },
-    ],
-    standings: [
-      { pos:1, name:'Marcus Holt',    nat:'British',  team:'Holt Motorsport', chip:'FI', chipCol:'#e03030', pts:160, gap:'\u2014' },
-      { pos:2, name:'Jana Kovar',     nat:'Czech',    team:'Kovar Racing',    chip:'PO', chipCol:'#3060d0', pts:155, gap:'\u22125' },
-      { pos:3, name:'Pierre Gauthier',nat:'French',   team:'Gauthier Sport',  chip:'CL', chipCol:'#d0b000', pts:148, gap:'\u221212' },
-      { pos:4, name:'YOU',            nat:'',         team:'Sabelt Racing',   chip:'C3', chipCol:'#7030c0', pts:142, gap:'\u221218', you:true },
-      { pos:5, name:'Luca Ferrini',   nat:'Italian',  team:'Ferrini Corse',   chip:'F5', chipCol:'#20a040', pts:138, gap:'\u221222' },
-    ],
-    circuit: { name:'Lakeside Park', type:'Street circuit', laps:32, length:'3.4 km', weather:'\u2600\uFE0F Dry', safetycar:'High (42%)' }
-  }
-];
-
-function loadSeasons() {
-  // Check for any newly joined seasons from sessionStorage
-  var joined = [];
-  try {
-    var raw = sessionStorage.getItem('atracer_joined_seasons');
-    if (raw) joined = JSON.parse(raw);
-  } catch(e) {}
-
-  // Merge demo + joined (backend will replace this)
-  var all = DEMO_SEASONS.slice();
-
-  // For each joined season not already in demo, add a placeholder card
-  joined.forEach(function(j) {
-    if (!all.find(function(s){ return s.id === j.id; })) {
-      all.push(j);
-    }
-  });
-
-  render(all);
+function fmtTime(s){
+  if(s<=0) return "Starting soon";
+  var h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+  var pad=function(n){return String(n).padStart(2,"0");};
+  if(h>0) return pad(h)+"h "+pad(m)+"m";
+  if(m>0) return pad(m)+"m "+pad(sec)+"s";
+  return pad(sec)+"s";
 }
 
-function render(seasons) {
-  var el = document.getElementById('seasonsList');
-  var sub = document.getElementById('seasonsSubtitle');
-
-  if (!seasons.length) {
-    sub.textContent = 'You haven\'t joined any seasons yet';
-    el.innerHTML = '<div class="empty-state">'
-      + '<div class="empty-icon">🏁</div>'
-      + '<h2>No seasons yet</h2>'
-      + '<p>Join a championship to get started. You can be active in up to 4 seasons at once.</p>'
-      + '<a href="atracer-join.html" class="btn btn-accent">Browse available series \u2192</a>'
-      + '</div>';
+function render(){
+  var el = document.getElementById("seasonsList");
+  var sub = document.getElementById("msSubtitle");
+  if(!SEASONS.length){
+    sub.textContent = "You haven't joined any seasons yet";
+    el.innerHTML = '<div class="empty-state"><div class="icon">&#127937;</div>'
+      +'<h2>No seasons yet</h2>'
+      +'<p>Join a championship to get started. You can be active in up to 4 seasons at once.</p>'
+      +'<a href="atracer-join.html" class="btn btn-accent">Browse available series &rarr;</a>'
+      +'</div>';
     return;
   }
+  sub.textContent = "Active in "+SEASONS.length+" season"+(SEASONS.length!==1?"s":"")+" &mdash; click any card to open the race weekend";
+  el.innerHTML = SEASONS.map(function(s){
+    var qBadge = s.queue==="classic"
+      ? '<span class="badge badge-classic">Classic queue</span>'
+      : '<span class="badge badge-fast">Fast queue</span>';
+    var liveBadge = s.liveBadge
+      ? '<span class="badge badge-live">&#9679; '+s.activeSession+'</span>'
+      : '<span class="badge badge-sched">'+s.activeSession+'</span>';
+    return '<a class="season-card" href="'+s.href+'">'
+      +'<div class="sc-stripe" style="background:'+s.colour+'"></div>'
+      +'<div class="sc-body">'
+        +'<div class="sc-series">'+s.name
+          +' <span style="font-size:12px;color:var(--text3);font-weight:400">'+s.season+'</span></div>'
+        +'<div class="sc-sub">Round '+s.round+' of '+s.totalRounds
+          +' &middot; '+s.car+' &middot; '+s.team+'</div>'
+        +'<div class="sc-pills">'+qBadge+' '+liveBadge+'</div>'
+      +'</div>'
+      +'<div class="sc-stats">'
+        +'<div class="sc-pos" style="color:'+s.posColour+'">P'+s.pos+'</div>'
+        +'<div class="sc-pos-lbl">Championship</div>'
+        +'<div class="sc-pts">'+s.pts+' pts</div>'
+        +'<div class="sc-timer'+( s.nextUpdate<3600?" urgent":"")+'" id="timer-'+s.id+'">'
+          +'Next update: '+fmtTime(s.nextUpdate)
+        +'</div>'
+      +'</div>'
+    +'</a>';
+  }).join("");
 
-  sub.textContent = 'Active in ' + seasons.length + ' season' + (seasons.length > 1 ? 's' : '') + ' \u2014 click any card to expand';
-  el.innerHTML = seasons.map(function(s) { return makeCard(s); }).join('');
-
-  // Start countdowns
-  seasons.forEach(function(s) {
-    if (s.activeSession && s.activeSession.closesIn > 0) {
-      startCountdown(s.id, s.activeSession.closesIn);
-    }
+  // start countdown timers
+  SEASONS.forEach(function(s){
+    if(timers[s.id]) clearInterval(timers[s.id]);
+    timers[s.id] = setInterval(function(){
+      if(s.nextUpdate > 0) s.nextUpdate--;
+      var el = document.getElementById("timer-"+s.id);
+      if(!el) return;
+      el.textContent = "Next update: "+fmtTime(s.nextUpdate);
+      el.className = "sc-timer"+(s.nextUpdate<3600?" urgent":"");
+    }, 1000);
   });
 }
 
-function makeCard(s) {
-  var active = s.activeSession;
-
-  // Session strip — always 4 sessions
-  var stripHtml = s.sessions.map(function(sess) {
-    var cls = sess.type === 'live' ? 'live' : sess.type === 'done' ? 'done' : sess.type === 'next' ? 'next' : '';
-    var val = sess.type === 'live'
-      ? '<span class="ssval live">\u25CF Open \u2014 ' + sess.action + '</span>'
-      : sess.type === 'done'
-        ? '<span class="ssval done">\u2713 ' + (sess.result || 'Done') + '</span>'
-        : '<span class="ssval">' + sess.date + '</span>';
-    return '<div class="session-strip-item"><div class="ssname">' + sess.name + '</div>' + val + '</div>';
-  }).join('');
-
-  // Championship mini positions
-  var pos = s.championship.pos;
-  var posHtml = '';
-  for (var i = 1; i <= 5; i++) {
-    posHtml += '<div class="mini-pos' + (i === pos ? ' you' : '') + '">' + i + '</div>';
-  }
-
-  // Active session badge
-  var activeBadge = active
-    ? (active.type === 'live'
-        ? '<span class="badge badge-live">\u25CF ' + active.name + ' open</span>'
-        : '<span class="badge badge-sched">' + active.name + '</span>')
-    : '<span class="badge badge-done">Between rounds</span>';
-
-  return '<div class="season-card" onclick="toggleDetail(\'' + s.id + '\')">'
-    + '<div class="season-card-top">'
-      + '<div class="season-stripe" style="background:' + s.colour + '"></div>'
-      + '<span style="font-size:20px">🏙️</span>'
-      + '<div class="season-card-meta">'
-        + '<h2>' + s.name + ' \u2014 ' + s.season + '</h2>'
-        + '<div class="sub">'
-          + '<span class="badge badge-' + s.queueType + '" style="margin-right:6px">'
-            + (s.queueType === 'classic' ? 'Classic queue' : 'Fast queue')
-          + '</span>'
-          + s.car + ' \u00B7 ' + s.team + ' \u00B7 Round ' + s.round + ' of ' + s.totalRounds
-        + '</div>'
-      + '</div>'
-      + '<div class="season-card-right">'
-        + '<div class="season-pos" style="color:var(--amber)">P' + s.championship.pos + '</div>'
-        + '<div class="season-pos-label">Championship</div>'
-        + activeBadge
-      + '</div>'
-    + '</div>'
-    + '<div class="session-strip">' + stripHtml + '</div>'
-    + '<div class="season-card-bottom">'
-      + '<div style="display:flex;align-items:center;gap:6px;flex:1">'
-        + posHtml
-        + '<span style="font-size:11px;color:var(--text3);margin-left:4px">'
-          + s.championship.pts + ' pts \u00B7 ' + s.championship.gap + ' from leader'
-        + '</span>'
-      + '</div>'
-      + '<span id="arrow-' + s.id + '" style="font-size:12px;color:var(--text3)">\u25BC Expand</span>'
-    + '</div>'
-  + '</div>'
-  + makeDetail(s);
-}
-
-function makeDetail(s) {
-  var active = s.activeSession;
-  var you = AT.user ? AT.user.name : 'You';
-
-  // Timeline
-  var tlHtml = s.sessions.map(function(sess) {
-    var cls = sess.type === 'live' ? ' live' : sess.type === 'done' ? ' done' : sess.type === 'next' ? ' next' : '';
-    var dotCls = sess.type === 'live' ? ' pulse' : '';
-    var badgeHtml = sess.type === 'live'
-      ? '<span class="badge badge-live">Open now</span>'
-      : sess.type === 'done'
-        ? '<span class="badge badge-done">Done</span>'
-        : sess.type === 'next'
-          ? '<span class="badge badge-next">Up next</span>'
-          : '<span class="badge badge-sched">Scheduled</span>';
-    var timeHtml = sess.type === 'live' && sess.action
-      ? '<div class="tl-time"><strong>' + sess.action + '</strong>' + sess.date + '</div>'
-      : '<div class="tl-time"><strong style="color:var(--text2)">' + sess.date + '</strong></div>';
-    return '<div class="tl-item' + cls + '">'
-      + '<div class="tl-dot' + dotCls + '"></div>'
-      + '<div class="tl-name">' + sess.name + '</div>'
-      + badgeHtml
-      + timeHtml
-    + '</div>';
-  }).join('');
-
-  // Countdown
-  var countdownHtml = (active && active.closesIn > 0)
-    ? '<div class="countdown-wrap">'
-        + '<div class="cd-label">' + active.name + ' closes in</div>'
-        + '<div class="countdown-row">'
-          + '<div class="cd-block"><span class="cd-num" id="cd-h-' + s.id + '">00</span><span class="cd-lbl">hrs</span></div>'
-          + '<div class="cd-sep">:</div>'
-          + '<div class="cd-block"><span class="cd-num" id="cd-m-' + s.id + '">00</span><span class="cd-lbl">min</span></div>'
-          + '<div class="cd-sep">:</div>'
-          + '<div class="cd-block"><span class="cd-num" id="cd-s-' + s.id + '">00</span><span class="cd-lbl">sec</span></div>'
-        + '</div>'
-      + '</div>'
-    : '';
-
-  // Main action button
-  var actionBtn = active && active.type === 'live'
-    ? '<a href="' + (active.link || '#') + '" class="btn btn-accent btn-full" style="margin-top:12px">'
-        + 'Go to ' + active.name.toLowerCase() + ' \u2192'
-      + '</a>'
-    : '';
-
-  // Standings
-  var standingsHtml = s.standings.map(function(r) {
-    var isYou = r.you;
-    var nameCell = isYou
-      ? '<strong>' + you + '</strong> <span style="font-size:11px;color:var(--accent)">(you)</span>'
-        + '<div style="font-size:11px;color:var(--text3)">' + r.team + '</div>'
-      : r.name + '<div style="font-size:11px;color:var(--text3)">' + AT.flagImg(r.nat, 14) + ' ' + r.team + '</div>';
-    return '<tr' + (isYou ? ' class="you-row"' : '') + '>'
-      + '<td' + (isYou ? ' style="color:var(--accent);font-weight:700"' : '') + '>' + r.pos + '</td>'
-      + '<td>' + nameCell + '</td>'
-      + '<td><span class="car-chip" style="background:' + r.chipCol + '">' + r.chip + '</span></td>'
-      + '<td><strong' + (isYou ? ' style="color:var(--accent)"' : '') + '>' + r.pts + '</strong></td>'
-      + '<td style="color:var(--text3)">' + r.gap + '</td>'
-    + '</tr>';
-  }).join('');
-
-  // Circuit info
-  var c = s.circuit;
-  var circuitHtml = '<div class="card" style="margin-bottom:10px">'
-    + '<div class="card-title">Round ' + s.round + ' \u2014 ' + c.name + '</div>'
-    + '<div style="background:var(--bg3);border:1px dashed var(--border2);border-radius:6px;'
-      + 'height:80px;display:flex;align-items:center;justify-content:center;'
-      + 'font-size:12px;color:var(--text3);margin-bottom:12px">Circuit map coming</div>'
-    + '<div style="font-size:12px;display:flex;flex-direction:column;gap:5px">'
-      + '<div style="display:flex;justify-content:space-between"><span style="color:var(--text2)">Type</span><strong>' + c.type + '</strong></div>'
-      + '<div style="display:flex;justify-content:space-between"><span style="color:var(--text2)">Laps</span><strong>' + c.laps + '</strong></div>'
-      + '<div style="display:flex;justify-content:space-between"><span style="color:var(--text2)">Lap length</span><strong>' + c.length + '</strong></div>'
-      + '<div style="display:flex;justify-content:space-between"><span style="color:var(--text2)">Weather</span><strong>' + c.weather + '</strong></div>'
-      + '<div style="display:flex;justify-content:space-between"><span style="color:var(--text2)">Safety car</span><strong>' + c.safetycar + '</strong></div>'
-    + '</div>'
-  + '</div>';
-
-  // Car panel
-  var carHtml = '<div class="card">'
-    + '<div class="card-title">Your car \u2014 ' + s.car + '</div>'
-    + '<div style="background:var(--bg3);border:1px dashed var(--border2);border-radius:6px;'
-      + 'height:56px;display:flex;align-items:center;justify-content:center;'
-      + 'font-size:12px;color:var(--text3);margin-bottom:10px">Livery upload coming</div>'
-    + '<div class="perf-stat"><div class="perf-stat-label"><span>Performance</span><span>64</span></div>'
-      + '<div class="perf-bar-wrap"><div class="perf-bar" style="width:64%;background:var(--blue)"></div></div></div>'
-    + '<div class="perf-stat"><div class="perf-stat-label"><span>Reliability</span><span>70</span></div>'
-      + '<div class="perf-bar-wrap"><div class="perf-bar" style="width:70%;background:var(--green)"></div></div></div>'
-    + '<div class="perf-stat"><div class="perf-stat-label"><span>Top speed</span><span>60</span></div>'
-      + '<div class="perf-bar-wrap"><div class="perf-bar" style="width:60%;background:var(--amber)"></div></div></div>'
-  + '</div>';
-
-  return '<div class="season-detail" id="detail-' + s.id + '">'
-    + '<div class="detail-header">'
-      + '<div class="season-stripe" style="background:' + s.colour + ';width:4px;height:24px;border-radius:2px"></div>'
-      + '<h2>' + s.name + ' S1 \u2014 Round ' + s.round + ' \u00B7 ' + s.circuit.name + '</h2>'
-      + (active && active.type === 'live'
-          ? '<a href="' + (active.link||'#') + '" class="btn btn-accent" onclick="event.stopPropagation()">Go to ' + active.name.toLowerCase() + ' \u2192</a>'
-          : '')
-    + '</div>'
-    + '<div class="detail-body">'
-      + '<div class="detail-grid">'
-        + '<div>'
-          + '<div class="card" style="margin-bottom:12px">'
-            + '<div class="card-title">Weekend sessions</div>'
-            + '<div class="session-timeline">' + tlHtml + '</div>'
-            + countdownHtml
-            + actionBtn
-          + '</div>'
-          + '<div class="card">'
-            + '<div class="card-title">Championship standings</div>'
-            + '<table class="standings-table">'
-              + '<thead><tr><th>#</th><th>Driver &amp; Team</th><th>Car</th><th>Pts</th><th>Gap</th></tr></thead>'
-              + '<tbody>' + standingsHtml + '</tbody>'
-            + '</table>'
-          + '</div>'
-        + '</div>'
-        + '<div>' + circuitHtml + carHtml + '</div>'
-      + '</div>'
-    + '</div>'
-  + '</div>';
-}
-
-// ── TOGGLE DETAIL ──
-function toggleDetail(id) {
-  var el = document.getElementById('detail-' + id);
-  var arrow = document.getElementById('arrow-' + id);
-  var isOpen = el.classList.contains('open');
-  document.querySelectorAll('.season-detail').forEach(function(d) { d.classList.remove('open'); });
-  document.querySelectorAll('[id^="arrow-"]').forEach(function(a) { a.textContent = '\u25BC Expand'; });
-  if (!isOpen) {
-    el.classList.add('open');
-    if (arrow) arrow.textContent = '\u25B2 Collapse';
-  }
-}
-
-// ── COUNTDOWN ──
-function startCountdown(id, totalSecs) {
-  var secs = totalSecs;
-  function tick() {
-    if (secs <= 0) return;
-    secs--;
-    var h = Math.floor(secs / 3600);
-    var m = Math.floor((secs % 3600) / 60);
-    var s = secs % 60;
-    var pad = function(n) { return String(n).padStart(2, '0'); };
-    var hEl = document.getElementById('cd-h-' + id);
-    var mEl = document.getElementById('cd-m-' + id);
-    var sEl = document.getElementById('cd-s-' + id);
-    if (hEl) hEl.textContent = pad(h);
-    if (mEl) mEl.textContent = pad(m);
-    if (sEl) sEl.textContent = pad(s);
-  }
-  tick();
-  setInterval(tick, 1000);
-}
-
-document.addEventListener('DOMContentLoaded', function() { loadSeasons(); });
+document.addEventListener("DOMContentLoaded", function(){ render(); });
 
 </script>
 </body>
