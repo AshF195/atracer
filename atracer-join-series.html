@@ -407,56 +407,96 @@ var NATIONALITIES = ['Argentine','Australian','Austrian','Bahraini','Belgian','B
   'South African','Spanish','Swedish','Swiss','Thai','Turkish','Ukrainian','Uruguayan',
   'Venezuelan','Vietnamese'].sort();
 
-var SERIES = {
-  id:'CCC-S1-0042',
-  cars:[
+// ── CARSET LOADING ──
+// To load from the real JSON file, set CARSET_URL to the raw GitHub URL
+// and remove the CARSET_HARDCODED block below.
+// e.g. var CARSET_URL = 'https://raw.githubusercontent.com/AshF195/atracer/main/carsets/ccc.json';
+var CARSET_URL = null; // null = use hardcoded data below
+
+// ── CARSET DATA (hardcoded for beta testing) ──
+// This mirrors the structure the carset JSON will use.
+// When the JSON is ready, remove this and set CARSET_URL above.
+var CARSET_HARDCODED = {
+  id:   'CCC-S1-0042',
+  name: 'City Car Challenge',
+  assetBase: 'https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge',
+  cars: [
     {id:'polo',   model:'VW Polo',           colour:'#3060d0', status:'vacancy',
-     team:{name:'Kovar Racing',   drivers:[{name:'Jana Kovar',  nationality:'Czech'}]},
-     pwProtected:false, perf:61,rel:74,spd:63,
+     team:{name:'Kovar Racing',  drivers:[{name:'Jana Kovar',  nationality:'Czech'}]},
+     pwProtected:false, perf:61, rel:74, spd:63,
      liveries:[
-       {id:'polo_l1',name:'Standard Blue',  bg:'linear-gradient(135deg,#003399,#0066cc)'},
-       {id:'polo_l2',name:'Rally White',    bg:'linear-gradient(135deg,#cccccc,#ffffff)'},
-       {id:'polo_l3',name:'Midnight Black', bg:'linear-gradient(135deg,#111,#333)'},
+       {id:'polo_l1', name:'Standard Blue',  bg:'linear-gradient(135deg,#003399,#0066cc)'},
+       {id:'polo_l2', name:'Rally White',    bg:'linear-gradient(135deg,#cccccc,#ffffff)'},
+       {id:'polo_l3', name:'Midnight Black', bg:'linear-gradient(135deg,#111,#333)'},
      ]},
     {id:'cactus', model:'Citroën C3 Cactus', colour:'#7030c0', status:'vacancy',
-     team:{name:'Sabelt Racing',  drivers:[{name:'Ramsey Sabelt',nationality:'British'}]},
-     pwProtected:true, pwPassword:'race99', pwTimeLeft:180, perf:61,rel:70,spd:60,
+     team:{name:'Sabelt Racing', drivers:[{name:'Ramsey Sabelt',nationality:'British'}]},
+     pwProtected:true, pwPassword:'race99', pwTimeLeft:180, perf:61, rel:70, spd:60,
      liveries:[
-       {id:'cac_l1',name:'Purple Storm', bg:'linear-gradient(135deg,#6600cc,#cc00ff)'},
-       {id:'cac_l2',name:'Carbon Grey',  bg:'linear-gradient(135deg,#444,#888)'},
-       {id:'cac_l3',name:'Arctic White', bg:'linear-gradient(135deg,#ddd,#fff)'},
+       {id:'cac_l1', name:'Purple Storm', bg:'linear-gradient(135deg,#6600cc,#cc00ff)'},
+       {id:'cac_l2', name:'Carbon Grey',  bg:'linear-gradient(135deg,#444,#888)'},
+       {id:'cac_l3', name:'Arctic White', bg:'linear-gradient(135deg,#ddd,#fff)'},
      ]},
-    {id:'clio',   model:'Renault Clio',       colour:'#d0b000', status:'available', perf:63,rel:68,spd:60,
+    {id:'clio',   model:'Renault Clio',       colour:'#d0b000', status:'available', perf:63, rel:68, spd:60,
      liveries:[
-       {id:'clio_l1',name:'Racing Yellow',bg:'linear-gradient(135deg,#cc9900,#ffcc00)'},
-       {id:'clio_l2',name:'French Blue',  bg:'linear-gradient(135deg,#0033cc,#003399)'},
-       {id:'clio_l3',name:'Rally Red',    bg:'linear-gradient(135deg,#cc0000,#ff3300)'},
+       {id:'clio_l1', name:'Racing Yellow', bg:'linear-gradient(135deg,#cc9900,#ffcc00)'},
+       {id:'clio_l2', name:'French Blue',   bg:'linear-gradient(135deg,#0033cc,#003399)'},
+       {id:'clio_l3', name:'Rally Red',     bg:'linear-gradient(135deg,#cc0000,#ff3300)'},
      ]},
-    {id:'jazz',   model:'Honda Jazz',          colour:'#c02070', status:'available', perf:57,rel:78,spd:57,
+    {id:'jazz',   model:'Honda Jazz',          colour:'#c02070', status:'available', perf:57, rel:78, spd:57,
      liveries:[
-       {id:'jazz_l1',name:'Cherry Pink', bg:'linear-gradient(135deg,#cc0066,#ff3399)'},
-       {id:'jazz_l2',name:'Pearl White', bg:'linear-gradient(135deg,#e8e8e8,#ffffff)'},
-       {id:'jazz_l3',name:'Slate Grey',  bg:'linear-gradient(135deg,#555,#888)'},
+       {id:'jazz_l1', name:'Cherry Pink', bg:'linear-gradient(135deg,#cc0066,#ff3399)'},
+       {id:'jazz_l2', name:'Pearl White', bg:'linear-gradient(135deg,#e8e8e8,#ffffff)'},
+       {id:'jazz_l3', name:'Slate Grey',  bg:'linear-gradient(135deg,#555,#888)'},
      ]},
-    {id:'fiat',   model:'Fiat 500',            colour:'#20a040', status:'available', perf:59,rel:66,spd:58,
-     imgUrl:'https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge/cars/fiat500-yellow.png',
+    {id:'fiat',   model:'Fiat 500',            colour:'#20a040', status:'available', perf:59, rel:66, spd:58,
+     imgFile:'cars/fiat500-yellow.png',
      liveries:[
-       {id:'fiat_l1',name:'Italian Green',bg:'linear-gradient(135deg,#006600,#00aa00)'},
-       {id:'fiat_l2',name:'Vintage Cream',bg:'linear-gradient(135deg,#d4c06a,#e8d880)'},
-       {id:'fiat_l3',name:'Rosso Corsa', bg:'linear-gradient(135deg,#cc0000,#ff0000)'},
+       {id:'fiat_l1', name:'Italian Green', bg:'linear-gradient(135deg,#006600,#00aa00)'},
+       {id:'fiat_l2', name:'Vintage Cream', bg:'linear-gradient(135deg,#d4c06a,#e8d880)'},
+       {id:'fiat_l3', name:'Rosso Corsa',   bg:'linear-gradient(135deg,#cc0000,#ff0000)'},
      ]},
-    {id:'yaris',  model:'Toyota Yaris',        colour:'#e06010', status:'available', perf:60,rel:76,spd:59,
-     imgUrl:'https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge/cars/toyotayaris_yellow.png',
+    {id:'yaris',  model:'Toyota Yaris',        colour:'#e06010', status:'available', perf:60, rel:76, spd:59,
+     imgFile:'cars/toyotayaris-yellow.png',
      liveries:[
-       {id:'yar_l1',name:'Gazoo Orange', bg:'linear-gradient(135deg,#cc4400,#ff6600)'},
-       {id:'yar_l2',name:'Alpine White', bg:'linear-gradient(135deg,#dddddd,#ffffff)'},
-       {id:'yar_l3',name:'Circuit Blue', bg:'linear-gradient(135deg,#002266,#0044aa)'},
+       {id:'yar_l1', name:'Gazoo Orange', bg:'linear-gradient(135deg,#cc4400,#ff6600)'},
+       {id:'yar_l2', name:'Alpine White', bg:'linear-gradient(135deg,#dddddd,#ffffff)'},
+       {id:'yar_l3', name:'Circuit Blue', bg:'linear-gradient(135deg,#002266,#0044aa)'},
      ]},
     {id:'fiesta', model:'Ford Fiesta',          colour:'#e03030', status:'completed',
-     team:{name:'Holt Motorsport',drivers:[{name:'Marcus Holt',nationality:'British'},{name:'Sam Holt',nationality:'British'}]},
-     perf:62,rel:72,spd:62},
+     team:{name:'Holt Motorsport', drivers:[{name:'Marcus Holt',nationality:'British'},{name:'Sam Holt',nationality:'British'}]},
+     perf:62, rel:72, spd:62},
   ]
 };
+
+// ── SERIES (resolved at runtime) ──
+var SERIES = null;
+
+function loadCarset() {
+  if (CARSET_URL) {
+    // Load from JSON file (use this in production)
+    fetch(CARSET_URL)
+      .then(function(r){ return r.json(); })
+      .then(function(data){ initCarset(data); })
+      .catch(function(){ console.warn('Carset load failed, falling back to hardcoded data'); initCarset(CARSET_HARDCODED); });
+  } else {
+    // Use hardcoded data
+    initCarset(CARSET_HARDCODED);
+  }
+}
+
+function initCarset(data) {
+  // Resolve imgFile paths to full URLs using assetBase
+  if (data.assetBase) {
+    data.cars.forEach(function(car) {
+      if (car.imgFile) {
+        car.imgUrl = data.assetBase + '/' + car.imgFile;
+      }
+    });
+  }
+  SERIES = data;
+  renderGrid();
+}
 
 // ── PERF BARS ──
 function perfBars(c) {
@@ -478,9 +518,10 @@ function fmtTime(s) { return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
 
 // ── RENDER GRID ──
 function makeRow(car, section) {
+  var fallback = '<div class="car-placeholder" style="background:'+car.colour+'22;border-radius:8px">'+carEmoji(car.model)+'</div>';
   var imgInner = car.imgUrl
-    ? '<img src="'+car.imgUrl+'" style="width:96px;height:54px;object-fit:contain" alt="'+car.model+'">'
-    : '<div class="car-placeholder" style="background:'+car.colour+'22;border-radius:8px">'+carEmoji(car.model)+'</div>';
+    ? '<img src="'+car.imgUrl+'" style="width:96px;height:54px;object-fit:contain;display:block" alt="'+car.model+'" onerror="this.outerHTML=\''+fallback.replace(/'/g,"\\'")+'\';">'
+    : fallback;
   var img = '<div class="car-image-panel">'+imgInner+'</div>';
 
   if (section === 'vacancy') {
@@ -746,7 +787,7 @@ function confirmJoin() {
   window.location.href = 'atracer-myseasons.html';
 }
 
-document.addEventListener('DOMContentLoaded', function(){ renderGrid(); });
+document.addEventListener('DOMContentLoaded', function(){ loadCarset(); });
 
 </script>
 </body>
