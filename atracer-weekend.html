@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&T Racer — Race Weekend</title>
+<script>const PAGE_ID = 'weekend';</script>
+<style>/* === A&T RACER SHARED CSS === */
+:root[data-theme="dark"]{
+  --bg:#0c0c10;--bg2:#13131a;--bg3:#1a1a24;--bg4:#22222e;--bg5:#2a2a38;
+  --border:#2a2a3a;--border2:#363648;
+  --text:#eeeef5;--text2:#8888a8;--text3:#55556a;
+  --accent:#e8392a;--accent2:#ff5544;--accentbg:rgba(232,57,42,0.12);--accentbdr:rgba(232,57,42,0.3);
+  --green:#2ecf72;--greenbg:rgba(46,207,114,0.1);--greenbdr:rgba(46,207,114,0.3);
+  --amber:#f0a030;--amberbg:rgba(240,160,48,0.1);--amberbdr:rgba(240,160,48,0.3);
+  --blue:#4a8fff;--bluebg:rgba(74,143,255,0.1);--bluebdr:rgba(74,143,255,0.25);
+  --purple:#a060ff;--purplebg:rgba(160,96,255,0.1);--purplebdr:rgba(160,96,255,0.25);
+  --shadow:0 2px 16px rgba(0,0,0,0.5);--shadow2:0 1px 4px rgba(0,0,0,0.35);
+  --r:10px;--nav-h:56px;
+}
+:root[data-theme="light"]{
+  --bg:#f0f0ee;--bg2:#ffffff;--bg3:#f7f7f5;--bg4:#ededea;--bg5:#e2e2de;
+  --border:#ddddd8;--border2:#c8c8c4;
+  --text:#111118;--text2:#66667a;--text3:#aaaabc;
+  --accent:#d42e20;--accent2:#e84433;--accentbg:rgba(212,46,32,0.08);--accentbdr:rgba(212,46,32,0.25);
+  --green:#1a8a48;--greenbg:rgba(26,138,72,0.1);--greenbdr:rgba(26,138,72,0.3);
+  --amber:#c07800;--amberbg:rgba(192,120,0,0.1);--amberbdr:rgba(192,120,0,0.3);
+  --blue:#2a6ed4;--bluebg:rgba(42,110,212,0.1);--bluebdr:rgba(42,110,212,0.25);
+  --purple:#7040cc;--purplebg:rgba(112,64,204,0.1);--purplebdr:rgba(112,64,204,0.25);
+  --shadow:0 2px 12px rgba(0,0,0,0.08);--shadow2:0 1px 3px rgba(0,0,0,0.06);
+  --r:10px;--nav-h:56px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh;transition:background 0.2s,color 0.2s}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;box-shadow:var(--shadow2)}
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:-0.04em;font-style:italic;margin-right:28px;white-space:nowrap;cursor:pointer;text-decoration:none;color:var(--text)}
+.nav-logo .amp{color:var(--accent)}
+.nav-tabs{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto}
+.nav-tab{padding:6px 13px;border-radius:6px;font-size:13px;color:var(--text2);cursor:pointer;border:none;background:none;transition:all 0.15s;white-space:nowrap;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.nav-tab:hover{color:var(--text);background:var(--bg4)}
+.nav-tab.active{color:var(--accent);background:var(--accentbg);font-weight:500}
+.tab-badge{background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;line-height:1.4;margin-left:2px}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;padding-left:12px}
+.icon-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text2);transition:all 0.15s;text-decoration:none;position:relative}
+.icon-btn:hover{background:var(--bg5);color:var(--text)}
+.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid var(--bg2)}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff8844);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;cursor:pointer;border:2px solid var(--bg2);box-shadow:0 0 0 1px var(--accent);text-decoration:none}
+.page{max-width:1100px;margin:0 auto;padding:calc(var(--nav-h) + 24px) 20px 60px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow2);margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:500}
+.badge-live{background:var(--greenbg);color:var(--green);border:1px solid var(--greenbdr)}
+.badge-next{background:var(--accentbg);color:var(--accent);border:1px solid var(--accentbdr)}
+.badge-done{background:var(--bg4);color:var(--text3);border:1px solid var(--border)}
+.badge-sched{background:var(--bluebg);color:var(--blue);border:1px solid var(--bluebdr)}
+.badge-classic{background:var(--amberbg);color:var(--amber);border:1px solid var(--amberbdr)}
+.badge-fast{background:var(--purplebg);color:var(--purple);border:1px solid var(--purplebdr)}
+.badge-open{background:var(--greenbg);color:var(--green);border:1px solid var(--greenbdr)}
+.badge-locked{background:var(--bg4);color:var(--text3);border:1px solid var(--border)}
+.badge-countdown{background:var(--accentbg);color:var(--accent);border:1px solid var(--accentbdr)}
+.btn{padding:7px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg3);font-size:12px;cursor:pointer;color:var(--text);font-family:inherit;transition:all 0.15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{background:var(--bg5)}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-accent:hover{background:var(--accent2)}
+.btn-full{width:100%;justify-content:center}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-disabled{opacity:0.4;pointer-events:none}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.pulse{animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.perf-bar-wrap{background:var(--bg4);border-radius:3px;height:5px;overflow:hidden;margin-top:3px}
+.perf-bar{height:100%;border-radius:3px;transition:width 0.4s}
+.standings-table{width:100%;border-collapse:collapse;font-size:13px}
+.standings-table th{text-align:left;padding:7px 8px;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600}
+.standings-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.standings-table tr:last-child td{border-bottom:none}
+.standings-table tr.you-row td{background:var(--accentbg)}
+.car-chip{display:inline-flex;align-items:center;justify-content:center;width:28px;height:16px;border-radius:3px;font-size:9px;font-weight:700;color:#fff}
+.empty-state{text-align:center;padding:48px 24px;color:var(--text3)}
+.empty-state .icon{font-size:40px;margin-bottom:12px;opacity:0.5}
+.empty-state h3{font-size:15px;color:var(--text2);margin-bottom:6px}
+.empty-state p{font-size:13px}
+.section-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+body.mobile-view .home-grid,body.mobile-view .detail-grid,body.mobile-view .stats-row{grid-template-columns:1fr!important}
+body.mobile-view .session-strip{grid-template-columns:1fr 1fr!important}
+body.mobile-view .seat-section{flex-direction:row!important;align-items:center!important;border-left:none!important;border-top:1px solid var(--border)!important;min-width:unset!important}
+body.mobile-view .season-row{flex-direction:column!important}
+body.mobile-view .car-image-panel{width:80px!important}
+body.mobile-view .nav-tabs{display:none!important}
+body.mobile-view .nav-logo{margin-right:auto!important}
+body.mobile-view .page{padding-left:14px!important;padding-right:14px!important}</style>
+<script>/* === A&T RACER SHARED JS === */
+const NAV_TABS = [
+  ['home',      'atracer-home.html',      'Home',              null],
+  ['join',      'atracer-join.html',       'Join a Season',     null],
+  ['myseasons', 'atracer-myseasons.html',  'My Seasons',        '1'],
+  ['midseason', 'atracer-midseason.html',  'Mid-Season Drives', null],
+  ['rankings',  'atracer-rankings.html',   '🏆 Rankings',       null],
+  ['profile',   'atracer-profile.html',    'Profile',           null],
+  ['social',    'atracer-social.html',     'Social',            null],
+];
+
+function injectNav(){
+  const pid = window.PAGE_ID || '';
+  const tabs = NAV_TABS.map(([id,href,label,badge])=>{
+    const active = id===pid?' active':'';
+    const b = badge ? '<span class="tab-badge">'+badge+'</span>' : '';
+    return '<a class="nav-tab'+active+'" href="'+href+'">'+label+b+'</a>';
+  }).join('');
+  const nav = document.createElement('nav');
+  nav.className='nav';
+  nav.innerHTML =
+    '<a class="nav-logo" href="atracer-home.html">A<span class="amp">&amp;</span>T Racer</a>'+
+    '<div class="nav-tabs">'+tabs+'</div>'+
+    '<div class="nav-right">'+
+      '<div class="icon-btn" style="position:relative" title="Notifications">🔔<div class="notif-dot"></div></div>'+
+      '<button class="icon-btn" id="mobileBtn" onclick="AT.toggleMobile()" title="Toggle mobile view">📱</button>'+
+      '<button class="icon-btn" id="themeBtn"  onclick="AT.toggleTheme()"  title="Toggle theme">🌙</button>'+
+      '<a class="avatar" id="navAvatar" href="atracer-profile.html" title="Your profile"></a>'+
+      '<button class="icon-btn" onclick="AT.logout()" title="Sign out" style="font-size:13px">⏻</button>'+
+    '</div>';
+  document.body.insertBefore(nav, document.body.firstChild);
+}
+
+window.AT = {
+  user: null,
+
+  init(){
+    const pid = window.PAGE_ID||'';
+    if(pid!=='login'){
+      const s=sessionStorage.getItem('atracer_user');
+      if(!s){window.location.href='atracer-login.html';return;}
+      this.user=JSON.parse(s);
+      const av=document.getElementById('navAvatar');
+      if(av){av.textContent=this.user.initials;av.title=this.user.name;}
+    }
+    this.applyTheme();
+    this.applyMobile();
+  },
+
+  logout(){
+    sessionStorage.removeItem('atracer_user');
+    window.location.href='atracer-login.html';
+  },
+
+  applyTheme(){
+    const t=localStorage.getItem('atracer_theme')||'light';
+    document.documentElement.setAttribute('data-theme',t);
+    const btn=document.getElementById('themeBtn');
+    if(btn) btn.textContent=t==='dark'?'☀️':'🌙';
+  },
+
+  toggleTheme(){
+    const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+    const next=isDark?'light':'dark';
+    document.documentElement.setAttribute('data-theme',next);
+    localStorage.setItem('atracer_theme',next);
+    const btn=document.getElementById('themeBtn');
+    if(btn) btn.textContent=next==='dark'?'☀️':'🌙';
+  },
+
+  applyMobile(){
+    const on=localStorage.getItem('atracer_mobile')==='true';
+    document.body.classList.toggle('mobile-view',on);
+    const btn=document.getElementById('mobileBtn');
+    if(btn) btn.textContent=on?'🖥️':'📱';
+  },
+
+  toggleMobile(){
+    const on=document.body.classList.toggle('mobile-view');
+    localStorage.setItem('atracer_mobile',on);
+    const btn=document.getElementById('mobileBtn');
+    if(btn) btn.textContent=on?'🖥️':'📱';
+  },
+
+  flagImg(nationality, size){
+    size=size||20;
+    const code=AT.NAT_TO_CODE[nationality];
+    if(!code) return '';
+    const w=Math.round(size*1.5);
+    return '<img src="https://raw.githubusercontent.com/AshF195/atracer/main/flag%201/'+code+'.png"'+
+      ' width="'+w+'" height="'+size+'"'+
+      ' style="border-radius:2px;object-fit:cover;vertical-align:middle;display:inline-block;flex-shrink:0"'+
+      ' alt="'+nationality+'" onerror="this.style.display=\'none\'">';
+  },
+
+  NAT_TO_CODE:{
+    "Afghan":"af","Albanian":"al","Algerian":"dz","American":"us","Andorran":"ad",
+    "Argentine":"ar","Armenian":"am","Australian":"au","Austrian":"at","Azerbaijani":"az",
+    "Bahraini":"bh","Belgian":"be","Bolivian":"bo","Brazilian":"br","British":"gb",
+    "Bulgarian":"bg","Canadian":"ca","Chilean":"cl","Chinese":"cn","Colombian":"co",
+    "Croatian":"hr","Czech":"cz","Danish":"dk","Dutch":"nl","Emirati":"ae",
+    "Estonian":"ee","Finnish":"fi","French":"fr","Georgian":"ge","German":"de",
+    "Greek":"gr","Hungarian":"hu","Indian":"in","Indonesian":"id","Iranian":"ir",
+    "Irish":"ie","Israeli":"il","Italian":"it","Japanese":"jp","Jordanian":"jo",
+    "Kazakhstani":"kz","Korean":"kr","South Korean":"kr","Kuwaiti":"kw","Latvian":"lv",
+    "Lebanese":"lb","Lithuanian":"lt","Luxembourger":"lu","Malaysian":"my","Mexican":"mx",
+    "Moldovan":"md","Monegasque":"mc","Moroccan":"ma","New Zealander":"nz","Nigerian":"ng",
+    "Norwegian":"no","Omani":"om","Pakistani":"pk","Peruvian":"pe","Polish":"pl",
+    "Portuguese":"pt","Qatari":"qa","Romanian":"ro","Russian":"ru","San Marinese":"sm",
+    "Saudi Arabian":"sa","Scottish":"gb","Serbian":"rs","Singaporean":"sg","Slovak":"sk",
+    "Slovenian":"si","South African":"za","Spanish":"es","Swedish":"se","Swiss":"ch",
+    "Thai":"th","Turkish":"tr","Ukrainian":"ua","Uruguayan":"uy","Venezuelan":"ve",
+    "Vietnamese":"vn","Welsh":"gb"
+  }
+};
+
+// Boot
+document.addEventListener('DOMContentLoaded',function(){
+  if(window.PAGE_ID!=='login') injectNav();
+  AT.init();
+});</script>
+<style>.wkd-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}.wkd-header-meta{flex:1;min-width:0}.wkd-header-meta h1{font-size:20px;font-weight:700;margin-bottom:2px}.wkd-header-meta p{font-size:13px;color:var(--text2)}.wkd-stripe{width:5px;height:48px;border-radius:3px;flex-shrink:0}.wkd-grid{display:grid;grid-template-columns:1fr 280px;gap:14px;align-items:start}@media(max-width:760px){.wkd-grid{grid-template-columns:1fr}}.car-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow2);margin-bottom:14px}.car-panel-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}.car-panel-header h3{font-size:14px;font-weight:600;flex:1}.car-livery{height:110px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.car-livery-stripe{position:absolute;top:0;left:0;bottom:0;width:5px}.car-livery-ph{font-size:12px;color:var(--text3)}.car-stats{padding:12px 16px;display:flex;gap:14px}.car-stat{flex:1;text-align:center}.car-stat-val{font-size:18px;font-weight:700;line-height:1}.car-stat-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-top:2px}.session-tl{display:flex;flex-direction:column;gap:8px}.tl-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg3)}.tl-item.live{border-color:var(--greenbdr);background:var(--greenbg)}.tl-item.next{border-color:var(--accentbdr);background:var(--accentbg)}.tl-item.done{opacity:0.6}.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--border2)}.tl-item.live .tl-dot{background:var(--green);box-shadow:0 0 6px var(--green)}.tl-item.next .tl-dot{background:var(--accent)}.tl-name{font-size:13px;font-weight:500;flex:1}.tl-item.done .tl-name{color:var(--text3)}.tl-right{text-align:right}.tl-time{font-size:12px;color:var(--text2)}.tl-result{font-size:12px;font-weight:500}.cd-wrap{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);text-align:center}.cd-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}.cd-row{display:flex;gap:8px;justify-content:center}.cd-block{text-align:center}.cd-num{font-size:22px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1;display:block}.cd-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em}.cd-sep{font-size:20px;color:var(--border2);font-weight:300;align-self:flex-start;padding-top:2px}.chat-msg{display:flex;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}.chat-msg:last-child{border-bottom:none}.chat-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}.chat-body{flex:1;color:var(--text2);line-height:1.4}.chat-body strong{color:var(--text)}.chat-time{font-size:11px;color:var(--text3);margin-top:2px}.chat-input-row{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}.chat-input-row input{flex:1;padding:8px 11px;border:1px solid var(--border);border-radius:7px;font-size:13px;background:var(--bg3);color:var(--text);font-family:inherit}.chat-input-row input:focus{outline:none;border-color:var(--accent)}.standings-hidden{text-align:center;padding:20px;cursor:pointer}.standings-hidden p{font-size:12px;color:var(--text3);margin:8px 0}.circuit-map{background:var(--bg3);border:1px dashed var(--border2);border-radius:6px;height:90px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);margin-bottom:12px}.detail-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}.detail-row:last-child{border-bottom:none}.detail-row span{color:var(--text2)}.standings-table{width:100%;border-collapse:collapse;font-size:13px}.standings-table th{text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600}.standings-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:middle}.standings-table tr:last-child td{border-bottom:none}.standings-table tr.you-row td{background:var(--accentbg)}.car-chip{display:inline-flex;align-items:center;justify-content:center;width:26px;height:15px;border-radius:3px;font-size:9px;font-weight:700;color:#fff}.notebook-entry{padding:10px 12px;background:var(--bg3);border-radius:6px;border-left:3px solid var(--accent);margin-bottom:8px;font-size:12px;color:var(--text2);line-height:1.5}.notebook-entry strong{color:var(--text);display:block;margin-bottom:2px}</style>
+</head>
+<body>
+<div class="page" style="max-width:960px">
+
+  <div class="wkd-header">
+    <a href="atracer-myseasons.html" class="btn btn-ghost btn-sm">&larr; My Seasons</a>
+    <div class="wkd-stripe" style="background:#7030c0"></div>
+    <div class="wkd-header-meta">
+      <h1>City Car Challenge &mdash; Season 1</h1>
+      <p>Round 4 of 8 &middot; Lakeside Park &middot; Classic queue</p>
+    </div>
+    <span class="badge badge-live">&#9679; Practice open</span>
+  </div>
+
+  <div class="wkd-grid">
+    <div>
+
+      <!-- CAR PANEL -->
+      <div class="car-panel">
+        <div class="car-panel-header">
+          <span style="font-size:16px">&#127950;&#65039;</span>
+          <h3>Sabelt Racing &mdash; Citro&euml;n C3 Cactus</h3>
+          <span class="badge badge-classic">Driver 2</span>
+        </div>
+        <div class="car-livery">
+          <div class="car-livery-stripe" style="background:#7030c0"></div>
+          <div class="car-livery-ph">Car image &mdash; upload coming</div>
+        </div>
+        <div class="car-stats">
+          <div class="car-stat"><div class="car-stat-val" style="color:var(--blue)">61</div><div class="car-stat-lbl">Performance</div></div>
+          <div class="car-stat"><div class="car-stat-val" style="color:var(--green)">70</div><div class="car-stat-lbl">Reliability</div></div>
+          <div class="car-stat"><div class="car-stat-val" style="color:var(--amber)">60</div><div class="car-stat-lbl">Top speed</div></div>
+        </div>
+      </div>
+
+      <!-- SESSION TIMELINE -->
+      <div class="card">
+        <div class="card-title">Weekend sessions</div>
+        <div class="session-tl">
+          <div class="tl-item done">
+            <div class="tl-dot"></div>
+            <div class="tl-name">Practice</div>
+            <span class="badge badge-done">Done</span>
+            <div class="tl-right"><div class="tl-result" style="color:var(--text3)">&#10003; P3 overall</div><div class="tl-time">Mon 09 Jun</div></div>
+          </div>
+          <div class="tl-item live">
+            <div class="tl-dot pulse"></div>
+            <div class="tl-name">Qualifying</div>
+            <span class="badge badge-live">Open now</span>
+            <div class="tl-right"><div class="tl-result"><strong style="color:var(--green)">Submit laps</strong></div><div class="tl-time">Closes in 4h 22m</div></div>
+          </div>
+          <div class="tl-item next">
+            <div class="tl-dot"></div>
+            <div class="tl-name">Warm-up &amp; strategy lock-in</div>
+            <span class="badge badge-next">Up next</span>
+            <div class="tl-right"><div class="tl-result"><strong style="color:var(--accent)">Tue 10 Jun</strong></div><div class="tl-time">09:00 UTC</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-name">Race</div>
+            <span class="badge badge-sched">Scheduled</span>
+            <div class="tl-right"><div class="tl-result" style="color:var(--text2)">Wed 11 Jun</div><div class="tl-time">09:00 UTC</div></div>
+          </div>
+        </div>
+        <div class="cd-wrap">
+          <div class="cd-label">Qualifying closes in</div>
+          <div class="cd-row">
+            <div class="cd-block"><span class="cd-num" id="cdH">04</span><span class="cd-lbl">hrs</span></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block"><span class="cd-num" id="cdM">22</span><span class="cd-lbl">min</span></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block"><span class="cd-num" id="cdS">17</span><span class="cd-lbl">sec</span></div>
+          </div>
+        </div>
+        <a href="atracer-practice.html" class="btn btn-accent btn-full" style="margin-top:12px">Go to practice &rarr;</a>
+      </div>
+
+      <!-- TEAM CHAT -->
+      <div class="card">
+        <div class="card-title">Team chat &mdash; Sabelt Racing <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">&mdash; shared with your teammate</span></div>
+        <div id="chatMessages">
+          <div class="chat-msg">
+            <div class="chat-av" id="myAvChat" style="background:#7030c0">RS</div>
+            <div class="chat-body"><strong id="myNameChat">You</strong> P3 in practice &mdash; decent. Setup feels a bit stiff in sector 2 though<div class="chat-time">Yesterday &middot; 14:22</div></div>
+          </div>
+          <div class="chat-msg">
+            <div class="chat-av" style="background:#9050e0">TP</div>
+            <div class="chat-body"><strong>Teammate</strong> Agreed. Went softer on rear suspension in run 3 and picked up 0.2s. Worth trying<div class="chat-time">Yesterday &middot; 15:41</div></div>
+          </div>
+          <div class="chat-msg">
+            <div class="chat-av" id="myAvChat2" style="background:#7030c0">RS</div>
+            <div class="chat-body"><strong id="myNameChat2">You</strong> Good call. Good luck in qualifying today &#128074;<div class="chat-time">Today &middot; 08:04</div></div>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Message your teammate..." onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="btn btn-accent btn-sm" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+
+      <!-- RACE NOTEBOOK -->
+      <div class="card">
+        <div class="card-title">Engineer notebook &mdash; Round 3 debrief</div>
+        <div class="notebook-entry"><strong>&#128734; Setup summary</strong>Gear ratio ran long &mdash; lost time in the infield but gained on the back straight. For Lakeside, recommend going shorter as it's a tighter layout overall.</div>
+        <div class="notebook-entry"><strong>&#128734; Tyre performance</strong>Mediums lasted 18 laps comfortably. Softs dropped off sharply after lap 10 in the heat. If weather stays dry, medium start with a single stop at lap 16&ndash;18 is the target.</div>
+        <div class="notebook-entry"><strong>&#128202; Race pace analysis</strong>P2 finish from P3 on grid. Gained one position at the start. Clean race &mdash; no incidents. Gap to P1 was 4.2s at the flag; Marcus Holt was quicker in sector 1.</div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+
+      <!-- CIRCUIT -->
+      <div class="card">
+        <div class="card-title">Round 4 &mdash; Lakeside Park</div>
+        <div class="circuit-map">Circuit map upload coming</div>
+        <div class="detail-row"><span>Type</span><strong>Street circuit</strong></div>
+        <div class="detail-row"><span>Laps</span><strong>32</strong></div>
+        <div class="detail-row"><span>Lap length</span><strong>3.4 km</strong></div>
+        <div class="detail-row"><span>Total distance</span><strong>108.8 km</strong></div>
+        <div class="detail-row"><span>Weather forecast</span><strong>&#9728;&#65039; Dry</strong></div>
+        <div class="detail-row"><span>Safety car chance</span><strong>High (42%)</strong></div>
+        <div class="detail-row"><span>Tyre wear rate</span><strong>Medium</strong></div>
+        <div class="detail-row"><span>Specialist bonus</span><strong style="color:var(--text3)">None</strong></div>
+      </div>
+
+      <!-- CHARACTERISTICS -->
+      <div class="card">
+        <div class="card-title">Your characteristics</div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Core &mdash; locked for season</div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--amberbg);border:1px solid var(--amberbdr);border-radius:6px">
+            <span style="font-size:16px">&#127961;&#65039;</span>
+            <div><div style="font-size:13px;font-weight:600">Street Fighter</div><div style="font-size:11px;color:var(--text2)">Better car control on tight street circuits</div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Current &mdash; can change after R4</div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--purplebg);border:1px solid var(--purplebdr);border-radius:6px">
+            <span style="font-size:16px">&#128678;</span>
+            <div><div style="font-size:13px;font-weight:600">Launch Controller</div><div style="font-size:11px;color:var(--text2)">Better getaway at race start</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STANDINGS -->
+      <div class="card">
+        <div class="card-title">Championship standings</div>
+        <div id="standingsHidden" class="standings-hidden" onclick="revealStandings()">
+          <div style="font-size:28px;opacity:0.4">&#127942;</div>
+          <p>Hidden to avoid spoilers</p>
+          <button class="btn btn-sm" style="margin-top:8px">Reveal standings</button>
+        </div>
+        <div id="standingsTable" style="display:none">
+          <table class="standings-table">
+            <thead><tr><th>#</th><th>Driver</th><th>Car</th><th>Pts</th><th>Gap</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Marcus Holt<div style="font-size:11px;color:var(--text3)">Holt Motorsport</div></td><td><span class="car-chip" style="background:#e03030">FI</span></td><td><strong>160</strong></td><td>&mdash;</td></tr>
+              <tr><td>2</td><td>Jana Kovar<div style="font-size:11px;color:var(--text3)">Kovar Racing</div></td><td><span class="car-chip" style="background:#3060d0">PO</span></td><td><strong>155</strong></td><td>&minus;5</td></tr>
+              <tr><td>3</td><td>Pierre Gauthier<div style="font-size:11px;color:var(--text3)">Gauthier Sport</div></td><td><span class="car-chip" style="background:#d0b000">CL</span></td><td><strong>148</strong></td><td>&minus;12</td></tr>
+              <tr class="you-row"><td style="color:var(--accent);font-weight:700">4</td><td><strong id="standingsYou">You</strong> <span style="font-size:11px;color:var(--accent)">(you)</span><div style="font-size:11px;color:var(--text3)">Sabelt Racing</div></td><td><span class="car-chip" style="background:#7030c0">C3</span></td><td><strong style="color:var(--accent)">142</strong></td><td>&minus;18</td></tr>
+              <tr><td>5</td><td>Luca Ferrini<div style="font-size:11px;color:var(--text3)">Ferrini Corse</div></td><td><span class="car-chip" style="background:#20a040">F5</span></td><td><strong>138</strong></td><td>&minus;22</td></tr>
+              <tr style="opacity:0.5"><td colspan="5" style="font-size:11px;color:var(--text3);text-align:center">9 more drivers</td></tr>
+            </tbody>
+          </table>
+          <button class="btn" style="width:100%;justify-content:center;margin-top:10px;font-size:12px" onclick="hideStandings()">Hide standings</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var user = AT.user;
+  if(user){
+    ['standingsYou','myNameChat','myNameChat2'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.textContent = user.name;
+    });
+    ['myAvChat','myAvChat2'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.textContent = user.initials;
+    });
+  }
+});
+
+var secs = (4*3600)+(22*60)+17;
+setInterval(function(){
+  if(secs<=0) return; secs--;
+  var h=Math.floor(secs/3600), m=Math.floor((secs%3600)/60), s=secs%60;
+  var pad=function(n){return String(n).padStart(2,'0');};
+  var hEl=document.getElementById('cdH'), mEl=document.getElementById('cdM'), sEl=document.getElementById('cdS');
+  if(hEl) hEl.textContent=pad(h);
+  if(mEl) mEl.textContent=pad(m);
+  if(sEl) sEl.textContent=pad(s);
+}, 1000);
+
+function revealStandings(){
+  document.getElementById('standingsHidden').style.display='none';
+  document.getElementById('standingsTable').style.display='block';
+}
+function hideStandings(){
+  document.getElementById('standingsTable').style.display='none';
+  document.getElementById('standingsHidden').style.display='';
+}
+function sendChat(){
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  if(!text) return;
+  var user = AT.user;
+  var name = user ? user.name : 'You';
+  var initials = user ? user.initials : '?';
+  var msgs = document.getElementById('chatMessages');
+  var msg = document.createElement('div');
+  msg.className = 'chat-msg';
+  msg.innerHTML = '<div class="chat-av" style="background:#7030c0">'+initials+'</div>'
+    +'<div class="chat-body"><strong>'+name+'</strong> '+text+'<div class="chat-time">Just now</div></div>';
+  msgs.appendChild(msg);
+  input.value='';
+  msgs.scrollTop = msgs.scrollHeight;
+}
+</script>
+</body>
+</html>
