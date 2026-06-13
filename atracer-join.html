@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&T Racer — Join a Season</title>
+<script>const PAGE_ID = 'join';</script>
+<style>/* === A&T RACER SHARED CSS === */
+:root[data-theme="dark"]{
+  --bg:#0c0c10;--bg2:#13131a;--bg3:#1a1a24;--bg4:#22222e;--bg5:#2a2a38;
+  --border:#2a2a3a;--border2:#363648;
+  --text:#eeeef5;--text2:#8888a8;--text3:#55556a;
+  --accent:#e8392a;--accent2:#ff5544;--accentbg:rgba(232,57,42,0.12);--accentbdr:rgba(232,57,42,0.3);
+  --green:#2ecf72;--greenbg:rgba(46,207,114,0.1);--greenbdr:rgba(46,207,114,0.3);
+  --amber:#f0a030;--amberbg:rgba(240,160,48,0.1);--amberbdr:rgba(240,160,48,0.3);
+  --blue:#4a8fff;--bluebg:rgba(74,143,255,0.1);--bluebdr:rgba(74,143,255,0.25);
+  --purple:#a060ff;--purplebg:rgba(160,96,255,0.1);--purplebdr:rgba(160,96,255,0.25);
+  --shadow:0 2px 16px rgba(0,0,0,0.5);--shadow2:0 1px 4px rgba(0,0,0,0.35);
+  --r:10px;--nav-h:56px;
+}
+:root[data-theme="light"]{
+  --bg:#f0f0ee;--bg2:#ffffff;--bg3:#f7f7f5;--bg4:#ededea;--bg5:#e2e2de;
+  --border:#ddddd8;--border2:#c8c8c4;
+  --text:#111118;--text2:#66667a;--text3:#aaaabc;
+  --accent:#d42e20;--accent2:#e84433;--accentbg:rgba(212,46,32,0.08);--accentbdr:rgba(212,46,32,0.25);
+  --green:#1a8a48;--greenbg:rgba(26,138,72,0.1);--greenbdr:rgba(26,138,72,0.3);
+  --amber:#c07800;--amberbg:rgba(192,120,0,0.1);--amberbdr:rgba(192,120,0,0.3);
+  --blue:#2a6ed4;--bluebg:rgba(42,110,212,0.1);--bluebdr:rgba(42,110,212,0.25);
+  --purple:#7040cc;--purplebg:rgba(112,64,204,0.1);--purplebdr:rgba(112,64,204,0.25);
+  --shadow:0 2px 12px rgba(0,0,0,0.08);--shadow2:0 1px 3px rgba(0,0,0,0.06);
+  --r:10px;--nav-h:56px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh;transition:background 0.2s,color 0.2s}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;box-shadow:var(--shadow2)}
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:-0.04em;font-style:italic;margin-right:28px;white-space:nowrap;cursor:pointer;text-decoration:none;color:var(--text)}
+.nav-logo .amp{color:var(--accent)}
+.nav-tabs{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto}
+.nav-tab{padding:6px 13px;border-radius:6px;font-size:13px;color:var(--text2);cursor:pointer;border:none;background:none;transition:all 0.15s;white-space:nowrap;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.nav-tab:hover{color:var(--text);background:var(--bg4)}
+.nav-tab.active{color:var(--accent);background:var(--accentbg);font-weight:500}
+.tab-badge{background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;line-height:1.4;margin-left:2px}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;padding-left:12px}
+.icon-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text2);transition:all 0.15s;text-decoration:none;position:relative}
+.icon-btn:hover{background:var(--bg5);color:var(--text)}
+.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid var(--bg2)}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff8844);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;cursor:pointer;border:2px solid var(--bg2);box-shadow:0 0 0 1px var(--accent);text-decoration:none}
+.page{max-width:1100px;margin:0 auto;padding:calc(var(--nav-h) + 24px) 20px 60px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow2);margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:500}
+.badge-live{background:var(--greenbg);color:var(--green);border:1px solid var(--greenbdr)}
+.badge-next{background:var(--accentbg);color:var(--accent);border:1px solid var(--accentbdr)}
+.badge-done{background:var(--bg4);color:var(--text3);border:1px solid var(--border)}
+.badge-sched{background:var(--bluebg);color:var(--blue);border:1px solid var(--bluebdr)}
+.badge-classic{background:var(--amberbg);color:var(--amber);border:1px solid var(--amberbdr)}
+.badge-fast{background:var(--purplebg);color:var(--purple);border:1px solid var(--purplebdr)}
+.badge-open{background:var(--greenbg);color:var(--green);border:1px solid var(--greenbdr)}
+.badge-locked{background:var(--bg4);color:var(--text3);border:1px solid var(--border)}
+.badge-countdown{background:var(--accentbg);color:var(--accent);border:1px solid var(--accentbdr)}
+.btn{padding:7px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg3);font-size:12px;cursor:pointer;color:var(--text);font-family:inherit;transition:all 0.15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{background:var(--bg5)}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-accent:hover{background:var(--accent2)}
+.btn-full{width:100%;justify-content:center}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-disabled{opacity:0.4;pointer-events:none}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.pulse{animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.perf-bar-wrap{background:var(--bg4);border-radius:3px;height:5px;overflow:hidden;margin-top:3px}
+.perf-bar{height:100%;border-radius:3px;transition:width 0.4s}
+.standings-table{width:100%;border-collapse:collapse;font-size:13px}
+.standings-table th{text-align:left;padding:7px 8px;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600}
+.standings-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.standings-table tr:last-child td{border-bottom:none}
+.standings-table tr.you-row td{background:var(--accentbg)}
+.car-chip{display:inline-flex;align-items:center;justify-content:center;width:28px;height:16px;border-radius:3px;font-size:9px;font-weight:700;color:#fff}
+.empty-state{text-align:center;padding:48px 24px;color:var(--text3)}
+.empty-state .icon{font-size:40px;margin-bottom:12px;opacity:0.5}
+.empty-state h3{font-size:15px;color:var(--text2);margin-bottom:6px}
+.empty-state p{font-size:13px}
+.section-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+body.mobile-view .home-grid,body.mobile-view .detail-grid,body.mobile-view .stats-row{grid-template-columns:1fr!important}
+body.mobile-view .session-strip{grid-template-columns:1fr 1fr!important}
+body.mobile-view .seat-section{flex-direction:row!important;align-items:center!important;border-left:none!important;border-top:1px solid var(--border)!important;min-width:unset!important}
+body.mobile-view .season-row{flex-direction:column!important}
+body.mobile-view .car-image-panel{width:80px!important}
+body.mobile-view .nav-tabs{display:none!important}
+body.mobile-view .nav-logo{margin-right:auto!important}
+body.mobile-view .page{padding-left:14px!important;padding-right:14px!important}</style>
+<script>/* === A&T RACER SHARED JS === */
+const NAV_TABS = [
+  ['home',      'atracer-home.html',      'Home',              null],
+  ['join',      'atracer-join.html',       'Join a Season',     null],
+  ['myseasons', 'atracer-myseasons.html',  'My Seasons',        '1'],
+  ['midseason', 'atracer-midseason.html',  'Mid-Season Drives', null],
+  ['rankings',  'atracer-rankings.html',   '🏆 Rankings',       null],
+  ['profile',   'atracer-profile.html',    'Profile',           null],
+  ['social',    'atracer-social.html',     'Social',            null],
+];
+
+function injectNav(){
+  const pid = window.PAGE_ID || '';
+  const tabs = NAV_TABS.map(([id,href,label,badge])=>{
+    const active = id===pid?' active':'';
+    const b = badge ? '<span class="tab-badge">'+badge+'</span>' : '';
+    return '<a class="nav-tab'+active+'" href="'+href+'">'+label+b+'</a>';
+  }).join('');
+  const nav = document.createElement('nav');
+  nav.className='nav';
+  nav.innerHTML =
+    '<a class="nav-logo" href="atracer-home.html">A<span class="amp">&amp;</span>T Racer</a>'+
+    '<div class="nav-tabs">'+tabs+'</div>'+
+    '<div class="nav-right">'+
+      '<div class="icon-btn" style="position:relative" title="Notifications">🔔<div class="notif-dot"></div></div>'+
+      '<button class="icon-btn" id="mobileBtn" onclick="AT.toggleMobile()" title="Toggle mobile view">📱</button>'+
+      '<button class="icon-btn" id="themeBtn"  onclick="AT.toggleTheme()"  title="Toggle theme">🌙</button>'+
+      '<a class="avatar" id="navAvatar" href="atracer-profile.html" title="Your profile"></a>'+
+      '<button class="icon-btn" onclick="AT.logout()" title="Sign out" style="font-size:13px">⏻</button>'+
+    '</div>';
+  document.body.insertBefore(nav, document.body.firstChild);
+}
+
+window.AT = {
+  user: null,
+
+  init(){
+    const pid = window.PAGE_ID||'';
+    if(pid!=='login'){
+      const s=sessionStorage.getItem('atracer_user');
+      if(!s){window.location.href='atracer-login.html';return;}
+      this.user=JSON.parse(s);
+      const av=document.getElementById('navAvatar');
+      if(av){av.textContent=this.user.initials;av.title=this.user.name;}
+    }
+    this.applyTheme();
+    this.applyMobile();
+  },
+
+  logout(){
+    sessionStorage.removeItem('atracer_user');
+    window.location.href='atracer-login.html';
+  },
+
+  applyTheme(){
+    const t=localStorage.getItem('atracer_theme')||'light';
+    document.documentElement.setAttribute('data-theme',t);
+    const btn=document.getElementById('themeBtn');
+    if(btn) btn.textContent=t==='dark'?'☀️':'🌙';
+  },
+
+  toggleTheme(){
+    const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+    const next=isDark?'light':'dark';
+    document.documentElement.setAttribute('data-theme',next);
+    localStorage.setItem('atracer_theme',next);
+    const btn=document.getElementById('themeBtn');
+    if(btn) btn.textContent=next==='dark'?'☀️':'🌙';
+  },
+
+  applyMobile(){
+    const on=localStorage.getItem('atracer_mobile')==='true';
+    document.body.classList.toggle('mobile-view',on);
+    const btn=document.getElementById('mobileBtn');
+    if(btn) btn.textContent=on?'🖥️':'📱';
+  },
+
+  toggleMobile(){
+    const on=document.body.classList.toggle('mobile-view');
+    localStorage.setItem('atracer_mobile',on);
+    const btn=document.getElementById('mobileBtn');
+    if(btn) btn.textContent=on?'🖥️':'📱';
+  },
+
+  flagImg(nationality, size){
+    size=size||20;
+    const code=AT.NAT_TO_CODE[nationality];
+    if(!code) return '';
+    const w=Math.round(size*1.5);
+    return '<img src="https://raw.githubusercontent.com/AshF195/atracer/main/flag%201/'+code+'.png"'+
+      ' width="'+w+'" height="'+size+'"'+
+      ' style="border-radius:2px;object-fit:cover;vertical-align:middle;display:inline-block;flex-shrink:0"'+
+      ' alt="'+nationality+'" onerror="this.style.display=\'none\'">';
+  },
+
+  NAT_TO_CODE:{
+    "Afghan":"af","Albanian":"al","Algerian":"dz","American":"us","Andorran":"ad",
+    "Argentine":"ar","Armenian":"am","Australian":"au","Austrian":"at","Azerbaijani":"az",
+    "Bahraini":"bh","Belgian":"be","Bolivian":"bo","Brazilian":"br","British":"gb",
+    "Bulgarian":"bg","Canadian":"ca","Chilean":"cl","Chinese":"cn","Colombian":"co",
+    "Croatian":"hr","Czech":"cz","Danish":"dk","Dutch":"nl","Emirati":"ae",
+    "Estonian":"ee","Finnish":"fi","French":"fr","Georgian":"ge","German":"de",
+    "Greek":"gr","Hungarian":"hu","Indian":"in","Indonesian":"id","Iranian":"ir",
+    "Irish":"ie","Israeli":"il","Italian":"it","Japanese":"jp","Jordanian":"jo",
+    "Kazakhstani":"kz","Korean":"kr","South Korean":"kr","Kuwaiti":"kw","Latvian":"lv",
+    "Lebanese":"lb","Lithuanian":"lt","Luxembourger":"lu","Malaysian":"my","Mexican":"mx",
+    "Moldovan":"md","Monegasque":"mc","Moroccan":"ma","New Zealander":"nz","Nigerian":"ng",
+    "Norwegian":"no","Omani":"om","Pakistani":"pk","Peruvian":"pe","Polish":"pl",
+    "Portuguese":"pt","Qatari":"qa","Romanian":"ro","Russian":"ru","San Marinese":"sm",
+    "Saudi Arabian":"sa","Scottish":"gb","Serbian":"rs","Singaporean":"sg","Slovak":"sk",
+    "Slovenian":"si","South African":"za","Spanish":"es","Swedish":"se","Swiss":"ch",
+    "Thai":"th","Turkish":"tr","Ukrainian":"ua","Uruguayan":"uy","Venezuelan":"ve",
+    "Vietnamese":"vn","Welsh":"gb"
+  }
+};
+
+// Boot
+document.addEventListener('DOMContentLoaded',function(){
+  if(window.PAGE_ID!=='login') injectNav();
+  AT.init();
+});</script>
+<style>.page-header{margin-bottom:20px}.page-header h1{font-size:21px;font-weight:700;margin-bottom:4px}.page-header p{font-size:13px;color:var(--text2)}.filters{display:flex;align-items:center;gap:6px;margin-bottom:18px;flex-wrap:wrap}.filter-btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg3);font-size:12px;cursor:pointer;color:var(--text2);font-family:inherit;transition:all 0.15s;white-space:nowrap}.filter-btn:hover{background:var(--bg5);color:var(--text)}.filter-btn.active{background:var(--accentbg);border-color:var(--accentbdr);color:var(--accent);font-weight:500}.filter-sep{width:1px;height:20px;background:var(--border2);margin:0 2px}.search-wrap{position:relative;margin-left:auto}.search-wrap input{padding:6px 10px 6px 28px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--bg3);color:var(--text);font-family:inherit;width:180px}.search-wrap input:focus{outline:none;border-color:var(--accent)}.search-icon{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:12px;pointer-events:none}.series-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow2);margin-bottom:12px;display:flex;transition:border-color 0.15s;cursor:pointer;text-decoration:none}.series-card:hover{border-color:var(--border2)}.series-icon-panel{width:90px;flex-shrink:0;background:var(--bg3);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:14px}.series-icon-panel img{width:58px;height:58px;border-radius:10px;object-fit:cover;border:1px solid var(--border2)}.series-icon-panel .icon-ph{width:58px;height:58px;border-radius:10px;background:linear-gradient(135deg,#e03030,#ff6600);display:flex;align-items:center;justify-content:center;font-size:26px}.series-info{flex:1;padding:14px 16px;min-width:0}.series-name{font-size:15px;font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.series-desc{font-size:12px;color:var(--text2);line-height:1.45;margin-bottom:8px}.series-meta{display:flex;gap:14px;font-size:11px;color:var(--text3);flex-wrap:wrap}.series-right{padding:14px 16px;border-left:1px solid var(--border);display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:10px;min-width:160px;flex-shrink:0}.seat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;text-align:right;margin-bottom:3px}.seat-count{font-size:20px;font-weight:700;text-align:right;line-height:1}.seat-count span{font-size:12px;font-weight:400;color:var(--text3)}.seat-bar{width:120px;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}.seat-fill{height:100%;border-radius:3px}.empty-state{text-align:center;padding:48px 24px;color:var(--text3)}.empty-state .icon{font-size:40px;margin-bottom:12px;opacity:0.5}.empty-state h3{font-size:15px;color:var(--text2);margin-bottom:6px}</style>
+</head>
+<body>
+<div class="page" style="max-width:900px">
+  <div class="page-header">
+    <h1>Join a Season</h1>
+    <p>Choose a championship, pick your car and create your team. You can be active in up to 4 seasons at once.</p>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" id="f-all"      onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn"        id="f-classic"  onclick="setFilter('classic',this)">Classic queue</button>
+    <button class="filter-btn"        id="f-fast"     onclick="setFilter('fast',this)">Fast queue</button>
+    <div class="filter-sep"></div>
+    <button class="filter-btn"        id="f-open"     onclick="setFilter('open',this)">Seats available</button>
+    <button class="filter-btn"        id="f-forming"  onclick="setFilter('forming',this)">Forming now</button>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search series..." oninput="doSearch(this.value)">
+    </div>
+  </div>
+  <div id="seriesList"></div>
+</div>
+
+<script>var CCC_ICON = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPE...";
+var SERIES = [
+  {
+    id: "ccc-s1",
+    name: "City Car Challenge",
+    subtitle: "Season 1",
+    queue: "classic",
+    status: "open",
+    iconUrl: "https://raw.githubusercontent.com/AshF195/atracer/main/city_car_challenge.png",
+    desc: "Tight street-circuit racing in matched city hatchbacks. Cars are closely matched — setup, tactics and characteristics matter more than outright pace.",
+    rounds: 8,
+    driversPerCar: 2,
+    totalSeats: 14,
+    takenSeats: 6,
+    starts: "Lobby forming",
+    href: "atracer-join-series.html"
+  }
+];
+
+var activeFilter = "all";
+var searchTerm = "";
+
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+  el.classList.add("active");
+  render();
+}
+
+function doSearch(v) { searchTerm = v.toLowerCase(); render(); }
+
+function render() {
+  var el = document.getElementById("seriesList");
+  var list = SERIES.filter(function(s) {
+    if (activeFilter === "classic" && s.queue !== "classic") return false;
+    if (activeFilter === "fast"    && s.queue !== "fast")    return false;
+    if (activeFilter === "open"    && s.takenSeats >= s.totalSeats) return false;
+    if (activeFilter === "forming" && s.status !== "forming") return false;
+    if (searchTerm && s.name.toLowerCase().indexOf(searchTerm) === -1) return false;
+    return true;
+  });
+  if (!list.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">🏁</div><h3>No series found</h3><p>Try adjusting your filters or search term</p></div>';
+    return;
+  }
+  el.innerHTML = list.map(function(s) {
+    var free = s.totalSeats - s.takenSeats;
+    var pct  = Math.round(s.takenSeats / s.totalSeats * 100);
+    var barCol = pct >= 90 ? "var(--accent)" : pct >= 60 ? "var(--amber)" : "var(--green)";
+    var qBadge = s.queue === "classic"
+      ? '<span class="badge badge-classic">Classic queue</span>'
+      : '<span class="badge badge-fast">Fast queue</span>';
+    var openBadge = free > 0
+      ? '<span class="badge badge-open">' + free + ' seats open</span>'
+      : '<span class="badge badge-locked">Full</span>';
+    var iconHtml = s.iconUrl
+      ? '<img src="' + s.iconUrl + '" style="width:58px;height:58px;border-radius:10px;object-fit:cover;border:1px solid var(--border2)">'
+      : '<div class="icon-ph">🏁</div>';
+    return '<a class="series-card" href="' + s.href + '">'
+      + '<div class="series-icon-panel">' + iconHtml + '</div>'
+      + '<div class="series-info">'
+        + '<div class="series-name">' + s.name + ' <span style="font-size:12px;color:var(--text3);font-weight:400">' + s.subtitle + '</span>'
+          + qBadge + openBadge
+        + '</div>'
+        + '<div class="series-desc">' + s.desc + '</div>'
+        + '<div class="series-meta">'
+          + '<span>🏁 ' + s.rounds + ' rounds</span>'
+          + '<span>👥 ' + s.driversPerCar + ' drivers per car</span>'
+          + '<span>📅 ' + s.starts + '</span>'
+        + '</div>'
+      + '</div>'
+      + '<div class="series-right">'
+        + '<div><div class="seat-label">Seats taken</div>'
+          + '<div class="seat-count">' + s.takenSeats + '<span> / ' + s.totalSeats + '</span></div>'
+          + '<div class="seat-bar" style="margin-top:6px"><div class="seat-fill" style="width:' + pct + '%;background:' + barCol + '"></div></div>'
+        + '</div>'
+        + '<span class="btn btn-accent" style="font-size:12px">View &amp; join →</span>'
+      + '</div>'
+    + '</a>';
+  }).join("");
+}
+
+document.addEventListener("DOMContentLoaded", function() { render(); });
+</script>
+</body>
+</html>
