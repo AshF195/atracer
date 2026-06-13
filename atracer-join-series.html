@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&T Racer — Join Series</title>
+<script>const PAGE_ID = 'join';</script>
+<style>/* === A&T RACER SHARED CSS === */
+:root[data-theme="dark"]{
+  --bg:#0c0c10;--bg2:#13131a;--bg3:#1a1a24;--bg4:#22222e;--bg5:#2a2a38;
+  --border:#2a2a3a;--border2:#363648;
+  --text:#eeeef5;--text2:#8888a8;--text3:#55556a;
+  --accent:#e8392a;--accent2:#ff5544;--accentbg:rgba(232,57,42,0.12);--accentbdr:rgba(232,57,42,0.3);
+  --green:#2ecf72;--greenbg:rgba(46,207,114,0.1);--greenbdr:rgba(46,207,114,0.3);
+  --amber:#f0a030;--amberbg:rgba(240,160,48,0.1);--amberbdr:rgba(240,160,48,0.3);
+  --blue:#4a8fff;--bluebg:rgba(74,143,255,0.1);--bluebdr:rgba(74,143,255,0.25);
+  --purple:#a060ff;--purplebg:rgba(160,96,255,0.1);--purplebdr:rgba(160,96,255,0.25);
+  --shadow:0 2px 16px rgba(0,0,0,0.5);--shadow2:0 1px 4px rgba(0,0,0,0.35);
+  --r:10px;--nav-h:56px;
+}
+:root[data-theme="light"]{
+  --bg:#f0f0ee;--bg2:#ffffff;--bg3:#f7f7f5;--bg4:#ededea;--bg5:#e2e2de;
+  --border:#ddddd8;--border2:#c8c8c4;
+  --text:#111118;--text2:#66667a;--text3:#aaaabc;
+  --accent:#d42e20;--accent2:#e84433;--accentbg:rgba(212,46,32,0.08);--accentbdr:rgba(212,46,32,0.25);
+  --green:#1a8a48;--greenbg:rgba(26,138,72,0.1);--greenbdr:rgba(26,138,72,0.3);
+  --amber:#c07800;--amberbg:rgba(192,120,0,0.1);--amberbdr:rgba(192,120,0,0.3);
+  --blue:#2a6ed4;--bluebg:rgba(42,110,212,0.1);--bluebdr:rgba(42,110,212,0.25);
+  --purple:#7040cc;--purplebg:rgba(112,64,204,0.1);--purplebdr:rgba(112,64,204,0.25);
+  --shadow:0 2px 12px rgba(0,0,0,0.08);--shadow2:0 1px 3px rgba(0,0,0,0.06);
+  --r:10px;--nav-h:56px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh;transition:background 0.2s,color 0.2s}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;box-shadow:var(--shadow2)}
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:-0.04em;font-style:italic;margin-right:28px;white-space:nowrap;cursor:pointer;text-decoration:none;color:var(--text)}
+.nav-logo .amp{color:var(--accent)}
+.nav-tabs{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto}
+.nav-tab{padding:6px 13px;border-radius:6px;font-size:13px;color:var(--text2);cursor:pointer;border:none;background:none;transition:all 0.15s;white-space:nowrap;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.nav-tab:hover{color:var(--text);background:var(--bg4)}
+.nav-tab.active{color:var(--accent);background:var(--accentbg);font-weight:500}
+.tab-badge{background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;line-height:1.4;margin-left:2px}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;padding-left:12px}
+.icon-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text2);transition:all 0.15s;text-decoration:none;position:relative}
+.icon-btn:hover{background:var(--bg5);color:var(--text)}
+.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid var(--bg2)}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff8844);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;cursor:pointer;border:2px solid var(--bg2);box-shadow:0 0 0 1px var(--accent);text-decoration:none}
+.page{max-width:1100px;margin:0 auto;padding:calc(var(--nav-h) + 24px) 20px 60px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow2);margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:500}
+.badge-live{background:var(--greenbg);color:var(--green);border:1px solid var(--greenbdr)}
+.badge-next{background:var(--accentbg);color:var(--accent);border:1px solid var(--accentbdr)}
+.badge-done{background:var(--bg4);color:var(--text3);border:1px solid var(--border)}
+.badge-sched{background:var(--bluebg);color:var(--blue);border:1px solid var(--bluebdr)}
+.badge-classic{background:var(--amberbg);color:var(--amber);border:1px solid var(--amberbdr)}
+.badge-fast{background:var(--purplebg);color:var(--purple);border:1px solid var(--purplebdr)}
+.badge-open{background:var(--greenbg);color:var(--green);border:1px solid var(--greenbdr)}
+.badge-locked{background:var(--bg4);color:var(--text3);border:1px solid var(--border)}
+.badge-countdown{background:var(--accentbg);color:var(--accent);border:1px solid var(--accentbdr)}
+.btn{padding:7px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--bg3);font-size:12px;cursor:pointer;color:var(--text);font-family:inherit;transition:all 0.15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{background:var(--bg5)}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-accent:hover{background:var(--accent2)}
+.btn-full{width:100%;justify-content:center}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-disabled{opacity:0.4;pointer-events:none}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.pulse{animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.perf-bar-wrap{background:var(--bg4);border-radius:3px;height:5px;overflow:hidden;margin-top:3px}
+.perf-bar{height:100%;border-radius:3px;transition:width 0.4s}
+.standings-table{width:100%;border-collapse:collapse;font-size:13px}
+.standings-table th{text-align:left;padding:7px 8px;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600}
+.standings-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.standings-table tr:last-child td{border-bottom:none}
+.standings-table tr.you-row td{background:var(--accentbg)}
+.car-chip{display:inline-flex;align-items:center;justify-content:center;width:28px;height:16px;border-radius:3px;font-size:9px;font-weight:700;color:#fff}
+.empty-state{text-align:center;padding:48px 24px;color:var(--text3)}
+.empty-state .icon{font-size:40px;margin-bottom:12px;opacity:0.5}
+.empty-state h3{font-size:15px;color:var(--text2);margin-bottom:6px}
+.empty-state p{font-size:13px}
+.section-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+body.mobile-view .home-grid,body.mobile-view .detail-grid,body.mobile-view .stats-row{grid-template-columns:1fr!important}
+body.mobile-view .session-strip{grid-template-columns:1fr 1fr!important}
+body.mobile-view .seat-section{flex-direction:row!important;align-items:center!important;border-left:none!important;border-top:1px solid var(--border)!important;min-width:unset!important}
+body.mobile-view .season-row{flex-direction:column!important}
+body.mobile-view .car-image-panel{width:80px!important}
+body.mobile-view .nav-tabs{display:none!important}
+body.mobile-view .nav-logo{margin-right:auto!important}
+body.mobile-view .page{padding-left:14px!important;padding-right:14px!important}</style>
+<script>/* === A&T RACER SHARED JS === */
+const NAV_TABS = [
+  ['home',      'atracer-home.html',      'Home',              null],
+  ['join',      'atracer-join.html',       'Join a Season',     null],
+  ['myseasons', 'atracer-myseasons.html',  'My Seasons',        '1'],
+  ['midseason', 'atracer-midseason.html',  'Mid-Season Drives', null],
+  ['rankings',  'atracer-rankings.html',   '🏆 Rankings',       null],
+  ['profile',   'atracer-profile.html',    'Profile',           null],
+  ['social',    'atracer-social.html',     'Social',            null],
+];
+
+function injectNav(){
+  const pid = window.PAGE_ID || '';
+  const tabs = NAV_TABS.map(([id,href,label,badge])=>{
+    const active = id===pid?' active':'';
+    const b = badge ? '<span class="tab-badge">'+badge+'</span>' : '';
+    return '<a class="nav-tab'+active+'" href="'+href+'">'+label+b+'</a>';
+  }).join('');
+  const nav = document.createElement('nav');
+  nav.className='nav';
+  nav.innerHTML =
+    '<a class="nav-logo" href="atracer-home.html">A<span class="amp">&amp;</span>T Racer</a>'+
+    '<div class="nav-tabs">'+tabs+'</div>'+
+    '<div class="nav-right">'+
+      '<div class="icon-btn" style="position:relative" title="Notifications">🔔<div class="notif-dot"></div></div>'+
+      '<button class="icon-btn" id="mobileBtn" onclick="AT.toggleMobile()" title="Toggle mobile view">📱</button>'+
+      '<button class="icon-btn" id="themeBtn"  onclick="AT.toggleTheme()"  title="Toggle theme">🌙</button>'+
+      '<a class="avatar" id="navAvatar" href="atracer-profile.html" title="Your profile"></a>'+
+      '<button class="icon-btn" onclick="AT.logout()" title="Sign out" style="font-size:13px">⏻</button>'+
+    '</div>';
+  document.body.insertBefore(nav, document.body.firstChild);
+}
+
+window.AT = {
+  user: null,
+
+  init(){
+    const pid = window.PAGE_ID||'';
+    if(pid!=='login'){
+      const s=sessionStorage.getItem('atracer_user');
+      if(!s){window.location.href='atracer-login.html';return;}
+      this.user=JSON.parse(s);
+      const av=document.getElementById('navAvatar');
+      if(av){av.textContent=this.user.initials;av.title=this.user.name;}
+    }
+    this.applyTheme();
+    this.applyMobile();
+  },
+
+  logout(){
+    sessionStorage.removeItem('atracer_user');
+    window.location.href='atracer-login.html';
+  },
+
+  applyTheme(){
+    const t=localStorage.getItem('atracer_theme')||'light';
+    document.documentElement.setAttribute('data-theme',t);
+    const btn=document.getElementById('themeBtn');
+    if(btn) btn.textContent=t==='dark'?'☀️':'🌙';
+  },
+
+  toggleTheme(){
+    const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+    const next=isDark?'light':'dark';
+    document.documentElement.setAttribute('data-theme',next);
+    localStorage.setItem('atracer_theme',next);
+    const btn=document.getElementById('themeBtn');
+    if(btn) btn.textContent=next==='dark'?'☀️':'🌙';
+  },
+
+  applyMobile(){
+    const on=localStorage.getItem('atracer_mobile')==='true';
+    document.body.classList.toggle('mobile-view',on);
+    const btn=document.getElementById('mobileBtn');
+    if(btn) btn.textContent=on?'🖥️':'📱';
+  },
+
+  toggleMobile(){
+    const on=document.body.classList.toggle('mobile-view');
+    localStorage.setItem('atracer_mobile',on);
+    const btn=document.getElementById('mobileBtn');
+    if(btn) btn.textContent=on?'🖥️':'📱';
+  },
+
+  flagImg(nationality, size){
+    size=size||20;
+    const code=AT.NAT_TO_CODE[nationality];
+    if(!code) return '';
+    const w=Math.round(size*1.5);
+    return '<img src="https://raw.githubusercontent.com/AshF195/atracer/main/flag%201/'+code+'.png"'+
+      ' width="'+w+'" height="'+size+'"'+
+      ' style="border-radius:2px;object-fit:cover;vertical-align:middle;display:inline-block;flex-shrink:0"'+
+      ' alt="'+nationality+'" onerror="this.style.display=\'none\'">';
+  },
+
+  NAT_TO_CODE:{
+    "Afghan":"af","Albanian":"al","Algerian":"dz","American":"us","Andorran":"ad",
+    "Argentine":"ar","Armenian":"am","Australian":"au","Austrian":"at","Azerbaijani":"az",
+    "Bahraini":"bh","Belgian":"be","Bolivian":"bo","Brazilian":"br","British":"gb",
+    "Bulgarian":"bg","Canadian":"ca","Chilean":"cl","Chinese":"cn","Colombian":"co",
+    "Croatian":"hr","Czech":"cz","Danish":"dk","Dutch":"nl","Emirati":"ae",
+    "Estonian":"ee","Finnish":"fi","French":"fr","Georgian":"ge","German":"de",
+    "Greek":"gr","Hungarian":"hu","Indian":"in","Indonesian":"id","Iranian":"ir",
+    "Irish":"ie","Israeli":"il","Italian":"it","Japanese":"jp","Jordanian":"jo",
+    "Kazakhstani":"kz","Korean":"kr","South Korean":"kr","Kuwaiti":"kw","Latvian":"lv",
+    "Lebanese":"lb","Lithuanian":"lt","Luxembourger":"lu","Malaysian":"my","Mexican":"mx",
+    "Moldovan":"md","Monegasque":"mc","Moroccan":"ma","New Zealander":"nz","Nigerian":"ng",
+    "Norwegian":"no","Omani":"om","Pakistani":"pk","Peruvian":"pe","Polish":"pl",
+    "Portuguese":"pt","Qatari":"qa","Romanian":"ro","Russian":"ru","San Marinese":"sm",
+    "Saudi Arabian":"sa","Scottish":"gb","Serbian":"rs","Singaporean":"sg","Slovak":"sk",
+    "Slovenian":"si","South African":"za","Spanish":"es","Swedish":"se","Swiss":"ch",
+    "Thai":"th","Turkish":"tr","Ukrainian":"ua","Uruguayan":"uy","Venezuelan":"ve",
+    "Vietnamese":"vn","Welsh":"gb"
+  }
+};
+
+// Boot
+document.addEventListener('DOMContentLoaded',function(){
+  if(window.PAGE_ID!=='login') injectNav();
+  AT.init();
+});</script>
+<style>.series-header{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:24px;box-shadow:var(--shadow2)}.series-header-top{padding:20px 22px;display:flex;align-items:center;gap:16px;position:relative}.series-header-top::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#ff8844,var(--amber))}.series-icon{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;border:1px solid var(--border2)}.series-icon img{width:100%;height:100%;object-fit:cover}.series-meta{flex:1;min-width:0}.series-meta h1{font-size:20px;font-weight:700;margin-bottom:4px}.series-meta p{font-size:13px;color:var(--text2)}.series-stats{display:flex;gap:20px;margin-top:10px;flex-wrap:wrap}.series-stat{font-size:12px;color:var(--text3)}.series-stat strong{color:var(--text);font-size:13px;display:block}.series-header-bottom{display:flex;align-items:center;justify-content:space-between;padding:12px 22px;border-top:1px solid var(--border);background:var(--bg3);flex-wrap:wrap;gap:10px}.seat-progress{flex:1;min-width:200px}.seat-progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:5px}.seat-progress-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}.seat-progress-fill{height:100%;border-radius:3px;background:var(--green)}.section-heading{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}.section-heading::after{content:"";flex:1;height:1px;background:var(--border)}.team-row{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);display:flex;align-items:stretch;overflow:hidden;margin-bottom:10px;box-shadow:var(--shadow2);transition:border-color 0.15s}.team-row:hover:not(.team-row-disabled){border-color:var(--border2)}.team-row-disabled{opacity:0.45;pointer-events:none}.car-image-panel{width:110px;flex-shrink:0;background:var(--bg3);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:12px}.car-placeholder{width:86px;height:44px;display:flex;align-items:center;justify-content:center;font-size:26px;border-radius:6px}.team-info{flex:1;padding:13px 15px;min-width:0}.team-name{font-size:14px;font-weight:600;margin-bottom:2px}.team-car{font-size:12px;color:var(--text2);margin-bottom:7px}.team-drivers{display:flex;gap:7px;flex-wrap:wrap}.driver-slot{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:var(--bg3)}.driver-slot.filled{border-color:var(--greenbdr);background:var(--greenbg);color:var(--green)}.driver-slot.vacant{border-color:var(--accentbdr);background:var(--accentbg);color:var(--accent);cursor:pointer}.driver-slot.vacant:hover{background:rgba(232,57,42,0.18)}.team-action{padding:13px 15px;border-left:1px solid var(--border);display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:8px;min-width:150px;flex-shrink:0}.perf-bars{display:flex;flex-direction:column;gap:4px;width:100%}.perf-bar-row{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text3)}.perf-bar-wrap{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}.perf-bar-fill{height:100%;border-radius:2px}.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);padding:16px}.modal-overlay.open{display:flex}.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:420px;box-shadow:var(--shadow);overflow:hidden;animation:mIn 0.18s ease}@keyframes mIn{from{opacity:0;transform:translateY(8px) scale(0.97)}to{opacity:1;transform:none}}.modal-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}.modal-header h2{font-size:15px;font-weight:600;flex:1}.modal-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text2)}.modal-body{padding:18px}.modal-footer{padding:13px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}.error-msg{font-size:12px;color:var(--accent);margin-top:6px;display:none}.error-msg.show{display:block}.flow-overlay{position:fixed;inset:0;background:var(--bg);z-index:150;display:none;flex-direction:column;overflow-y:auto}.flow-overlay.open{display:flex}.flow-nav{height:56px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:10}.flow-nav h2{font-size:15px;font-weight:600;flex:1}.flow-progress{height:3px;background:var(--border);flex-shrink:0}.flow-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#ff8844);transition:width 0.3s}.flow-body{max-width:660px;margin:0 auto;width:100%;padding:28px 20px 80px}.flow-step{display:none}.flow-step.active{display:block}.step-title{font-size:18px;font-weight:700;margin-bottom:4px}.step-sub{font-size:13px;color:var(--text2);margin-bottom:22px}.livery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}.livery-option{background:var(--bg3);border:2px solid var(--border);border-radius:10px;padding:14px 10px;cursor:pointer;text-align:center;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:8px}.livery-option:hover{border-color:var(--border2)}.livery-option.selected{border-color:var(--accent);background:var(--accentbg)}.livery-swatch{width:80px;height:44px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px}.livery-name{font-size:11px;color:var(--text2);font-weight:500}.livery-option.selected .livery-name{color:var(--accent)}.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.char-option{background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:all 0.15s}.char-option:hover{border-color:var(--border2)}.char-option.sel-amber{border-color:var(--amber);background:var(--amberbg)}.char-option.sel-purple{border-color:var(--purple);background:var(--purplebg)}.char-header{display:flex;align-items:center;gap:7px;margin-bottom:4px}.char-icon{font-size:17px}.char-name{font-size:12px;font-weight:600}.char-desc{font-size:11px;color:var(--text2);line-height:1.4}.char-cat{font-size:10px;color:var(--text3);margin-top:3px}.circuit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.circuit-option{background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;padding:10px;cursor:pointer;transition:all 0.15s;text-align:center}.circuit-option:hover{border-color:var(--border2)}.circuit-option.selected{border-color:var(--blue);background:var(--bluebg)}.c-icon{font-size:18px;margin-bottom:4px}.c-name{font-size:11px;font-weight:500}.c-type{font-size:10px;color:var(--text3);margin-top:2px}label{display:block;font-size:11px;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em}input[type=text],input[type=password],select{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:7px;font-size:13px;background:var(--bg3);color:var(--text);font-family:inherit;transition:border-color 0.15s;margin-bottom:12px}input:focus,select:focus{outline:none;border-color:var(--accent)}input::placeholder{color:var(--text3)}input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;margin-bottom:0}.pw-toggle{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;margin-bottom:12px;cursor:pointer}.pw-toggle label{flex:1;font-size:13px;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;margin:0}.pw-toggle span{font-size:12px;color:var(--text2)}.review-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}.review-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}.review-row:last-child{border-bottom:none}.review-row span{color:var(--text2)}.pw-timer{background:var(--amberbg);border:1px solid var(--amberbdr);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px}.pw-timer-count{font-size:20px;font-weight:700;color:var(--amber);font-variant-numeric:tabular-nums;min-width:48px}.car-banner{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:11px 14px;margin-bottom:18px}</style>
+</head>
+<body>
+<div class="page" style="max-width:920px">
+  <div style="margin-bottom:16px">
+    <a href="atracer-join.html" class="btn btn-ghost btn-sm" style="text-decoration:none">← Back to series list</a>
+  </div>
+
+  <!-- SERIES HEADER -->
+  <div class="series-header">
+    <div class="series-header-top">
+      <div class="series-icon">
+        <img src="https://raw.githubusercontent.com/AshF195/atracer/main/city_car_challenge.png" alt="CCC" onerror="this.style.display='none'">
+      </div>
+      <div class="series-meta">
+        <h1>City Car Challenge</h1>
+        <p>Season 1 · 8 rounds · Classic queue · Street circuits</p>
+        <div class="series-stats">
+          <div class="series-stat"><strong>Round 1 of 8</strong>Starting soon</div>
+          <div class="series-stat"><strong>14 seats</strong>Total grid</div>
+          <div class="series-stat"><strong>2 drivers</strong>Per car</div>
+          <div class="series-stat"><strong>Classic ELO</strong>Queue type</div>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:right">
+        <span class="badge badge-classic">Classic queue</span>
+        <div style="margin-top:6px"><span class="badge badge-open">● Open</span></div>
+      </div>
+    </div>
+    <div class="series-header-bottom">
+      <div class="seat-progress">
+        <div class="seat-progress-label"><span>6 of 14 seats filled</span><span style="color:var(--green);font-weight:500">8 available</span></div>
+        <div class="seat-progress-bar"><div class="seat-progress-fill" style="width:43%"></div></div>
+      </div>
+      <span style="font-size:12px;color:var(--text3)">Game ID: <strong style="font-family:monospace;color:var(--text2)">CCC-S1-0042</strong></span>
+    </div>
+  </div>
+
+  <!-- VACANCIES -->
+  <div class="section-heading" id="vacancyHeading">🟡 Vacancies — join an existing team</div>
+  <div id="vacancyList"></div>
+
+  <!-- AVAILABLE -->
+  <div class="section-heading" style="margin-top:4px">🟢 Available — create a new team</div>
+  <div id="availableList"></div>
+
+  <!-- COMPLETED -->
+  <div class="section-heading" style="margin-top:4px">⚫ Completed teams</div>
+  <div id="completedList"></div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div class="modal-overlay" id="pwModal" onclick="if(event.target===this)closePw()">
+  <div class="modal">
+    <div class="modal-header"><span style="font-size:18px">🔒</span><h2>Team password required</h2><button class="modal-close" onclick="closePw()">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:14px">This team slot is password protected. Enter the password to join.</p>
+      <label>Password</label>
+      <input type="password" id="pwInput" placeholder="Enter team password" onkeydown="if(event.key==='Enter')checkPw()">
+      <div class="error-msg" id="pwErr">Incorrect password — try again</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closePw()">Cancel</button>
+      <button class="btn btn-accent" onclick="checkPw()">Confirm →</button>
+    </div>
+  </div>
+</div>
+
+<!-- JOIN FLOW OVERLAY -->
+<div class="flow-overlay" id="flowOverlay">
+  <div class="flow-nav">
+    <button class="btn btn-ghost btn-sm" onclick="closeFlow()">✕ Cancel</button>
+    <h2 id="flowTitle">Create your team</h2>
+    <span style="font-size:12px;color:var(--text3)" id="flowStepLabel">Step 1 of 3</span>
+  </div>
+  <div class="flow-progress"><div class="flow-progress-fill" id="flowProgressBar" style="width:33%"></div></div>
+  <div class="flow-body">
+
+    <!-- STEP 1: Team setup -->
+    <div class="flow-step active" id="flowStep1">
+      <div class="step-title" id="s1Title">Set up your team</div>
+      <div class="step-sub" id="s1Sub">Choose your livery and team name</div>
+      <div class="car-banner">
+        <div id="carDot" style="width:12px;height:12px;border-radius:50%;flex-shrink:0"></div>
+        <div><div style="font-size:14px;font-weight:600" id="carModel"></div><div style="font-size:11px;color:var(--text3)">City Car Challenge — Season 1</div></div>
+      </div>
+      <!-- Joining existing: readonly -->
+      <div id="existBlock" style="display:none">
+        <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px">Existing team details</div>
+        <div class="review-card" id="existDetails"></div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:16px">These details were set by the first driver and cannot be changed.</p>
+      </div>
+      <!-- New team: livery + name -->
+      <div id="newBlock">
+        <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px">Choose a livery</div>
+        <div class="livery-grid" id="liveryGrid"></div>
+        <p style="font-size:11px;color:var(--text3);margin-bottom:18px">Custom liveries available later in-game</p>
+        <label>Team name</label>
+        <input type="text" id="teamNameIn" placeholder="e.g. Sabelt Racing" maxlength="40" oninput="chk1()">
+        <div class="pw-toggle" onclick="togglePwProtect()">
+          <input type="checkbox" id="pwCheck" onclick="event.stopPropagation();togglePwProtect()">
+          <label for="pwCheck">Password protect the second driver slot</label>
+          <span>5 min timer</span>
+        </div>
+        <div id="pwSetField" style="display:none">
+          <label>Set team password</label>
+          <input type="password" id="teamPwIn" placeholder="Choose a password" maxlength="20" oninput="chk1()">
+          <p style="font-size:11px;color:var(--text3);margin-top:-8px;margin-bottom:12px">Expires after 5 minutes — second slot then opens to all.</p>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:16px">
+        <button class="btn btn-accent" onclick="if(chk1())goStep(2);else alert('Please complete all fields and choose a livery.')">Next — driver profile →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Driver profile -->
+    <div class="flow-step" id="flowStep2">
+      <div class="step-title">Your driver profile</div>
+      <div class="step-sub">These details stay with you for the full season</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label>Driver name</label><input type="text" id="driverIn" placeholder="e.g. Ashley Eyre" maxlength="40" oninput="chk2()"></div>
+        <div><label>Nationality</label><select id="natIn" onchange="chk2()"><option value="">Select...</option></select></div>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Specialist circuit <span style="color:var(--blue);font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">— your home advantage</span></div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:10px">The one circuit you know better than anyone. Independent of nationality.</p>
+      <div class="circuit-grid" id="circuitGrid" style="margin-bottom:18px"></div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Core characteristic <span style="color:var(--amber);font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">— locked for season</span></div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Your driver identity. Choose carefully — cannot be changed this season.</p>
+      <div class="char-grid" id="coreGrid" style="margin-bottom:18px"></div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Current characteristic <span style="color:var(--purple);font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">— swappable every 2 races</span></div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:10px">A focused boost. You can change this after every 2 races.</p>
+      <div class="char-grid" id="currGrid" style="margin-bottom:18px"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+        <button class="btn" onclick="goStep(1)">← Back</button>
+        <button class="btn btn-accent" onclick="if(chk2())goStep(3);else alert('Please complete all driver details.')">Review →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Review -->
+    <div class="flow-step" id="flowStep3">
+      <div class="step-title">Review &amp; confirm</div>
+      <div class="step-sub">Check your details before joining the grid</div>
+      <div class="review-card" id="reviewCard"></div>
+      <div class="pw-timer" id="pwTimerBanner" style="display:none">
+        <span style="font-size:18px">🔒</span>
+        <div style="flex:1"><div style="font-weight:600;margin-bottom:2px;font-size:13px">Second slot password protected</div><div style="font-size:12px;color:var(--text2)">Opens to all players when timer reaches zero</div></div>
+        <div class="pw-timer-count" id="pwTimerCount">5:00</div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn" onclick="goStep(2)">← Back</button>
+        <button class="btn btn-accent" onclick="confirmJoin()">Confirm &amp; join grid →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+var GAME_CONFIG = {
+  coreCharacteristics:[
+    {id:'street_fighter',    name:'Street Fighter',         icon:'🏙️', desc:'Excels on tight street circuits. Better car control, reduced incidents.',     cat:'Race Craft'},
+    {id:'circuit_specialist',name:'Circuit Specialist',     icon:'🏁', desc:'Deep familiarity with permanent circuits. Faster setup and tyre management.', cat:'Technical'},
+    {id:'all_rounder',       name:'All Rounder',            icon:'⚖️', desc:'Consistent across all conditions. No weaknesses, no huge strengths.',         cat:'Mental'},
+    {id:'qualifier',         name:'Qualifier',              icon:'⏱️', desc:'Exceptional single-lap pace. Strong in qualifying.',                           cat:'Race Craft'},
+  ],
+  currentCharacteristics:[
+    {id:'launch_controller',      name:'Launch Controller',       icon:'🚦', desc:'Better getaway at race start.',                               cat:'Race Craft'},
+    {id:'one_lap_specialist',     name:'One Lap Specialist',      icon:'🎯', desc:'Exceptional qualifying lap pace.',                           cat:'Race Craft'},
+    {id:'race_craft_expert',      name:'Race Craft Expert',       icon:'🤝', desc:'Reduced collision chance when overtaking.',                  cat:'Race Craft'},
+    {id:'wet_weather_meister',    name:'Wet Weather Meister',     icon:'🌧️', desc:'Superior performance in wet conditions.',                   cat:'Weather'},
+    {id:'mechanical_sympathiser', name:'Mechanical Sympathiser',  icon:'🔧', desc:'Lowers mechanical failure risk and wear.',                  cat:'Technical'},
+    {id:'tyre_whisperer',         name:'Tyre Whisperer',          icon:'🛞', desc:'Exceptional tyre management over stints.',                  cat:'Technical'},
+    {id:'late_braker',            name:'Late Braker',             icon:'🛑', desc:'Gains under braking but higher lockup risk.',               cat:'Race Craft'},
+    {id:'safety_car_specialist',  name:'Safety Car Specialist',   icon:'🟡', desc:'Better pit timing and restart pace.',                       cat:'Mental'},
+  ],
+  specialistCircuits:[
+    {id:'marina_street', name:'Marina Street Circuit', type:'Street'},
+    {id:'riverside_loop',name:'Riverside Loop',        type:'Street'},
+    {id:'lakeside_park', name:'Lakeside Park',         type:'Street'},
+    {id:'harbour_gate',  name:'Harbour Gate',          type:'Street'},
+    {id:'clifftop_run',  name:'Clifftop Run',          type:'Street'},
+    {id:'city_centre',   name:'City Centre Sprint',    type:'Street'},
+  ]
+};
+
+var NATIONALITIES = ['Argentine','Australian','Austrian','Bahraini','Belgian','Brazilian','British',
+  'Bulgarian','Canadian','Chilean','Chinese','Colombian','Croatian','Czech','Danish','Dutch',
+  'Emirati','Estonian','Finnish','French','Georgian','German','Greek','Hungarian','Indian',
+  'Indonesian','Iranian','Irish','Italian','Japanese','Kazakhstani','Korean','Latvian',
+  'Lithuanian','Malaysian','Mexican','Moldovan','Moroccan','New Zealander','Nigerian',
+  'Norwegian','Omani','Pakistani','Peruvian','Polish','Portuguese','Qatari','Romanian',
+  'Russian','San Marinese','Saudi Arabian','Serbian','Singaporean','Slovak','Slovenian',
+  'South African','Spanish','Swedish','Swiss','Thai','Turkish','Ukrainian','Uruguayan',
+  'Venezuelan','Vietnamese'].sort();
+
+var SERIES = {
+  id:'CCC-S1-0042',
+  cars:[
+    {id:'polo',   model:'VW Polo',           colour:'#3060d0', status:'vacancy',
+     team:{name:'Kovar Racing',   drivers:[{name:'Jana Kovar',  nationality:'Czech'}]},
+     pwProtected:false, perf:61,rel:74,spd:63,
+     liveries:[
+       {id:'polo_l1',name:'Standard Blue',  bg:'linear-gradient(135deg,#003399,#0066cc)'},
+       {id:'polo_l2',name:'Rally White',    bg:'linear-gradient(135deg,#cccccc,#ffffff)'},
+       {id:'polo_l3',name:'Midnight Black', bg:'linear-gradient(135deg,#111,#333)'},
+     ]},
+    {id:'cactus', model:'Citroën C3 Cactus', colour:'#7030c0', status:'vacancy',
+     team:{name:'Sabelt Racing',  drivers:[{name:'Ramsey Sabelt',nationality:'British'}]},
+     pwProtected:true, pwPassword:'race99', pwTimeLeft:180, perf:61,rel:70,spd:60,
+     liveries:[
+       {id:'cac_l1',name:'Purple Storm', bg:'linear-gradient(135deg,#6600cc,#cc00ff)'},
+       {id:'cac_l2',name:'Carbon Grey',  bg:'linear-gradient(135deg,#444,#888)'},
+       {id:'cac_l3',name:'Arctic White', bg:'linear-gradient(135deg,#ddd,#fff)'},
+     ]},
+    {id:'clio',   model:'Renault Clio',       colour:'#d0b000', status:'available', perf:63,rel:68,spd:60,
+     liveries:[
+       {id:'clio_l1',name:'Racing Yellow',bg:'linear-gradient(135deg,#cc9900,#ffcc00)'},
+       {id:'clio_l2',name:'French Blue',  bg:'linear-gradient(135deg,#0033cc,#003399)'},
+       {id:'clio_l3',name:'Rally Red',    bg:'linear-gradient(135deg,#cc0000,#ff3300)'},
+     ]},
+    {id:'jazz',   model:'Honda Jazz',          colour:'#c02070', status:'available', perf:57,rel:78,spd:57,
+     liveries:[
+       {id:'jazz_l1',name:'Cherry Pink', bg:'linear-gradient(135deg,#cc0066,#ff3399)'},
+       {id:'jazz_l2',name:'Pearl White', bg:'linear-gradient(135deg,#e8e8e8,#ffffff)'},
+       {id:'jazz_l3',name:'Slate Grey',  bg:'linear-gradient(135deg,#555,#888)'},
+     ]},
+    {id:'fiat',   model:'Fiat 500',            colour:'#20a040', status:'available', perf:59,rel:66,spd:58,
+     liveries:[
+       {id:'fiat_l1',name:'Italian Green',bg:'linear-gradient(135deg,#006600,#00aa00)'},
+       {id:'fiat_l2',name:'Vintage Cream',bg:'linear-gradient(135deg,#d4c06a,#e8d880)'},
+       {id:'fiat_l3',name:'Rosso Corsa', bg:'linear-gradient(135deg,#cc0000,#ff0000)'},
+     ]},
+    {id:'yaris',  model:'Toyota Yaris',        colour:'#e06010', status:'available', perf:60,rel:76,spd:59,
+     liveries:[
+       {id:'yar_l1',name:'Gazoo Orange', bg:'linear-gradient(135deg,#cc4400,#ff6600)'},
+       {id:'yar_l2',name:'Alpine White', bg:'linear-gradient(135deg,#dddddd,#ffffff)'},
+       {id:'yar_l3',name:'Circuit Blue', bg:'linear-gradient(135deg,#002266,#0044aa)'},
+     ]},
+    {id:'fiesta', model:'Ford Fiesta',          colour:'#e03030', status:'completed',
+     team:{name:'Holt Motorsport',drivers:[{name:'Marcus Holt',nationality:'British'},{name:'Sam Holt',nationality:'British'}]},
+     perf:62,rel:72,spd:62},
+  ]
+};
+
+// ── PERF BARS ──
+function perfBars(c) {
+  function row(label, val, col) {
+    return '<div class="perf-bar-row"><span style="min-width:22px">'+label+'</span>'
+      +'<div class="perf-bar-wrap"><div class="perf-bar-fill" style="width:'+val+'%;background:'+col+'"></div></div>'
+      +'<span>'+val+'</span></div>';
+  }
+  return '<div class="perf-bars">'+row('Perf',c.perf,'var(--blue)')+row('Rel',c.rel,'var(--green)')+row('Spd',c.spd,'var(--amber)')+'</div>';
+}
+
+// ── CAR EMOJI ──
+function carEmoji(model) {
+  var map = {'Ford Fiesta':'🔴','VW Polo':'🔵','Renault Clio':'🟡','Honda Jazz':'🟣','Fiat 500':'🟢','Toyota Yaris':'🟠','Citroën C3 Cactus':'🟣'};
+  return map[model] || '🏎️';
+}
+
+function fmtTime(s) { return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
+
+// ── RENDER GRID ──
+function makeRow(car, section) {
+  var img = '<div class="car-image-panel"><div class="car-placeholder" style="background:'+car.colour+'22;border-radius:8px">'+carEmoji(car.model)+'</div></div>';
+
+  if (section === 'vacancy') {
+    var d = car.team.drivers[0];
+    var flag = AT.flagImg(d.nationality, 18);
+    var pwBadge = car.pwProtected
+      ? '<span class="badge" style="background:var(--amberbg);color:var(--amber);border:1px solid var(--amberbdr)">🔒 Password protected</span>' : '';
+    var timer = (car.pwProtected && car.pwTimeLeft > 0)
+      ? '<div style="font-size:11px;color:var(--amber);margin-top:4px">🕐 Opens in <span id="timer_'+car.id+'">'+fmtTime(car.pwTimeLeft)+'</span></div>' : '';
+    return '<div class="team-row">'+img
+      +'<div class="team-info">'
+        +'<div class="team-name">'+car.team.name+'</div>'
+        +'<div class="team-car">'+car.model+'</div>'
+        +'<div class="team-drivers">'
+          +'<div class="driver-slot filled">'+flag+' '+d.name+' · Driver 1</div>'
+          +'<div class="driver-slot vacant" onclick="handleVacancy(\''+car.id+'\')">+ Join as Driver 2</div>'
+        +'</div>'+timer
+      +'</div>'
+      +'<div class="team-action">'+perfBars(car)+pwBadge+'</div>'
+    +'</div>';
+  }
+
+  if (section === 'available') {
+    return '<div class="team-row">'+img
+      +'<div class="team-info">'
+        +'<div class="team-name" style="color:var(--text3)">No team yet</div>'
+        +'<div class="team-car">'+car.model+'</div>'
+        +'<div class="team-drivers">'
+          +'<div class="driver-slot">Driver 1 — open</div>'
+          +'<div class="driver-slot">Driver 2 — open</div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="team-action">'+perfBars(car)
+        +'<button class="btn btn-accent btn-sm" onclick="startNew(\''+car.id+'\')">Create team →</button>'
+      +'</div>'
+    +'</div>';
+  }
+
+  if (section === 'completed') {
+    var d1 = car.team.drivers[0], d2 = car.team.drivers[1];
+    return '<div class="team-row team-row-disabled">'+img
+      +'<div class="team-info">'
+        +'<div class="team-name">'+car.team.name+'</div>'
+        +'<div class="team-car">'+car.model+'</div>'
+        +'<div class="team-drivers">'
+          +'<div class="driver-slot filled">'+AT.flagImg(d1.nationality,18)+' '+d1.name+'</div>'
+          +'<div class="driver-slot filled">'+AT.flagImg(d2.nationality,18)+' '+d2.name+'</div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="team-action">'+perfBars(car)+'</div>'
+    +'</div>';
+  }
+}
+
+function renderGrid() {
+  var vac  = SERIES.cars.filter(function(c){return c.status==='vacancy';});
+  var avail= SERIES.cars.filter(function(c){return c.status==='available';});
+  var done = SERIES.cars.filter(function(c){return c.status==='completed';});
+
+  var vh = document.getElementById('vacancyHeading');
+  if(vh) vh.style.display = vac.length ? '' : 'none';
+  document.getElementById('vacancyList').innerHTML  = vac.map(function(c){return makeRow(c,'vacancy');}).join('');
+  document.getElementById('availableList').innerHTML= avail.map(function(c){return makeRow(c,'available');}).join('');
+  document.getElementById('completedList').innerHTML= done.map(function(c){return makeRow(c,'completed');}).join('');
+
+  vac.filter(function(c){return c.pwProtected && c.pwTimeLeft>0;}).forEach(function(c){
+    var iv = setInterval(function(){
+      c.pwTimeLeft--;
+      var el = document.getElementById('timer_'+c.id);
+      if(el) el.textContent = fmtTime(c.pwTimeLeft);
+      if(c.pwTimeLeft<=0){ clearInterval(iv); c.pwProtected=false; renderGrid(); }
+    },1000);
+  });
+}
+
+// ── VACANCY CLICK ──
+var pendingCarId = null;
+function handleVacancy(id) {
+  var car = SERIES.cars.find(function(c){return c.id===id;});
+  pendingCarId = id;
+  if(car.pwProtected && car.pwTimeLeft > 0) {
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwErr').classList.remove('show');
+    document.getElementById('pwModal').classList.add('open');
+  } else {
+    startExisting(id);
+  }
+}
+function checkPw() {
+  var car = SERIES.cars.find(function(c){return c.id===pendingCarId;});
+  if(document.getElementById('pwInput').value === car.pwPassword) {
+    closePw(); startExisting(pendingCarId);
+  } else {
+    document.getElementById('pwErr').classList.add('show');
+    document.getElementById('pwInput').value='';
+  }
+}
+function closePw(){ document.getElementById('pwModal').classList.remove('open'); }
+
+// ── FLOW STATE ──
+var flowMode='new', selCar=null, selLivery=null, selCore=null, selCurr=null, selCircuit=null, pwTimerIv=null;
+
+function openFlow(){ document.getElementById('flowOverlay').style.display='flex'; }
+function closeFlow(){ document.getElementById('flowOverlay').style.display='none'; if(pwTimerIv){clearInterval(pwTimerIv);pwTimerIv=null;} }
+
+function startNew(id) {
+  flowMode='new'; selCar=id;
+  var car = SERIES.cars.find(function(c){return c.id===id;});
+  resetFlow();
+  document.getElementById('flowTitle').textContent = 'Create your team — '+car.model;
+  document.getElementById('s1Title').textContent   = 'Set up your team';
+  document.getElementById('s1Sub').textContent     = 'Choose your livery and team name';
+  document.getElementById('existBlock').style.display = 'none';
+  document.getElementById('newBlock').style.display   = 'block';
+  document.getElementById('carDot').style.background  = car.colour;
+  document.getElementById('carModel').textContent     = car.model;
+  renderLiveries(car); renderCircuits(); renderChars(); populateNat();
+  goStep(1); openFlow();
+}
+
+function startExisting(id) {
+  flowMode='existing'; selCar=id;
+  var car = SERIES.cars.find(function(c){return c.id===id;});
+  var d   = car.team.drivers[0];
+  resetFlow();
+  document.getElementById('flowTitle').textContent = 'Join team — '+car.team.name;
+  document.getElementById('s1Title').textContent   = 'Team details';
+  document.getElementById('s1Sub').textContent     = 'Set by the first driver — shown for reference';
+  document.getElementById('existBlock').style.display = 'block';
+  document.getElementById('newBlock').style.display   = 'none';
+  document.getElementById('existDetails').innerHTML =
+    '<div class="review-row"><span>Team name</span><strong>'+car.team.name+'</strong></div>'
+    +'<div class="review-row"><span>Car</span><strong>'+car.model+'</strong></div>'
+    +'<div class="review-row"><span>Driver 1</span><strong>'+AT.flagImg(d.nationality,16)+' '+d.name+'</strong></div>'
+    +'<div class="review-row"><span>Your role</span><strong>Driver 2</strong></div>';
+  document.getElementById('carDot').style.background = car.colour;
+  document.getElementById('carModel').textContent    = car.model+' — '+car.team.name;
+  renderCircuits(); renderChars(); populateNat();
+  goStep(1); openFlow();
+}
+
+function resetFlow() {
+  selLivery=null; selCore=null; selCurr=null; selCircuit=null;
+  document.getElementById('teamNameIn').value='';
+  document.getElementById('driverIn').value='';
+  document.getElementById('pwCheck').checked=false;
+  document.getElementById('pwSetField').style.display='none';
+  document.getElementById('teamPwIn').value='';
+}
+
+function goStep(n) {
+  [1,2,3].forEach(function(i){
+    document.getElementById('flowStep'+i).classList.toggle('active', i===n);
+  });
+  document.getElementById('flowProgressBar').style.width = (n===1?33:n===2?66:100)+'%';
+  document.getElementById('flowStepLabel').textContent   = 'Step '+n+' of 3';
+  if(n===3) buildReview();
+  window.scrollTo(0,0);
+}
+
+// ── LIVERIES ──
+function renderLiveries(car) {
+  document.getElementById('liveryGrid').innerHTML = car.liveries.map(function(l){
+    var sel = selLivery===l.id;
+    return '<div class="livery-option'+(sel?' selected':'')+'" onclick="selLiv(\''+l.id+'\',\''+car.id+'\')"><div class="livery-swatch" style="background:'+l.bg+'">🏎️</div><div class="livery-name">'+l.name+'</div></div>';
+  }).join('');
+}
+function selLiv(lid, cid) {
+  selLivery=lid;
+  renderLiveries(SERIES.cars.find(function(c){return c.id===cid;}));
+}
+
+// ── CHARACTERISTICS ──
+function renderChars() {
+  renderCharGrid('coreGrid',  GAME_CONFIG.coreCharacteristics,    'core',  'sel-amber');
+  renderCharGrid('currGrid',  GAME_CONFIG.currentCharacteristics, 'curr',  'sel-purple');
+}
+function renderCharGrid(elId, chars, type, selClass) {
+  document.getElementById(elId).innerHTML = chars.map(function(c){
+    var sel = (type==='core'?selCore:selCurr)===c.id;
+    return '<div class="char-option'+(sel?' '+selClass:'')+'" onclick="selChar(\''+type+'\',\''+c.id+'\')"><div class="char-header"><span class="char-icon">'+c.icon+'</span><span class="char-name">'+c.name+'</span></div><div class="char-desc">'+c.desc+'</div><div class="char-cat">'+c.cat+'</div></div>';
+  }).join('');
+}
+function selChar(type, id) {
+  if(type==='core') selCore=id; else selCurr=id;
+  renderChars();
+}
+
+// ── CIRCUITS ──
+function renderCircuits() {
+  document.getElementById('circuitGrid').innerHTML = GAME_CONFIG.specialistCircuits.map(function(c){
+    var sel = selCircuit===c.id;
+    return '<div class="circuit-option'+(sel?' selected':'')+'" onclick="selCirc(\''+c.id+'\')"><div class="c-icon">🏁</div><div class="c-name">'+c.name+'</div><div class="c-type">'+c.type+'</div></div>';
+  }).join('');
+}
+function selCirc(id) { selCircuit=id; renderCircuits(); }
+
+// ── NATIONALITY ──
+function populateNat() {
+  var sel = document.getElementById('natIn');
+  sel.innerHTML = '<option value="">Select nationality...</option>'
+    + NATIONALITIES.map(function(n){return '<option value="'+n+'">'+n+'</option>';}).join('');
+}
+
+// ── PASSWORD PROTECT ──
+function togglePwProtect() {
+  var on = document.getElementById('pwCheck').checked;
+  document.getElementById('pwSetField').style.display = on ? 'block' : 'none';
+}
+
+// ── VALIDATION ──
+function chk1() {
+  if(flowMode==='existing') return true;
+  var name = document.getElementById('teamNameIn').value.trim();
+  var pwOk = !document.getElementById('pwCheck').checked || document.getElementById('teamPwIn').value.trim().length>0;
+  return name.length>0 && !!selLivery && pwOk;
+}
+function chk2() {
+  return document.getElementById('driverIn').value.trim().length>0
+    && document.getElementById('natIn').value
+    && !!selCore && !!selCurr && !!selCircuit;
+}
+
+// ── REVIEW ──
+function buildReview() {
+  var car   = SERIES.cars.find(function(c){return c.id===selCar;});
+  var core  = GAME_CONFIG.coreCharacteristics.find(function(c){return c.id===selCore;});
+  var curr  = GAME_CONFIG.currentCharacteristics.find(function(c){return c.id===selCurr;});
+  var circ  = GAME_CONFIG.specialistCircuits.find(function(c){return c.id===selCircuit;});
+  var driver= document.getElementById('driverIn').value.trim();
+  var nat   = document.getElementById('natIn').value;
+  var team  = flowMode==='new' ? document.getElementById('teamNameIn').value.trim() : car.team.name;
+  var livery= flowMode==='new' ? car.liveries.find(function(l){return l.id===selLivery;}) : null;
+  var pwProt= flowMode==='new' && document.getElementById('pwCheck').checked;
+  var flagHtml = AT.flagImg(nat, 16);
+
+  document.getElementById('reviewCard').innerHTML =
+    '<div class="review-row"><span>Series</span><strong>City Car Challenge S1</strong></div>'
+    +'<div class="review-row"><span>Car</span><strong>'+car.model+'</strong></div>'
+    +'<div class="review-row"><span>Team</span><strong>'+team+'</strong></div>'
+    +(livery?'<div class="review-row"><span>Livery</span><strong>'+livery.name+'</strong></div>':'')
+    +'<div class="review-row"><span>Driver</span><strong>'+driver+'</strong></div>'
+    +'<div class="review-row"><span>Nationality</span><strong>'+flagHtml+' '+nat+'</strong></div>'
+    +'<div class="review-row"><span>Specialist circuit</span><strong>'+(circ?circ.name:'—')+'</strong></div>'
+    +'<div class="review-row"><span>Core characteristic</span><strong>'+(core?core.icon+' '+core.name:'—')+'</strong></div>'
+    +'<div class="review-row"><span>Current characteristic</span><strong>'+(curr?curr.icon+' '+curr.name:'—')+'</strong></div>'
+    +'<div class="review-row"><span>Role</span><strong>'+(flowMode==='new'?'Driver 1':'Driver 2')+'</strong></div>'
+    +'<div class="review-row"><span>Game ID</span><strong style="font-family:monospace">'+SERIES.id+'</strong></div>';
+
+  var tb = document.getElementById('pwTimerBanner');
+  if(pwProt) {
+    tb.style.display='flex';
+    var secs=300;
+    document.getElementById('pwTimerCount').textContent='5:00';
+    if(pwTimerIv) clearInterval(pwTimerIv);
+    pwTimerIv=setInterval(function(){ secs--; document.getElementById('pwTimerCount').textContent=fmtTime(secs); if(secs<=0){clearInterval(pwTimerIv);tb.style.display='none';} },1000);
+  } else { tb.style.display='none'; }
+}
+
+// ── CONFIRM ──
+function confirmJoin() {
+  closeFlow();
+  window.location.href = 'atracer-myseasons.html';
+}
+
+document.addEventListener('DOMContentLoaded', function(){ renderGrid(); });
+
+</script>
+</body>
+</html>
