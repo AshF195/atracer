@@ -502,46 +502,44 @@ document.addEventListener('DOMContentLoaded',function(){
 </div>
 
 <script>
-
-// ── TYRE DATA (from carset JSON in production) ──
 var TYRES = {
-  soft:   [ {id:'S1',wear:0},{id:'S2',wear:0},{id:'S3',wear:62},{id:'S4',wear:100} ],
-  medium: [ {id:'M1',wear:0},{id:'M2',wear:0},{id:'M3',wear:28},{id:'M4',wear:100} ]
+  soft:   [{id:'S1',wear:0},{id:'S2',wear:0},{id:'S3',wear:62},{id:'S4',wear:100}],
+  medium: [{id:'M1',wear:0},{id:'M2',wear:0},{id:'M3',wear:28},{id:'M4',wear:100}]
 };
 
-// ── CAR PERF DATA (no figures shown to players) ──
 var CARS_PERF = [
-  {name:'Fiesta Racing',    base:62, upgrade:5},
-  {name:'VW Racing',        base:61, upgrade:0},
-  {name:'Gauthier Sport',   base:63, upgrade:0},
-  {name:'Sabelt Racing',    base:61, upgrade:0, you:true},
-  {name:'500 Legends',      base:59, upgrade:8},
-  {name:'Toyota GR',        base:60, upgrade:0},
+  {name:'Fiesta Racing',  base:62, upgrade:5,  you:false},
+  {name:'VW Racing',      base:61, upgrade:0,  you:false},
+  {name:'Gauthier Sport', base:63, upgrade:0,  you:false},
+  {name:'Sabelt Racing',  base:61, upgrade:0,  you:true},
+  {name:'500 Legends',    base:59, upgrade:8,  you:false},
+  {name:'Toyota GR',      base:60, upgrade:0,  you:false}
 ];
 
-// ── DRIVER SLIDER CONFIG ──
 var DRIVER_SLIDERS = [
   {id:'limitDriving',  label:'Limit driving',   low:'Conservative',  high:'On the limit'},
   {id:'aggression',    label:'Aggression',       low:'Clean racing',  high:'Aggressive'},
   {id:'pitstopSpeed',  label:'Pit stop speed',   low:'Careful',       high:'Fast'},
   {id:'mechWear',      label:'Mechanical wear',  low:'Protect parts', high:'Push hard'},
   {id:'tyrePunish',    label:'Tyre punishment',  low:'Nurse tyres',   high:'Push tyres'},
-  {id:'startReaction', label:'Start reaction',   low:'Safe',          high:'Aggressive'},
+  {id:'startReaction', label:'Start reaction',   low:'Safe',          high:'Aggressive'}
 ];
 var driverVals = {};
 DRIVER_SLIDERS.forEach(function(s){ driverVals[s.id] = 50; });
 
-// ── SESSION COUNTDOWN ──
-var secs = (4*3600)+(22*60)+17;
+var CAR_IMG = 'https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge/cars/fiat500-yellow-medium.png';
+
+// Session countdown
+var cdSecs = (4*3600)+(22*60)+17;
 setInterval(function(){
-  if(secs<=0){ document.getElementById('sessionCd').textContent='00:00:00'; return; }
-  secs--;
-  var h=Math.floor(secs/3600), m=Math.floor((secs%3600)/60), s=secs%60;
+  if(cdSecs<=0){ document.getElementById('sessionCd').textContent='00:00:00'; return; }
+  cdSecs--;
+  var h=Math.floor(cdSecs/3600), m=Math.floor((cdSecs%3600)/60), s=cdSecs%60;
   var pad=function(n){return String(n).padStart(2,'0');};
   document.getElementById('sessionCd').textContent = pad(h)+':'+pad(m)+':'+pad(s);
 }, 1000);
 
-// ── MODALS ──
+// Modals
 function openModal(id){
   document.getElementById(id).classList.add('open');
   if(id==='raceSettingsModal'){ buildStints(); buildDriverSliders(); }
@@ -550,54 +548,62 @@ function openModal(id){
 }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 
-// ── TYRE OPTION HTML ──
-function tyreOptions(selectedId){
+// Tyre helpers
+function allTyres(){
+  var list = [];
+  ['soft','medium'].forEach(function(c){
+    TYRES[c].forEach(function(t){ list.push({compound:c,id:t.id,wear:t.wear}); });
+  });
+  return list;
+}
+
+function tyreOptHtml(selectedId){
   var opts = '';
-  ['soft','medium'].forEach(function(compound){
-    TYRES[compound].forEach(function(t){
-      var wearPct = t.wear;
-      var fresh = wearPct===0;
-      var label = (compound==='soft'?'Soft':'Medium')+' '+t.id+(fresh?' (new)':' ('+wearPct+'% worn)');
-      var sel = t.id===selectedId ? ' selected' : '';
-      var dis = wearPct===100 ? ' disabled' : '';
-      opts += '<option value="'+t.id+'"'+sel+dis+'>'+label+'</option>';
-    });
+  allTyres().forEach(function(t){
+    var label = (t.compound==='soft'?'Soft':'Medium') + ' ' + t.id + (t.wear===0?' (new)':' ('+t.wear+'% worn)');
+    var sel = t.id===selectedId ? ' selected' : '';
+    var dis = t.wear===100 ? ' disabled' : '';
+    opts += '<option value="' + t.id + '"' + sel + dis + '>' + label + '</option>';
   });
   return opts;
 }
 
-function tyreWearBarHtml(tyreId){
-  var wear = 0, compound = '';
-  ['soft','medium'].forEach(function(c){
-    TYRES[c].forEach(function(t){ if(t.id===tyreId){ wear=t.wear; compound=c; } });
-  });
+function wearBarHtml(tyreId){
+  var wear = 0;
+  allTyres().forEach(function(t){ if(t.id===tyreId) wear=t.wear; });
   var col = wear===0 ? 'var(--green)' : wear<50 ? 'var(--amber)' : 'var(--accent)';
   return '<div class="tyre-wear-wrap">'
-    +'<div class="tyre-wear-lbl">'+wear+'% worn</div>'
-    +'<div class="tyre-wear-bar"><div class="tyre-wear-fill" style="width:'+wear+'%;background:'+col+'"></div></div>'
-    +'</div>';
+    + '<div class="tyre-wear-lbl">' + wear + '% worn</div>'
+    + '<div class="tyre-wear-bar"><div class="tyre-wear-fill" style="width:' + wear + '%;background:' + col + '"></div></div>'
+    + '</div>';
 }
 
-// ── STINT BUILDER ──
+// Bind a select to update its wear bar; avoids inline onchange with variable refs
+function bindTyreSelect(selId, wearId){
+  var sel = document.getElementById(selId);
+  var wearEl = document.getElementById(wearId);
+  if(sel && wearEl){
+    sel.addEventListener('change', function(){ wearEl.innerHTML = wearBarHtml(this.value); });
+  }
+}
+
+// ── STINTS ──
 function buildStints(){
   var n = parseInt(document.getElementById('stopsSelect').value);
-  var stints = n + 1;
   var defaults = ['M1','S2','M2','S3'];
   var html = '';
-  for(var i=0;i<stints;i++){
+  for(var i=0;i<n+1;i++){
     var defId = defaults[i] || 'M1';
     html += '<div class="stint-row">'
-      +'<span class="stint-num">Stint '+(i+1)+'</span>'
-      +'<select class="tyre-select" id="stint'+i+'Tyre" onchange="updateStintWear('+i+')">'+tyreOptions(defId)+'</select>'
-      +'<div id="stint'+i+'Wear">'+tyreWearBarHtml(defId)+'</div>'
-      +'</div>';
+      + '<span class="stint-num">Stint ' + (i+1) + '</span>'
+      + '<select class="tyre-select" id="stintTyre' + i + '">'
+        + tyreOptHtml(defId)
+      + '</select>'
+      + '<div id="stintWear' + i + '">' + wearBarHtml(defId) + '</div>'
+    + '</div>';
   }
   document.getElementById('stintRows').innerHTML = html;
-}
-
-function updateStintWear(i){
-  var sel = document.getElementById('stint'+i+'Tyre');
-  document.getElementById('stint'+i+'Wear').innerHTML = tyreWearBarHtml(sel.value);
+  for(var j=0;j<n+1;j++){ bindTyreSelect('stintTyre'+j,'stintWear'+j); }
 }
 
 // ── DRIVER SLIDERS ──
@@ -606,23 +612,24 @@ function buildDriverSliders(){
   DRIVER_SLIDERS.forEach(function(s){
     var val = driverVals[s.id];
     html += '<div class="slider-row">'
-      +'<div class="slider-labels"><span>'+s.label+'</span><span class="val" id="val_'+s.id+'">'+val+'</span></div>'
-      +'<input type="range" min="0" max="100" value="'+val+'" oninput="updateSlider(''+s.id+'',this.value)">'
-      +'<div class="slider-hints"><span>'+s.low+'</span><span>'+s.high+'</span></div>'
-      +'</div>';
+      + '<div class="slider-labels"><span>' + s.label + '</span><span class="val" id="val_' + s.id + '">' + val + '</span></div>'
+      + '<input type="range" min="0" max="100" value="' + val + '" data-sid="' + s.id + '">'
+      + '<div class="slider-hints"><span>' + s.low + '</span><span>' + s.high + '</span></div>'
+    + '</div>';
   });
   document.getElementById('driverSliders').innerHTML = html;
+  document.querySelectorAll('#driverSliders input[type=range]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var sid = this.dataset.sid;
+      driverVals[sid] = parseInt(this.value);
+      var el = document.getElementById('val_'+sid);
+      if(el) el.textContent = this.value;
+    });
+  });
 }
-
-function updateSlider(id, val){
-  driverVals[id] = parseInt(val);
-  var el = document.getElementById('val_'+id);
-  if(el) el.textContent = val;
-}
-
 function saveRaceSettings(){ closeModal('raceSettingsModal'); }
 
-// ── QUAL LAP BUILDER ──
+// ── QUAL LAPS ──
 function buildQualLaps(){
   var n = parseInt(document.getElementById('qualLapsSelect').value);
   var defaults = ['S1','S2','M1'];
@@ -630,47 +637,50 @@ function buildQualLaps(){
   for(var i=0;i<n;i++){
     var defId = defaults[i] || 'S1';
     html += '<div class="qual-lap-row">'
-      +'<div class="qual-lap-header">'
-        +'<span class="qual-lap-num">Lap '+(i+1)+'</span>'
-        +'<select class="tyre-select" style="flex:1" id="qlap'+i+'Tyre" onchange="updateQlapWear('+i+')">'+tyreOptions(defId)+'</select>'
-        +'<div id="qlap'+i+'Wear" style="margin-left:8px">'+tyreWearBarHtml(defId)+'</div>'
-      +'</div>'
-      +'<div class="push-row">'
-        +'<span>Push level</span>'
-        +'<input type="range" style="flex:1" min="0" max="100" value="80" id="qlap'+i+'Push" oninput="document.getElementById('qlap'+i+'PushVal').textContent=this.value">'
-        +'<span id="qlap'+i+'PushVal" style="min-width:28px;text-align:right;color:var(--accent);font-weight:600">80</span>'
-      +'</div>'
-      +'</div>';
+      + '<div class="qual-lap-header">'
+        + '<span class="qual-lap-num">Lap ' + (i+1) + '</span>'
+        + '<select class="tyre-select" style="flex:1" id="qlapTyre' + i + '">'
+          + tyreOptHtml(defId)
+        + '</select>'
+        + '<div id="qlapWear' + i + '" style="margin-left:8px">' + wearBarHtml(defId) + '</div>'
+      + '</div>'
+      + '<div class="push-row">'
+        + '<span>Push level</span>'
+        + '<input type="range" style="flex:1" min="0" max="100" value="80" data-pushval="qlapPush' + i + '">'
+        + '<span id="qlapPush' + i + '" style="min-width:28px;text-align:right;color:var(--accent);font-weight:600">80</span>'
+      + '</div>'
+    + '</div>';
   }
-  if(!n) html = '<p style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0">No laps selected &mdash; you won't participate in qualifying.</p>';
+  if(!n) html = '<p style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0">No laps selected.</p>';
   document.getElementById('qualLapRows').innerHTML = html;
+  for(var j=0;j<n;j++){ bindTyreSelect('qlapTyre'+j,'qlapWear'+j); }
+  document.querySelectorAll('#qualLapRows input[type=range]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var el = document.getElementById(this.dataset.pushval);
+      if(el) el.textContent = this.value;
+    });
+  });
 }
-
-function updateQlapWear(i){
-  var sel = document.getElementById('qlap'+i+'Tyre');
-  document.getElementById('qlap'+i+'Wear').innerHTML = tyreWearBarHtml(sel.value);
-}
-
 function saveQualSettings(){ closeModal('qualSettingsModal'); }
 
 // ── CAR PERFORMANCE ──
-var CAR_IMG = 'https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge/cars/fiat500-yellow-medium.png';
 function buildCarPerf(){
   var html = '';
   CARS_PERF.forEach(function(car){
-    var baseW = car.base;
-    var upgW  = car.upgrade;
-    html += '<div class="perf-team-row'+(car.you?' you':'')+'">'
-      +'<div class="perf-team-header">'
-        +'<img src="'+CAR_IMG+'" class="perf-team-img">'
-        +'<span'+(car.you?' style="font-weight:600;color:var(--accent)"':'')+'>'+car.name+(car.you?' (you)':'')+'</span>'
-      +'</div>'
-      +'<div class="perf-bar-lbl">Overall performance</div>'
-      +'<div class="perf-track">'
-        +'<div class="perf-base" style="width:'+baseW+'%"></div>'
-        +(upgW>0?'<div class="perf-upgrade" style="left:'+baseW+'%;width:'+upgW+'%"></div>':'')
-      +'</div>'
-      +'</div>';
+    var nameSpan = car.you
+      ? '<span style="font-weight:600;color:var(--accent)">' + car.name + ' (you)</span>'
+      : '<span>' + car.name + '</span>';
+    html += '<div class="perf-team-row">'
+      + '<div class="perf-team-header">'
+        + '<img src="' + CAR_IMG + '" class="perf-team-img" alt="">'
+        + nameSpan
+      + '</div>'
+      + '<div class="perf-bar-lbl">Overall performance</div>'
+      + '<div class="perf-track">'
+        + '<div class="perf-base" style="width:' + car.base + '%"></div>'
+        + (car.upgrade>0 ? '<div class="perf-upgrade" style="left:' + car.base + '%;width:' + car.upgrade + '%"></div>' : '')
+      + '</div>'
+    + '</div>';
   });
   document.getElementById('carPerfRows').innerHTML = html;
 }
@@ -688,22 +698,29 @@ function sendChat(type){
   var msgs = document.getElementById(bodyId);
   var msg = document.createElement('div');
   msg.className = 'chat-msg';
-  msg.innerHTML = '<div class="chat-av" style="background:#7030c0">'+initials+'</div>'
-    +'<div class="chat-body"><strong>'+name+'</strong> '+text+'<div class="chat-time">Just now</div></div>';
+  var av = document.createElement('div');
+  av.className = 'chat-av';
+  av.style.background = '#7030c0';
+  av.textContent = initials;
+  var body = document.createElement('div');
+  body.className = 'chat-body';
+  body.innerHTML = '<strong>' + name + '</strong> ' + text + '<div class="chat-time">Just now</div>';
+  msg.appendChild(av);
+  msg.appendChild(body);
   msgs.appendChild(msg);
-  input.value='';
+  input.value = '';
   msgs.scrollTop = msgs.scrollHeight;
 }
 
 // ── NEWS NAV ──
-var newsPage_ = 0;
+var newsIdx = 0;
 function newsPage(dir){
-  newsPage_ += dir;
-  document.getElementById('newsPrev').disabled = newsPage_<=0;
-  document.getElementById('newsPager').textContent = 'Round '+(newsPage_+1);
+  newsIdx += dir;
+  document.getElementById('newsPrev').disabled = newsIdx <= 0;
+  document.getElementById('newsPager').textContent = 'Round ' + (newsIdx+1);
 }
 
-// ── PERSONALISE ──
+// ── INIT ──
 document.addEventListener('DOMContentLoaded', function(){
   buildStints();
   var user = AT.user;
@@ -714,7 +731,6 @@ document.addEventListener('DOMContentLoaded', function(){
     if(nm) nm.textContent = user.name;
   }
 });
-
 </script>
 </body>
 </html>
