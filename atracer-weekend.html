@@ -211,222 +211,266 @@ document.addEventListener('DOMContentLoaded',function(){
   if(window.PAGE_ID!=='login') injectNav();
   AT.init();
 });</script>
-<style>.wkd-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}.wkd-header-meta{flex:1;min-width:0}.wkd-header-meta h1{font-size:20px;font-weight:700;margin-bottom:2px}.wkd-header-meta p{font-size:13px;color:var(--text2)}.wkd-stripe{width:5px;height:48px;border-radius:3px;flex-shrink:0}.wkd-grid{display:grid;grid-template-columns:1fr 280px;gap:14px;align-items:start}@media(max-width:760px){.wkd-grid{grid-template-columns:1fr}}.car-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow2);margin-bottom:14px}.car-panel-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}.car-panel-header h3{font-size:14px;font-weight:600;flex:1}.car-livery{height:110px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.car-livery-stripe{position:absolute;top:0;left:0;bottom:0;width:5px}.car-livery-ph{font-size:12px;color:var(--text3)}.car-stats{padding:12px 16px;display:flex;gap:14px}.car-stat{flex:1;text-align:center}.car-stat-val{font-size:18px;font-weight:700;line-height:1}.car-stat-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-top:2px}.session-tl{display:flex;flex-direction:column;gap:8px}.tl-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg3)}.tl-item.live{border-color:var(--greenbdr);background:var(--greenbg)}.tl-item.next{border-color:var(--accentbdr);background:var(--accentbg)}.tl-item.done{opacity:0.6}.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--border2)}.tl-item.live .tl-dot{background:var(--green);box-shadow:0 0 6px var(--green)}.tl-item.next .tl-dot{background:var(--accent)}.tl-name{font-size:13px;font-weight:500;flex:1}.tl-item.done .tl-name{color:var(--text3)}.tl-right{text-align:right}.tl-time{font-size:12px;color:var(--text2)}.tl-result{font-size:12px;font-weight:500}.cd-wrap{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);text-align:center}.cd-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}.cd-row{display:flex;gap:8px;justify-content:center}.cd-block{text-align:center}.cd-num{font-size:22px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1;display:block}.cd-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em}.cd-sep{font-size:20px;color:var(--border2);font-weight:300;align-self:flex-start;padding-top:2px}.chat-msg{display:flex;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}.chat-msg:last-child{border-bottom:none}.chat-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}.chat-body{flex:1;color:var(--text2);line-height:1.4}.chat-body strong{color:var(--text)}.chat-time{font-size:11px;color:var(--text3);margin-top:2px}.chat-input-row{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}.chat-input-row input{flex:1;padding:8px 11px;border:1px solid var(--border);border-radius:7px;font-size:13px;background:var(--bg3);color:var(--text);font-family:inherit}.chat-input-row input:focus{outline:none;border-color:var(--accent)}.standings-hidden{text-align:center;padding:20px;cursor:pointer}.standings-hidden p{font-size:12px;color:var(--text3);margin:8px 0}.circuit-map{background:var(--bg3);border:1px dashed var(--border2);border-radius:6px;height:90px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);margin-bottom:12px}.detail-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}.detail-row:last-child{border-bottom:none}.detail-row span{color:var(--text2)}.standings-table{width:100%;border-collapse:collapse;font-size:13px}.standings-table th{text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600}.standings-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:middle}.standings-table tr:last-child td{border-bottom:none}.standings-table tr.you-row td{background:var(--accentbg)}.car-chip{display:inline-flex;align-items:center;justify-content:center;width:26px;height:15px;border-radius:3px;font-size:9px;font-weight:700;color:#fff}.notebook-entry{padding:10px 12px;background:var(--bg3);border-radius:6px;border-left:3px solid var(--accent);margin-bottom:8px;font-size:12px;color:var(--text2);line-height:1.5}.notebook-entry strong{color:var(--text);display:block;margin-bottom:2px}</style>
+<style>.wkd-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}.wkd-title{flex:1;min-width:0;text-align:center}.wkd-title h1{font-size:16px;font-weight:700;margin-bottom:2px}.wkd-title p{font-size:12px;color:var(--text2)}.wkd-car{display:flex;align-items:center;gap:10px;flex-shrink:0}.wkd-car-info{text-align:right;font-size:12px}.wkd-car-info strong{display:block;font-size:13px}.wkd-car-sprite{width:90px;height:52px;object-fit:contain;display:block}.wkd-car-ph{width:90px;height:52px;background:var(--bg3);border:1px dashed var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text3)}.wkd-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:700px){.wkd-grid{grid-template-columns:1fr}}.stnd-cols{display:grid;grid-template-columns:1fr 1px 1fr;gap:0}.stnd-divider{background:var(--border);margin:0 12px}.stnd-col h4{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;text-align:center}.stnd-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}.stnd-row:last-child{border-bottom:none}.stnd-pos{font-size:11px;font-weight:700;color:var(--text3);min-width:16px}.stnd-pts{font-size:11px;font-weight:700;color:var(--accent);min-width:28px;text-align:right}.stnd-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stnd-chip{width:22px;height:13px;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff}.show-all-btn{font-size:11px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:inherit;padding:8px 0 0;width:100%;text-align:center}.session-top{display:grid;grid-template-columns:1fr 130px;gap:12px;margin-bottom:12px}.session-name{font-size:15px;font-weight:700;margin-bottom:4px}.session-countdown{font-size:22px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}.session-cd-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}.circuit-thumb{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;height:90px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text3)}.weather-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}.weather-row span{color:var(--text2)}.runs-row{font-size:12px;color:var(--text2);margin-bottom:10px}.leaderboard-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}.leaderboard-row:last-child{border-bottom:none}.lb-pos{font-size:11px;font-weight:700;color:var(--text3);min-width:16px}.lb-chip{width:24px;height:14px;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff}.lb-name{flex:1}.lb-time{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text)}.lb-time.fastest{color:var(--purple)}.lb-gap{font-size:11px;color:var(--text3);min-width:48px;text-align:right}.news-date{font-size:11px;color:var(--text3);float:right}.news-item{font-size:13px;color:var(--text2);margin-bottom:6px;line-height:1.4}.news-item a{color:var(--accent);text-decoration:none;font-weight:600}.news-item a:hover{text-decoration:underline}.news-nav{display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}.news-nav button{background:none;border:none;color:var(--accent);cursor:pointer;font-family:inherit;font-size:13px}.news-nav button:disabled{color:var(--text3);cursor:default}.settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.settings-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:all 0.15s;text-decoration:none;color:var(--text)}.settings-btn:hover{background:var(--bg4);border-color:var(--border2)}.settings-btn .icon{font-size:20px}.settings-btn .lbl{font-size:10px;color:var(--text2);text-align:center;line-height:1.3}.settings-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.wkd-bottom{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:0}@media(max-width:700px){.wkd-bottom{grid-template-columns:1fr}}.comm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.comm-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:all 0.15s;text-align:center}.comm-btn:hover{background:var(--bg4);border-color:var(--border2)}.comm-btn .icon{font-size:22px;margin-bottom:6px}.comm-btn .lbl{font-size:12px;font-weight:500}.comm-btn .sub{font-size:11px;color:var(--text3);margin-top:2px}.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);padding:16px}.modal-overlay.open{display:flex}.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:480px;max-height:80vh;display:flex;flex-direction:column;box-shadow:var(--shadow);animation:mIn 0.18s ease}@keyframes mIn{from{opacity:0;transform:translateY(8px) scale(0.97)}to{opacity:1;transform:none}}.modal-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}.modal-header h2{font-size:15px;font-weight:600;flex:1}.modal-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text2)}.modal-body{flex:1;overflow-y:auto;padding:14px 18px}.modal-footer{padding:10px 18px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:8px}.modal-footer input{flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:7px;font-size:13px;background:var(--bg3);color:var(--text);font-family:inherit}.modal-footer input:focus{outline:none;border-color:var(--accent)}.chat-msg{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}.chat-msg:last-child{border-bottom:none}.chat-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}.chat-body{flex:1;color:var(--text2);line-height:1.4}.chat-body strong{color:var(--text)}.chat-time{font-size:11px;color:var(--text3);margin-top:2px}.stnd-modal-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}.stnd-modal-row:last-child{border-bottom:none}.stnd-modal-row.you{background:var(--accentbg);margin:0 -18px;padding:7px 18px}</style>
 </head>
 <body>
-<div class="page" style="max-width:960px">
+<div class="page" style="max-width:980px">
 
-  <div class="wkd-header">
-    <a href="atracer-myseasons.html" class="btn btn-ghost btn-sm">&larr; My Seasons</a>
-    <div class="wkd-stripe" style="background:#7030c0"></div>
-    <div class="wkd-header-meta">
-      <h1>City Car Challenge &mdash; Season 1</h1>
-      <p>Round 4 of 8 &middot; Lakeside Park &middot; Classic queue</p>
+<!-- HEADER -->
+<div class="wkd-header">
+  <a href="atracer-myseasons.html" class="btn btn-ghost btn-sm">&larr; My Seasons</a>
+  <div class="wkd-title">
+    <h1>City Car Challenge &mdash; <span style="color:var(--text3);font-weight:400;font-size:13px">CCC-S1-0042</span></h1>
+    <p>Round 1 of 8 &middot; Lakeside Park &middot; Classic queue</p>
+  </div>
+  <div class="wkd-car">
+    <div class="wkd-car-info">
+      <strong>Sabelt Racing</strong>
+      <span style="color:var(--text3)">Citro&euml;n C3 Cactus</span>
     </div>
-    <span class="badge badge-live">&#9679; Practice open</span>
+    <img src="https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge/cars/fiat500-yellow-medium.png" class="wkd-car-sprite" alt="Car" onerror="this.outerHTML='<div class=wkd-car-ph>No image</div>'">
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="wkd-grid">
+
+  <!-- TOP LEFT: Championship standings -->
+  <div class="card">
+    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+      Championship standings
+      <button class="btn btn-sm" onclick="openModal('standingsModal')">View all &rarr;</button>
+    </div>
+    <div class="stnd-cols">
+      <div>
+        <h4>Drivers</h4>
+        <div class="stnd-row"><span class="stnd-pos">1</span><span class="stnd-chip" style="background:#e03030">FI</span><span class="stnd-name">A. Eyre</span><span class="stnd-pts">40</span></div>
+        <div class="stnd-row"><span class="stnd-pos">2</span><span class="stnd-chip" style="background:#3060d0">PO</span><span class="stnd-name">T. Eyre</span><span class="stnd-pts">32</span></div>
+        <div class="stnd-row"><span class="stnd-pos">3</span><span class="stnd-chip" style="background:#d0b000">CL</span><span class="stnd-name">K. Winter</span><span class="stnd-pts">30</span></div>
+        <div class="stnd-row" style="background:var(--accentbg)"><span class="stnd-pos" style="color:var(--accent)">4</span><span class="stnd-chip" style="background:#7030c0">C3</span><span class="stnd-name" style="font-weight:600">E. Orme</span><span class="stnd-pts">24</span></div>
+        <div class="stnd-row"><span class="stnd-pos">5</span><span class="stnd-chip" style="background:#20a040">F5</span><span class="stnd-name">C. Charles</span><span class="stnd-pts">22</span></div>
+      </div>
+      <div class="stnd-divider"></div>
+      <div>
+        <h4>Teams</h4>
+        <div class="stnd-row"><span class="stnd-pos">1</span><span class="stnd-chip" style="background:#e03030">FI</span><span class="stnd-name">Fiesta Racing</span><span class="stnd-pts">62</span></div>
+        <div class="stnd-row"><span class="stnd-pos">2</span><span class="stnd-chip" style="background:#3060d0">PO</span><span class="stnd-name">VW Racing</span><span class="stnd-pts">60</span></div>
+        <div class="stnd-row"><span class="stnd-pos">3</span><span class="stnd-chip" style="background:#20a040">F5</span><span class="stnd-name">500 Legends</span><span class="stnd-pts">53</span></div>
+        <div class="stnd-row"><span class="stnd-pos">4</span><span class="stnd-chip" style="background:#7030c0">C3</span><span class="stnd-name">Team Citro&euml;n</span><span class="stnd-pts">30</span></div>
+        <div class="stnd-row"><span class="stnd-pos">5</span><span class="stnd-chip" style="background:#e06010">YR</span><span class="stnd-name">Toyota GR</span><span class="stnd-pts">29</span></div>
+      </div>
+    </div>
   </div>
 
-  <div class="wkd-grid">
-    <div>
-
-      <!-- CAR PANEL -->
-      <div class="car-panel">
-        <div class="car-panel-header">
-          <span style="font-size:16px">&#127950;&#65039;</span>
-          <h3>Sabelt Racing &mdash; Citro&euml;n C3 Cactus</h3>
-          <span class="badge badge-classic">Driver 2</span>
-        </div>
-        <div class="car-livery">
-          <div class="car-livery-stripe" style="background:#7030c0"></div>
-          <div class="car-livery-ph">Car image &mdash; upload coming</div>
-        </div>
-        <div class="car-stats">
-          <div class="car-stat"><div class="car-stat-val" style="color:var(--blue)">61</div><div class="car-stat-lbl">Performance</div></div>
-          <div class="car-stat"><div class="car-stat-val" style="color:var(--green)">70</div><div class="car-stat-lbl">Reliability</div></div>
-          <div class="car-stat"><div class="car-stat-val" style="color:var(--amber)">60</div><div class="car-stat-lbl">Top speed</div></div>
-        </div>
+  <!-- TOP RIGHT: Current session -->
+  <div class="card">
+    <div class="card-title">Current session</div>
+    <div class="session-top">
+      <div>
+        <div class="session-name">Practice</div>
+        <div class="session-cd-lbl">Time remaining</div>
+        <div class="session-countdown" id="sessionCd">04:22:17</div>
+        <div class="runs-row" style="margin-top:8px">&#127945; <strong id="runsLeft">8</strong> of <strong>8</strong> runs remaining</div>
+        <div class="weather-row"><span>Weather</span><strong>&#9728;&#65039; Dry, 22&deg;C</strong></div>
+        <div class="weather-row"><span>Track temp</span><strong>34&deg;C</strong></div>
       </div>
-
-      <!-- SESSION TIMELINE -->
-      <div class="card">
-        <div class="card-title">Weekend sessions</div>
-        <div class="session-tl">
-          <div class="tl-item done">
-            <div class="tl-dot"></div>
-            <div class="tl-name">Practice</div>
-            <span class="badge badge-done">Done</span>
-            <div class="tl-right"><div class="tl-result" style="color:var(--text3)">&#10003; P3 overall</div><div class="tl-time">Mon 09 Jun</div></div>
-          </div>
-          <div class="tl-item live">
-            <div class="tl-dot pulse"></div>
-            <div class="tl-name">Qualifying</div>
-            <span class="badge badge-live">Open now</span>
-            <div class="tl-right"><div class="tl-result"><strong style="color:var(--green)">Submit laps</strong></div><div class="tl-time">Closes in 4h 22m</div></div>
-          </div>
-          <div class="tl-item next">
-            <div class="tl-dot"></div>
-            <div class="tl-name">Warm-up &amp; strategy lock-in</div>
-            <span class="badge badge-next">Up next</span>
-            <div class="tl-right"><div class="tl-result"><strong style="color:var(--accent)">Tue 10 Jun</strong></div><div class="tl-time">09:00 UTC</div></div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-name">Race</div>
-            <span class="badge badge-sched">Scheduled</span>
-            <div class="tl-right"><div class="tl-result" style="color:var(--text2)">Wed 11 Jun</div><div class="tl-time">09:00 UTC</div></div>
-          </div>
-        </div>
-        <div class="cd-wrap">
-          <div class="cd-label">Qualifying closes in</div>
-          <div class="cd-row">
-            <div class="cd-block"><span class="cd-num" id="cdH">04</span><span class="cd-lbl">hrs</span></div>
-            <div class="cd-sep">:</div>
-            <div class="cd-block"><span class="cd-num" id="cdM">22</span><span class="cd-lbl">min</span></div>
-            <div class="cd-sep">:</div>
-            <div class="cd-block"><span class="cd-num" id="cdS">17</span><span class="cd-lbl">sec</span></div>
-          </div>
-        </div>
-        <a href="atracer-practice.html" class="btn btn-accent btn-full" style="margin-top:12px">Go to practice &rarr;</a>
+      <div>
+        <div class="circuit-thumb">Circuit map<br>coming soon</div>
+        <a href="atracer-practice.html" class="btn btn-accent btn-full" style="margin-top:8px;font-size:11px">Go to session &rarr;</a>
       </div>
+    </div>
+    <div class="card-title" style="margin-bottom:8px">Live leaderboard</div>
+    <div id="leaderboard">
+      <div class="leaderboard-row"><span class="lb-pos">1</span><span class="lb-chip" style="background:#20a040">F5</span><span class="lb-name">A. Eyre</span><span class="lb-time fastest">1:30.003</span><span class="lb-gap">&mdash;</span></div>
+      <div class="leaderboard-row"><span class="lb-pos">2</span><span class="lb-chip" style="background:#e06010">YR</span><span class="lb-name">G. Smith</span><span class="lb-time">1:30.523</span><span class="lb-gap">+0.520</span></div>
+      <div class="leaderboard-row"><span class="lb-pos">3</span><span class="lb-chip" style="background:#3060d0">PO</span><span class="lb-name">T. Eyre</span><span class="lb-time">1:30.634</span><span class="lb-gap">+0.631</span></div>
+      <div class="leaderboard-row"><span class="lb-pos">4</span><span class="lb-chip" style="background:#3060d0">PO</span><span class="lb-name">K. Winter</span><span class="lb-time">1:30.911</span><span class="lb-gap">+0.908</span></div>
+      <div class="leaderboard-row" style="background:var(--accentbg)"><span class="lb-pos" style="color:var(--accent)">5</span><span class="lb-chip" style="background:#7030c0">C3</span><span class="lb-name" style="font-weight:600">E. Orme <span style="font-size:10px;color:var(--accent)">(you)</span></span><span class="lb-time">1:31.002</span><span class="lb-gap">+0.999</span></div>
+      <div class="leaderboard-row"><span class="lb-pos">6</span><span class="lb-chip" style="background:#c02070">JZ</span><span class="lb-name">J. Hope</span><span class="lb-time">1:31.123</span><span class="lb-gap">+1.120</span></div>
+    </div>
+  </div>
 
-      <!-- TEAM CHAT -->
-      <div class="card">
-        <div class="card-title">Team chat &mdash; Sabelt Racing <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">&mdash; shared with your teammate</span></div>
-        <div id="chatMessages">
-          <div class="chat-msg">
-            <div class="chat-av" id="myAvChat" style="background:#7030c0">RS</div>
-            <div class="chat-body"><strong id="myNameChat">You</strong> P3 in practice &mdash; decent. Setup feels a bit stiff in sector 2 though<div class="chat-time">Yesterday &middot; 14:22</div></div>
-          </div>
-          <div class="chat-msg">
-            <div class="chat-av" style="background:#9050e0">TP</div>
-            <div class="chat-body"><strong>Teammate</strong> Agreed. Went softer on rear suspension in run 3 and picked up 0.2s. Worth trying<div class="chat-time">Yesterday &middot; 15:41</div></div>
-          </div>
-          <div class="chat-msg">
-            <div class="chat-av" id="myAvChat2" style="background:#7030c0">RS</div>
-            <div class="chat-body"><strong id="myNameChat2">You</strong> Good call. Good luck in qualifying today &#128074;<div class="chat-time">Today &middot; 08:04</div></div>
-          </div>
-        </div>
-        <div class="chat-input-row">
-          <input type="text" id="chatInput" placeholder="Message your teammate..." onkeydown="if(event.key==='Enter')sendChat()">
-          <button class="btn btn-accent btn-sm" onclick="sendChat()">Send</button>
-        </div>
+</div><!-- end main grid -->
+
+<!-- BOTTOM GRID -->
+<div class="wkd-grid" style="margin-top:14px">
+
+  <!-- BOTTOM LEFT: Season news -->
+  <div class="card">
+    <div class="card-title">
+      Season news
+      <span id="newsDate" style="font-size:11px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;float:right">14 Jun 2026</span>
+    </div>
+    <div id="newsContent">
+      <div class="news-item">VW has received a chassis upgrade ahead of this round.</div>
+      <div class="news-item">Fiat has introduced an engine upgrade &mdash; reliability +3.</div>
+      <div class="news-item" style="margin-top:10px"><strong>&#127937; Race session advanced!</strong></div>
+      <div class="news-item"><a href="atracer-results.html">&#128196; Full results here &rarr;</a></div>
+    </div>
+    <div class="news-nav">
+      <button onclick="newsPage(-1)" id="newsPrev" disabled>&larr; Older</button>
+      <span style="font-size:11px;color:var(--text3)" id="newsPager">Round 1</span>
+      <button onclick="newsPage(1)" id="newsNext">Newer &rarr;</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM RIGHT: Settings + comms -->
+  <div>
+    <!-- Series settings -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">Series settings</div>
+      <div class="settings-grid">
+        <a href="atracer-practice.html" class="settings-btn">
+          <span class="icon">&#128100;</span><span class="lbl">Driver settings</span>
+        </a>
+        <a href="atracer-qualifying.html" class="settings-btn">
+          <span class="icon">&#9201;</span><span class="lbl">Qualifying settings</span>
+        </a>
+        <a href="atracer-strategy.html" class="settings-btn">
+          <span class="icon">&#127937;</span><span class="lbl">Race settings</span>
+        </a>
       </div>
-
-      <!-- RACE NOTEBOOK -->
-      <div class="card">
-        <div class="card-title">Engineer notebook &mdash; Round 3 debrief</div>
-        <div class="notebook-entry"><strong>&#128734; Setup summary</strong>Gear ratio ran long &mdash; lost time in the infield but gained on the back straight. For Lakeside, recommend going shorter as it's a tighter layout overall.</div>
-        <div class="notebook-entry"><strong>&#128734; Tyre performance</strong>Mediums lasted 18 laps comfortably. Softs dropped off sharply after lap 10 in the heat. If weather stays dry, medium start with a single stop at lap 16&ndash;18 is the target.</div>
-        <div class="notebook-entry"><strong>&#128202; Race pace analysis</strong>P2 finish from P3 on grid. Gained one position at the start. Clean race &mdash; no incidents. Gap to P1 was 4.2s at the flag; Marcus Holt was quicker in sector 1.</div>
+      <div class="settings-row2">
+        <a href="atracer-join-series.html" class="settings-btn">
+          <span class="icon">&#128295;</span><span class="lbl">Car performance</span>
+        </a>
+        <a href="#" class="settings-btn">
+          <span class="icon">&#128203;</span><span class="lbl">Series rules</span>
+        </a>
       </div>
-
     </div>
 
-    <!-- SIDEBAR -->
-    <div>
-
-      <!-- CIRCUIT -->
-      <div class="card">
-        <div class="card-title">Round 4 &mdash; Lakeside Park</div>
-        <div class="circuit-map">Circuit map upload coming</div>
-        <div class="detail-row"><span>Type</span><strong>Street circuit</strong></div>
-        <div class="detail-row"><span>Laps</span><strong>32</strong></div>
-        <div class="detail-row"><span>Lap length</span><strong>3.4 km</strong></div>
-        <div class="detail-row"><span>Total distance</span><strong>108.8 km</strong></div>
-        <div class="detail-row"><span>Weather forecast</span><strong>&#9728;&#65039; Dry</strong></div>
-        <div class="detail-row"><span>Safety car chance</span><strong>High (42%)</strong></div>
-        <div class="detail-row"><span>Tyre wear rate</span><strong>Medium</strong></div>
-        <div class="detail-row"><span>Specialist bonus</span><strong style="color:var(--text3)">None</strong></div>
-      </div>
-
-      <!-- CHARACTERISTICS -->
-      <div class="card">
-        <div class="card-title">Your characteristics</div>
-        <div style="margin-bottom:10px">
-          <div style="font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Core &mdash; locked for season</div>
-          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--amberbg);border:1px solid var(--amberbdr);border-radius:6px">
-            <span style="font-size:16px">&#127961;&#65039;</span>
-            <div><div style="font-size:13px;font-weight:600">Street Fighter</div><div style="font-size:11px;color:var(--text2)">Better car control on tight street circuits</div></div>
-          </div>
+    <!-- Comms -->
+    <div class="card">
+      <div class="card-title">Communications</div>
+      <div class="comm-grid">
+        <div class="comm-btn" onclick="openModal('teamChatModal')">
+          <div class="icon">&#128172;</div>
+          <div class="lbl">Team chat</div>
+          <div class="sub">Sabelt Racing</div>
         </div>
-        <div>
-          <div style="font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Current &mdash; can change after R4</div>
-          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--purplebg);border:1px solid var(--purplebdr);border-radius:6px">
-            <span style="font-size:16px">&#128678;</span>
-            <div><div style="font-size:13px;font-weight:600">Launch Controller</div><div style="font-size:11px;color:var(--text2)">Better getaway at race start</div></div>
-          </div>
+        <div class="comm-btn" onclick="openModal('seriesChatModal')">
+          <div class="icon">&#128227;</div>
+          <div class="lbl">Series message board</div>
+          <div class="sub">All drivers</div>
         </div>
       </div>
+      <a href="atracer-results.html" class="btn btn-full" style="margin-top:8px">
+        &#127942; Full season results &rarr;
+      </a>
+    </div>
+  </div>
 
-      <!-- STANDINGS -->
-      <div class="card">
-        <div class="card-title">Championship standings</div>
-        <div id="standingsHidden" class="standings-hidden" onclick="revealStandings()">
-          <div style="font-size:28px;opacity:0.4">&#127942;</div>
-          <p>Hidden to avoid spoilers</p>
-          <button class="btn btn-sm" style="margin-top:8px">Reveal standings</button>
-        </div>
-        <div id="standingsTable" style="display:none">
-          <table class="standings-table">
-            <thead><tr><th>#</th><th>Driver</th><th>Car</th><th>Pts</th><th>Gap</th></tr></thead>
-            <tbody>
-              <tr><td>1</td><td>Marcus Holt<div style="font-size:11px;color:var(--text3)">Holt Motorsport</div></td><td><span class="car-chip" style="background:#e03030">FI</span></td><td><strong>160</strong></td><td>&mdash;</td></tr>
-              <tr><td>2</td><td>Jana Kovar<div style="font-size:11px;color:var(--text3)">Kovar Racing</div></td><td><span class="car-chip" style="background:#3060d0">PO</span></td><td><strong>155</strong></td><td>&minus;5</td></tr>
-              <tr><td>3</td><td>Pierre Gauthier<div style="font-size:11px;color:var(--text3)">Gauthier Sport</div></td><td><span class="car-chip" style="background:#d0b000">CL</span></td><td><strong>148</strong></td><td>&minus;12</td></tr>
-              <tr class="you-row"><td style="color:var(--accent);font-weight:700">4</td><td><strong id="standingsYou">You</strong> <span style="font-size:11px;color:var(--accent)">(you)</span><div style="font-size:11px;color:var(--text3)">Sabelt Racing</div></td><td><span class="car-chip" style="background:#7030c0">C3</span></td><td><strong style="color:var(--accent)">142</strong></td><td>&minus;18</td></tr>
-              <tr><td>5</td><td>Luca Ferrini<div style="font-size:11px;color:var(--text3)">Ferrini Corse</div></td><td><span class="car-chip" style="background:#20a040">F5</span></td><td><strong>138</strong></td><td>&minus;22</td></tr>
-              <tr style="opacity:0.5"><td colspan="5" style="font-size:11px;color:var(--text3);text-align:center">9 more drivers</td></tr>
-            </tbody>
-          </table>
-          <button class="btn" style="width:100%;justify-content:center;margin-top:10px;font-size:12px" onclick="hideStandings()">Hide standings</button>
-        </div>
-      </div>
+</div><!-- end bottom grid -->
+</div>
 
+<!-- STANDINGS MODAL -->
+<div class="modal-overlay" id="standingsModal" onclick="if(event.target===this)closeModal('standingsModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>&#127942; Full championship standings</h2>
+      <button class="modal-close" onclick="closeModal('standingsModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px">Drivers</div>
+      <div class="stnd-modal-row"><span class="stnd-pos">1</span><span class="stnd-chip" style="background:#e03030">FI</span><span style="flex:1">A. Eyre</span><span style="font-size:11px;color:var(--text3)">Fiesta Racing</span><strong style="min-width:28px;text-align:right">40</strong></div>
+      <div class="stnd-modal-row"><span class="stnd-pos">2</span><span class="stnd-chip" style="background:#3060d0">PO</span><span style="flex:1">T. Eyre</span><span style="font-size:11px;color:var(--text3)">VW Racing</span><strong style="min-width:28px;text-align:right">32</strong></div>
+      <div class="stnd-modal-row"><span class="stnd-pos">3</span><span class="stnd-chip" style="background:#d0b000">CL</span><span style="flex:1">K. Winter</span><span style="font-size:11px;color:var(--text3)">Gauthier Sport</span><strong style="min-width:28px;text-align:right">30</strong></div>
+      <div class="stnd-modal-row you"><span class="stnd-pos" style="color:var(--accent)">4</span><span class="stnd-chip" style="background:#7030c0">C3</span><span style="flex:1;font-weight:600">E. Orme (you)</span><span style="font-size:11px;color:var(--text3)">Sabelt Racing</span><strong style="min-width:28px;text-align:right;color:var(--accent)">24</strong></div>
+      <div class="stnd-modal-row"><span class="stnd-pos">5</span><span class="stnd-chip" style="background:#20a040">F5</span><span style="flex:1">C. Charles</span><span style="font-size:11px;color:var(--text3)">500 Legends</span><strong style="min-width:28px;text-align:right">22</strong></div>
+      <div class="stnd-modal-row"><span class="stnd-pos">6</span><span class="stnd-chip" style="background:#e06010">YR</span><span style="flex:1">G. Smith</span><span style="font-size:11px;color:var(--text3)">Toyota GR</span><strong style="min-width:28px;text-align:right">18</strong></div>
+      <div class="stnd-modal-row"><span class="stnd-pos">7</span><span class="stnd-chip" style="background:#c02070">JZ</span><span style="flex:1">J. Hope</span><span style="font-size:11px;color:var(--text3)">Jazz Works</span><strong style="min-width:28px;text-align:right">14</strong></div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin:14px 0 8px">Teams</div>
+      <div class="stnd-modal-row"><span class="stnd-pos">1</span><span class="stnd-chip" style="background:#e03030">FI</span><span style="flex:1">Fiesta Racing</span><strong style="min-width:28px;text-align:right">62</strong></div>
+      <div class="stnd-modal-row"><span class="stnd-pos">2</span><span class="stnd-chip" style="background:#3060d0">PO</span><span style="flex:1">VW Racing</span><strong style="min-width:28px;text-align:right">60</strong></div>
+      <div class="stnd-modal-row"><span class="stnd-pos">3</span><span class="stnd-chip" style="background:#20a040">F5</span><span style="flex:1">500 Legends</span><strong style="min-width:28px;text-align:right">53</strong></div>
+      <div class="stnd-modal-row you"><span class="stnd-pos" style="color:var(--accent)">4</span><span class="stnd-chip" style="background:#7030c0">C3</span><span style="flex:1;font-weight:600">Team Citro&euml;n (you)</span><strong style="min-width:28px;text-align:right;color:var(--accent)">30</strong></div>
+      <div class="stnd-modal-row"><span class="stnd-pos">5</span><span class="stnd-chip" style="background:#e06010">YR</span><span style="flex:1">Toyota GR</span><strong style="min-width:28px;text-align:right">29</strong></div>
     </div>
   </div>
 </div>
+
+<!-- TEAM CHAT MODAL -->
+<div class="modal-overlay" id="teamChatModal" onclick="if(event.target===this)closeModal('teamChatModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>&#128172; Team chat &mdash; Sabelt Racing</h2>
+      <button class="modal-close" onclick="closeModal('teamChatModal')">&#10005;</button>
+    </div>
+    <div class="modal-body" id="teamChatBody">
+      <div class="chat-msg"><div class="chat-av" id="tcAv1" style="background:#7030c0">EO</div><div class="chat-body"><strong id="tcName1">E. Orme</strong> P3 in practice &mdash; setup feels stiff in sector 2 though<div class="chat-time">Yesterday &middot; 14:22</div></div></div>
+      <div class="chat-msg"><div class="chat-av" style="background:#9050e0">TP</div><div class="chat-body"><strong>Teammate</strong> Agreed. Went softer on rear suspension in run 3, picked up 0.2s<div class="chat-time">Yesterday &middot; 15:41</div></div></div>
+      <div class="chat-msg"><div class="chat-av" id="tcAv2" style="background:#7030c0">EO</div><div class="chat-body"><strong id="tcName2">E. Orme</strong> Good call. Good luck today &#128074;<div class="chat-time">Today &middot; 08:04</div></div></div>
+    </div>
+    <div class="modal-footer">
+      <input type="text" id="teamChatInput" placeholder="Message your teammate..." onkeydown="if(event.key==='Enter')sendChat('team')">
+      <button class="btn btn-accent btn-sm" onclick="sendChat('team')">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- SERIES MESSAGE BOARD MODAL -->
+<div class="modal-overlay" id="seriesChatModal" onclick="if(event.target===this)closeModal('seriesChatModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>&#128227; Series message board</h2>
+      <button class="modal-close" onclick="closeModal('seriesChatModal')">&#10005;</button>
+    </div>
+    <div class="modal-body" id="seriesChatBody">
+      <div class="chat-msg"><div class="chat-av" style="background:#e03030">AE</div><div class="chat-body"><strong>A. Eyre</strong> Good session everyone &mdash; Lakeside is tricky in sector 1<div class="chat-time">Today &middot; 09:12</div></div></div>
+      <div class="chat-msg"><div class="chat-av" style="background:#3060d0">TE</div><div class="chat-body"><strong>T. Eyre</strong> Anyone else losing time in the hairpin? Braking point feels inconsistent<div class="chat-time">Today &middot; 09:34</div></div></div>
+      <div class="chat-msg"><div class="chat-av" style="background:#d0b000">KW</div><div class="chat-body"><strong>K. Winter</strong> Medium tyres seem to be the move today with the track temps<div class="chat-time">Today &middot; 10:05</div></div></div>
+      <div class="chat-msg"><div class="chat-av" style="background:#20a040">CC</div><div class="chat-body"><strong>C. Charles</strong> Agreed on mediums. Softs fell off a cliff after lap 8 for me in warmup<div class="chat-time">Today &middot; 10:22</div></div></div>
+    </div>
+    <div class="modal-footer">
+      <input type="text" id="seriesChatInput" placeholder="Post to all drivers..." onkeydown="if(event.key==='Enter')sendChat('series')">
+      <button class="btn btn-accent btn-sm" onclick="sendChat('series')">Send</button>
+    </div>
+  </div>
+</div>
+
 <script>
+
+// Personalise from session
 document.addEventListener('DOMContentLoaded', function(){
   var user = AT.user;
   if(user){
-    ['standingsYou','myNameChat','myNameChat2'].forEach(function(id){
-      var el = document.getElementById(id);
-      if(el) el.textContent = user.name;
-    });
-    ['myAvChat','myAvChat2'].forEach(function(id){
+    ['tcAv1','tcAv2'].forEach(function(id){
       var el = document.getElementById(id);
       if(el) el.textContent = user.initials;
+    });
+    ['tcName1','tcName2'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.textContent = user.name;
     });
   }
 });
 
+// Session countdown
 var secs = (4*3600)+(22*60)+17;
 setInterval(function(){
-  if(secs<=0) return; secs--;
+  if(secs<=0){ document.getElementById('sessionCd').textContent='00:00:00'; return; }
+  secs--;
   var h=Math.floor(secs/3600), m=Math.floor((secs%3600)/60), s=secs%60;
   var pad=function(n){return String(n).padStart(2,'0');};
-  var hEl=document.getElementById('cdH'), mEl=document.getElementById('cdM'), sEl=document.getElementById('cdS');
-  if(hEl) hEl.textContent=pad(h);
-  if(mEl) mEl.textContent=pad(m);
-  if(sEl) sEl.textContent=pad(s);
+  document.getElementById('sessionCd').textContent = pad(h)+':'+pad(m)+':'+pad(s);
 }, 1000);
 
-function revealStandings(){
-  document.getElementById('standingsHidden').style.display='none';
-  document.getElementById('standingsTable').style.display='block';
-}
-function hideStandings(){
-  document.getElementById('standingsTable').style.display='none';
-  document.getElementById('standingsHidden').style.display='';
-}
-function sendChat(){
-  var input = document.getElementById('chatInput');
+// Modals
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+// Chat send
+function sendChat(type){
+  var inputId = type==='team' ? 'teamChatInput' : 'seriesChatInput';
+  var bodyId  = type==='team' ? 'teamChatBody'  : 'seriesChatBody';
+  var input = document.getElementById(inputId);
   var text = input.value.trim();
   if(!text) return;
   var user = AT.user;
   var name = user ? user.name : 'You';
   var initials = user ? user.initials : '?';
-  var msgs = document.getElementById('chatMessages');
+  var msgs = document.getElementById(bodyId);
   var msg = document.createElement('div');
   msg.className = 'chat-msg';
   msg.innerHTML = '<div class="chat-av" style="background:#7030c0">'+initials+'</div>'
@@ -435,6 +479,16 @@ function sendChat(){
   input.value='';
   msgs.scrollTop = msgs.scrollHeight;
 }
+
+// News pagination (stub — just shows one page for now)
+var newsPage_ = 0;
+function newsPage(dir){
+  newsPage_ += dir;
+  document.getElementById('newsPrev').disabled = newsPage_<=0;
+  document.getElementById('newsPager').textContent = 'Round '+(newsPage_+1);
+  // Backend will populate news per round
+}
+
 </script>
 </body>
 </html>
