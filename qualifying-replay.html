@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&T Racer &mdash; Qualifying Results</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#17171e;--bg3:#1e1e28;--bg4:#252530;
+  --border:#2e2e3e;--border2:#3a3a4e;
+  --text:#e8e8f0;--text2:#9898b0;--text3:#5a5a72;
+  --accent:#6c8fff;--accent2:#4a6ee0;--accentbg:rgba(108,143,255,0.08);
+  --green:#3ecf6e;--greenbg:rgba(62,207,110,0.12);--greenbdr:rgba(62,207,110,0.35);
+  --amber:#f0a030;--amberbg:rgba(240,160,48,0.12);--amberbdr:rgba(240,160,48,0.35);
+  --red:#f05060;--redbg:rgba(240,80,96,0.12);--redbdr:rgba(240,80,96,0.35);
+  --purple:#c060ff;--purplebg:rgba(192,96,255,0.12);--purplebdr:rgba(192,96,255,0.35);
+  --r:10px;
+}
+html[data-theme="light"]:root{
+  --bg:#f0f0f4;--bg2:#fff;--bg3:#f5f5f9;--bg4:#e8e8ef;
+  --border:#d4d4e0;--border2:#b8b8cc;
+  --text:#1a1a2e;--text2:#4a4a6a;--text3:#8a8aaa;
+  --accent:#4a6ee0;--accent2:#3858c0;
+  --green:#18a048;--greenbg:rgba(24,160,72,0.08);--greenbdr:rgba(24,160,72,0.3);
+  --amber:#b07010;--amberbg:rgba(176,112,16,0.08);--amberbdr:rgba(176,112,16,0.3);
+  --red:#c82030;--redbg:rgba(200,32,48,0.08);--redbdr:rgba(200,32,48,0.3);
+  --purple:#8030d0;--purplebg:rgba(128,48,208,0.08);--purplebdr:rgba(128,48,208,0.3);
+}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;min-height:100vh}
+
+/* topbar */
+.topbar{display:flex;align-items:center;gap:10px;padding:9px 18px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.topbar-logo{font-size:15px;font-weight:800;font-style:italic;letter-spacing:-0.04em;text-decoration:none;color:var(--text)}
+.topbar-logo .amp{color:#e8392a}
+.topbar h1{font-size:13px;font-weight:600;color:var(--text2)}
+.topbar-sub{font-size:11px;color:var(--text3)}
+.btn{padding:5px 12px;border:1px solid var(--border2);border-radius:6px;background:var(--bg3);font-size:11px;cursor:pointer;color:var(--text);white-space:nowrap;font-family:inherit;transition:all 0.15s}
+.btn:hover{background:var(--bg4)}
+.btn-sm{padding:3px 7px;font-size:10px}
+
+/* loading / error states */
+.state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:12px;color:var(--text3);text-align:center;padding:24px}
+.state .icon{font-size:40px;opacity:0.4}
+.state h2{font-size:16px;color:var(--text2)}
+.state p{font-size:12px;max-width:320px}
+.spinner{width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* page */
+.page{max-width:1100px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+
+/* session info bar */
+.info-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:12px}
+.info-bar strong{color:var(--text);font-size:14px}
+.info-chip{padding:2px 8px;border-radius:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:11px}
+
+/* cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.ctitle{font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+
+/* timeline */
+.tl-scroll{overflow-x:auto;margin-bottom:10px}
+.tl-track{display:flex;gap:2px;min-width:max-content;padding:2px}
+.tl-sq{width:24px;height:24px;border-radius:3px;background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text3);font-weight:600;transition:all 0.1s;flex-shrink:0;border:1px solid transparent}
+.tl-sq:hover{border-color:var(--border2)}
+.tl-sq.active{border-color:var(--accent)!important;color:var(--accent)}
+.tl-sq.has-lap{background:var(--greenbg);color:var(--green)}
+.tl-sq.has-acc{background:var(--redbg);color:var(--red)}
+.tl-sq.has-inc{background:var(--amberbg);color:var(--amber)}
+.tl-sq.has-out{background:var(--bg4);color:var(--text3)}
+
+/* viewer nav */
+.viewer-nav{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.min-lbl{font-size:20px;font-weight:700;color:var(--accent);min-width:70px}
+.ot-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:var(--greenbg);border:1px solid var(--greenbdr);color:var(--green)}
+.sess-status{font-size:10px;color:var(--text3)}
+
+/* legend */
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:10px;color:var(--text2)}
+.leg-item{display:flex;align-items:center;gap:4px}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* viewer layout */
+.viewer-layout{display:grid;grid-template-columns:1fr 280px;gap:12px}
+@media(max-width:900px){.viewer-layout{grid-template-columns:1fr}}
+
+/* car image + flag */
+.t-car-img-wrap{display:flex;align-items:center;justify-content:center;padding:6px 10px}
+.t-car-img{width:125px;height:36px;object-fit:contain;display:block;margin:auto}
+.t-flag-wrap{display:flex;align-items:center;justify-content:center;padding:0 3px}
+.t-flag{width:22px;height:15px;object-fit:cover;border-radius:2px;display:block;margin:auto}
+
+/* timing tower */
+.tower{width:100%}
+.tower-wrap{border-radius:10px;border:1px solid var(--border2);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.3)}
+.tower-hdr{display:grid;grid-template-columns:38px 12px 141px 24px minmax(160px,auto) minmax(100px,1fr) minmax(100px,auto) minmax(68px,auto) minmax(100px,auto) 44px;gap:0;align-items:center;padding:7px 12px;background:#0a0a10;font-size:9px;color:rgba(255,255,255,0.35);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;border-bottom:2px solid rgba(255,255,255,0.06)}
+html[data-theme="light"] .tower-hdr{background:#1a1a2e;color:rgba(255,255,255,0.5);border-bottom-color:rgba(255,255,255,0.1)}
+.tower-row{display:grid;grid-template-columns:38px 12px 141px 24px minmax(160px,auto) minmax(100px,1fr) minmax(100px,auto) minmax(68px,auto) minmax(100px,auto) 44px;gap:0;align-items:center;padding:0;border-bottom:1px solid var(--border);font-size:12px;position:relative;overflow:hidden}
+.tower-row:last-child{border-bottom:none}
+.tower-row:nth-child(even){background:rgba(255,255,255,0.015)}
+html[data-theme="light"] .tower-row:nth-child(even){background:rgba(0,0,0,0.02)}
+.tower-row>*{padding:8px 6px}
+.tower-row>*:first-child{padding-left:10px}
+.tower-row>*:last-child{padding-right:10px}
+.tower-hdr>*{padding:7px 6px}
+.tower-hdr>*:first-child{padding-left:10px}
+.tower-hdr .hdr-bar{padding:0}
+.tower-row.flash-purple{animation:flashP 3s ease}
+.tower-row.flash-green{animation:flashG 3s ease}
+.tower-row.flash-amber{animation:flashA 3s ease}
+@keyframes flashP{0%,30%{background:rgba(192,96,255,0.45)}100%{background:transparent}}
+@keyframes flashG{0%,30%{background:rgba(62,207,110,0.45)}100%{background:transparent}}
+@keyframes flashA{0%,30%{background:rgba(240,160,48,0.40)}100%{background:transparent}}
+.t-pos{font-size:13px;font-weight:800;color:var(--text3);text-align:center;font-variant-numeric:tabular-nums}
+.t-pos.p1{color:var(--amber);text-shadow:0 0 8px rgba(240,160,48,0.5)}
+.t-pos.p2{color:var(--text2)}
+.t-pos.p3{color:var(--amber);opacity:0.6}
+.t-bar{width:4px;min-height:36px;align-self:stretch}
+.t-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.t-car{font-size:10px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t-time{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;letter-spacing:-0.02em}
+.t-time.t-settled{color:var(--text2);font-weight:500}
+.t-time.t-purple{color:var(--purple);text-shadow:0 0 10px rgba(192,96,255,0.4)}
+.t-time.t-none{color:var(--text3);font-weight:400;font-size:11px}
+.t-time.t-deleted{color:var(--red)}
+.t-gap{font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums}
+.t-last{font-variant-numeric:tabular-nums;font-size:12px}
+.t-last.tl-dash{color:var(--text3);opacity:0.4}
+.t-last.tl-yellow{color:var(--amber)}
+.t-last.tl-red{color:var(--red);text-decoration:line-through}
+.t-last.tl-purple{color:var(--purple);font-weight:700;text-shadow:0 0 8px rgba(192,96,255,0.4)}
+.t-last.tl-green{color:var(--green);font-weight:700}
+.t-last.tl-grey{color:var(--text3);font-size:12px}
+.t-gain{font-size:10px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:2px}
+
+/* commentary */
+.commentary-list{display:flex;flex-direction:column;gap:3px;min-height:100px}
+.ev{padding:5px 8px;border-radius:5px;font-size:11px;background:var(--bg3);border-left:3px solid var(--border2);line-height:1.4}
+.ev strong{color:var(--text)}
+.ev.ev-lap-pb{border-left-color:var(--green)}
+.ev.ev-lap-best{border-left-color:var(--purple)}
+.ev.ev-lap-no-pb{border-left-color:var(--amber)}
+.ev.ev-invalid{border-left-color:var(--red)}
+.ev.ev-spin{border-left-color:var(--amber)}
+.ev.ev-accident{border-left-color:var(--red)}
+.ev.ev-traffic{border-left-color:var(--purple)}
+.ev.ev-session{border-left-color:var(--accent);font-weight:600;color:var(--text)}
+.ev.ev-out{border-left-color:var(--border2);color:var(--text3)}
+
+/* final grid */
+.grid-table{width:100%;border-collapse:collapse;font-size:12px}
+.grid-table th{padding:6px 8px;text-align:left;background:var(--bg3);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);font-weight:600}
+.grid-table td{padding:6px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.grid-table tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-logo" href="atracer-home.html">A<span class="amp">&amp;</span>T Racer</a>
+  <span style="color:var(--border2)">|</span>
+  <h1>Qualifying Results</h1>
+  <span class="topbar-sub" id="topbarSub">Loading...</span>
+  <div style="margin-left:auto;display:flex;gap:6px">
+    <button class="btn btn-sm" onclick="toggleTheme()" id="themeBtn">&#9790; Light</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="state" id="stateLoading">
+  <div class="spinner"></div>
+  <h2>Loading session...</h2>
+</div>
+
+<!-- ERROR -->
+<div class="state" id="stateError" style="display:none">
+  <div class="icon">&#128679;</div>
+  <h2>Session not found</h2>
+  <p id="errorMsg">Could not load qualifying results for this round.</p>
+</div>
+
+<!-- CONTENT -->
+<div class="page" id="pageContent" style="display:none">
+
+  <div class="info-bar">
+    <strong id="infoCircuit">—</strong>
+    <span class="info-chip" id="infoRound">Round —</span>
+    <span class="info-chip" id="infoSessLen">— mins</span>
+    <span class="info-chip" id="infoDrivers">— drivers</span>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">
+      Qualifying session
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="btn btn-sm" onclick="stepMin(-1)">&#9664;</button>
+        <button class="btn btn-sm" onclick="stepMin(1)">&#9654;</button>
+        <button class="btn btn-sm" onclick="togglePlay()" id="playBtn">&#9654;&#9654; Play</button>
+      </div>
+    </div>
+
+    <div class="tl-scroll"><div class="tl-track" id="tlTrack"></div></div>
+
+    <div class="viewer-nav">
+      <span class="min-lbl">MIN <span id="curMin">0</span></span>
+      <input type="range" id="scrubber" min="0" value="0" style="flex:1;accent-color:var(--accent);cursor:pointer" oninput="goToMin(+this.value)">
+      <span class="ot-badge">&#128664; <span id="otCount">0</span> on track</span>
+      <span class="sess-status" id="sessStatus"></span>
+    </div>
+
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div>Fastest overall</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Personal best</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--amber)"></div>No improvement</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Deleted / incident</div>
+    </div>
+
+    <div class="viewer-layout">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px">Timing tower</div>
+        <div class="tower tower-wrap">
+          <div class="tower-hdr">
+            <span>P</span><span class="hdr-bar"></span><span style="padding:7px 10px"></span><span></span><span>Driver</span><span>Car</span>
+            <span>Best time</span><span>Gap</span><span>Last time</span><span>&#9650;</span>
+          </div>
+          <div id="towerBody"></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px">
+          Minute <span id="commMinLbl">0</span> &mdash; events
+        </div>
+        <div class="commentary-list" id="commentary"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="gridCard" style="display:none">
+    <div class="ctitle">Starting grid &mdash; qualifying result</div>
+    <table class="grid-table">
+      <thead><tr><th>P</th><th>Driver</th><th>Car</th><th>Best lap</th><th>Gap</th><th>Set on</th></tr></thead>
+      <tbody id="finalGrid"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+// ════════════════════════════════
+// CONFIG — update SEASON_ID and ROUND via URL params or hardcode
+// ════════════════════════════════
+var SUPABASE_URL = 'https://ycijvolkydyqbvcqxxch.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_sDSdIK5LqBtov6qbkQdxoA_I-avpHCq';
+
+// Read season_id and round from URL params, fall back to defaults
+var urlParams = new URLSearchParams(window.location.search);
+var SEASON_ID = urlParams.get('season') || '00000000-0000-0000-0000-000000000001';
+var ROUND     = parseInt(urlParams.get('round') || '1');
+
+// ════════════════════════════════
+// STATE (populated from DB)
+// ════════════════════════════════
+var sessionTimeline = [];
+var drivers = [];
+var carset = {};
+var sessLen = 60;
+var currentMin = 0;
+var playTimer = null;
+
+// ════════════════════════════════
+// BOOT — fetch from Supabase
+// ════════════════════════════════
+(async function init() {
+  try {
+    var url = SUPABASE_URL + '/rest/v1/qualifying_sessions'
+      + '?season_id=eq.' + SEASON_ID
+      + '&round=eq.' + ROUND
+      + '&limit=1';
+
+    var resp = await fetch(url, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var rows = await resp.json();
+    if (!rows.length) throw new Error('No session found for this round.');
+
+    var row = rows[0];
+    sessionTimeline = row.timeline;
+    drivers         = row.drivers;
+    carset          = row.carset_snapshot;
+    sessLen         = row.session_length_mins;
+
+    // Update info bar
+    document.getElementById('infoCircuit').textContent  = row.circuit;
+    document.getElementById('infoRound').textContent    = 'Round ' + row.round;
+    document.getElementById('infoSessLen').textContent  = sessLen + ' mins';
+    document.getElementById('infoDrivers').textContent  = drivers.length + ' drivers';
+    document.getElementById('topbarSub').textContent    = row.circuit + ' \u00b7 Round ' + row.round;
+    document.title = 'Qualifying \u2014 ' + row.circuit + ' \u00b7 A&T Racer';
+
+    // Show content
+    document.getElementById('stateLoading').style.display = 'none';
+    document.getElementById('pageContent').style.display  = 'flex';
+
+    // Build viewer
+    buildTimelineBar();
+    var sc = document.getElementById('scrubber');
+    sc.max = sessLen; sc.value = 0;
+    goToMin(0);
+
+  } catch(e) {
+    document.getElementById('stateLoading').style.display = 'none';
+    document.getElementById('stateError').style.display   = 'flex';
+    document.getElementById('errorMsg').textContent       = e.message;
+  }
+})();
+
+// ════════════════════════════════
+// THEME
+// ════════════════════════════════
+(function(){
+  var t = localStorage.getItem('atracer_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '\u263d Light' : '\u2600 Dark';
+})();
+function toggleTheme(){
+  var t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('atracer_theme', t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '\u263d Light' : '\u2600 Dark';
+}
+
+// ════════════════════════════════
+// TIMELINE BAR
+// ════════════════════════════════
+function buildTimelineBar(){
+  var el = document.getElementById('tlTrack');
+  el.innerHTML = sessionTimeline.map(function(m, i){
+    var hasLap = m.events.some(function(e){ return e.type.startsWith('lap-'); });
+    var hasAcc = m.events.some(function(e){ return e.type === 'accident'; });
+    var hasInc = m.events.some(function(e){ return e.type === 'spin' || e.type === 'invalid' || e.type === 'traffic'; });
+    var cls = 'tl-sq' + (hasAcc ? ' has-acc' : hasLap ? ' has-lap' : hasInc ? ' has-inc' : m.onTrack > 0 ? ' has-out' : '');
+    return '<div class="' + cls + '" id="tlm_' + i + '" onclick="goToMin(' + i + ')" title="Min ' + i + ': ' + m.events.length + ' event' + (m.events.length !== 1 ? 's' : '') + ', ' + m.onTrack + ' on track">' + i + '</div>';
+  }).join('');
+}
+
+// ════════════════════════════════
+// VIEWER
+// ════════════════════════════════
+function goToMin(min){
+  min = Math.max(0, Math.min(sessionTimeline.length - 1, +min));
+  currentMin = min;
+  document.getElementById('scrubber').value = min;
+  document.getElementById('curMin').textContent = min;
+  document.getElementById('commMinLbl').textContent = min;
+  document.querySelectorAll('.tl-sq').forEach(function(el, i){ el.classList.toggle('active', i === min); });
+
+  var frame = sessionTimeline[min];
+  if (!frame) return;
+
+  document.getElementById('otCount').textContent = frame.onTrack;
+  document.getElementById('sessStatus').textContent =
+    min === 0 ? 'Session starting' : min >= sessLen ? 'Session complete' :
+    (sessLen - min) + ' min' + (sessLen - min !== 1 ? 's' : '') + ' remaining';
+
+  var cEl = document.getElementById('commentary');
+  if (!frame.events.length){
+    cEl.innerHTML = '<div class="ev ev-out" style="color:var(--text3);font-style:italic">No events this minute.</div>';
+  } else {
+    cEl.innerHTML = frame.events.map(function(ev){
+      var cls = 'ev ev-' + (ev.type.startsWith('lap-') ? ev.type : ev.type);
+      return '<div class="' + cls + '">' + ev.text + '</div>';
+    }).join('');
+  }
+
+  renderTower(frame);
+
+  // Show final grid only once the last minute is reached (anti-spoiler)
+  var gridCard = document.getElementById('gridCard');
+  if (min >= sessLen) {
+    if (gridCard.style.display === 'none') {
+      renderFinalGrid();
+      gridCard.style.display = 'block';
+    }
+  } else {
+    gridCard.style.display = 'none';
+  }
+}
+
+function renderTower(frame){
+  var driverRes = frame.driverRes;
+  var leader = null;
+  frame.ranked.forEach(function(r){ if (r.bestTime !== null && leader === null) leader = r.bestTime; });
+
+  var setThisMin = {};
+  driverRes.forEach(function(r, i){
+    if (r.bestSetAt === frame.min) setThisMin[i] = 'pb';
+  });
+  frame.events.forEach(function(ev){
+    if (ev.type === 'lap-amber' || ev.type === 'invalid' || ev.type === 'spin'){
+      driverRes.forEach(function(r, i){
+        if (setThisMin[i]) return;
+        if (ev.type === 'invalid' && r.lastTimeType === 'deleted') setThisMin[i] = 'deleted';
+        else if (ev.type === 'spin' && r.lastTimeType === 'spin') setThisMin[i] = 'spin';
+        else if (ev.type === 'lap-amber' && r.lastTimeType === 'nopb') setThisMin[i] = 'nopb';
+      });
+    }
+  });
+
+  var el = document.getElementById('towerBody');
+  el.innerHTML = frame.ranked.map(function(r, pos){
+    var dr = drivers[r.di];
+    var res = driverRes[r.di];
+    var car = carset.cars && carset.cars[dr.carIdx];
+    var activity = setThisMin[r.di];
+    var isOverallBest = pos === 0 && res.bestTime !== null;
+
+    var bestTimeCls = 't-none', bestTimeStr = 'No time';
+    if (res.retired){ bestTimeCls = 't-deleted'; bestTimeStr = 'OUT'; }
+    else if (res.bestTime !== null){ bestTimeCls = isOverallBest ? 't-purple' : 't-settled'; bestTimeStr = fmtTime(res.bestTime); }
+
+    var lastTimeCls = 'tl-dash', lastTimeStr = '\u2014';
+    if (res.lastTime !== null){
+      if (res.lastTimeType === 'deleted'){ lastTimeCls = 'tl-red'; lastTimeStr = fmtTime(res.lastTime); }
+      else if (res.lastTimeType === 'spin'){ lastTimeCls = 'tl-yellow'; lastTimeStr = fmtTime(res.lastTime); }
+      else if (res.lastTimeType === 'pb'){ lastTimeCls = isOverallBest ? 'tl-purple' : 'tl-green'; lastTimeStr = fmtTime(res.lastTime); }
+      else if (res.lastTimeType === 'nopb'){ lastTimeCls = 'tl-yellow'; lastTimeStr = fmtTime(res.lastTime); }
+    }
+
+    var flashCls = '';
+    if (activity === 'pb'){ flashCls = isOverallBest ? ' flash-purple' : ' flash-green'; }
+    else if (activity === 'nopb' || activity === 'spin'){ flashCls = ' flash-amber'; }
+
+    var gap = pos === 0 || res.bestTime === null ? '\u2014' : ('+' + (res.bestTime - leader).toFixed(3) + 's');
+    var gainStr = (res.posGainActual && res.posGainActual !== 0) ? (res.posGainActual > 0 ? '+' : '') + res.posGainActual : '';
+
+    var carImgUrl = '';
+    if (carset && carset.assetBase && car && car.imgFile) {
+      carImgUrl = carset.assetBase.replace(/\/$/,'') + '/' + car.imgFile.replace(/^\//, '');
+    }
+    return '<div class="tower-row' + flashCls + '">'
+      + '<span class="t-pos' + (pos === 0 ? ' p1' : '') + '">' + (pos + 1) + '</span>'
+      + '<div class="t-bar" style="background:' + dr.colour + '"></div>'
+      + (carImgUrl ? '<div class="t-car-img-wrap"><img class="t-car-img" src="' + carImgUrl + '" alt=""></div>' : '<div class="t-car-img-wrap"></div>')
+      + (dr.nationality ? '<div class="t-flag-wrap"><img class="t-flag" src="' + flagUrl(dr.nationality) + '" alt="' + dr.nationality + '" onerror="this.style.display='none'"></div>' : '<div class="t-flag-wrap"></div>')
+      + '<span class="t-name">' + dr.name + '</span>'
+      + '<span class="t-car">' + (car ? (car.teamName || car.model) : '?') + '</span>'
+      + '<span class="t-time ' + bestTimeCls + '">' + bestTimeStr + '</span>'
+      + '<span class="t-gap">' + gap + '</span>'
+      + '<span class="t-last ' + lastTimeCls + '">' + lastTimeStr + '</span>'
+      + (gainStr ? (+gainStr > 0 ? '<span class="t-gain">\u25b2' + gainStr + '</span>' : '<span style="font-size:10px;font-weight:700;color:var(--red)">\u25bc' + gainStr + '</span>') : '')
+      + '</div>';
+  }).join('');
+}
+
+function stepMin(dir){ goToMin(currentMin + dir); }
+
+function togglePlay(){
+  if (playTimer){
+    clearInterval(playTimer); playTimer = null;
+    document.getElementById('playBtn').textContent = '\u23f5\u23f5 Play';
+    return;
+  }
+  document.getElementById('playBtn').textContent = '\u23f9 Stop';
+  playTimer = setInterval(function(){
+    if (currentMin >= sessionTimeline.length - 1){
+      clearInterval(playTimer); playTimer = null;
+      document.getElementById('playBtn').textContent = '\u23f5\u23f5 Play';
+      return;
+    }
+    goToMin(currentMin + 1);
+  }, 800);
+}
+
+// ════════════════════════════════
+// FINAL GRID
+// ════════════════════════════════
+function renderFinalGrid(){
+  var lastFrame = sessionTimeline[sessionTimeline.length - 1];
+  if (!lastFrame) return;
+  var ranked = lastFrame.ranked;
+  var driverRes = lastFrame.driverRes;
+  var leader = null;
+  ranked.forEach(function(r){ if (r.bestTime !== null && leader === null) leader = r.bestTime; });
+
+  document.getElementById('finalGrid').innerHTML = ranked.map(function(r, i){
+    var dr = drivers[r.di];
+    var res = driverRes[r.di];
+    var car = carset.cars && carset.cars[dr.carIdx];
+    var gap = i === 0 || res.bestTime === null ? '\u2014' : ('+' + (res.bestTime - leader).toFixed(3) + 's');
+    return '<tr>'
+      + '<td><strong style="color:' + (i === 0 ? 'var(--amber)' : i < 3 ? 'var(--text)' : 'var(--text3)') + '">' + (i + 1) + '</strong></td>'
+      + '<td><div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:8px;border-radius:50%;background:' + dr.colour + ';flex-shrink:0"></div>' + dr.name + (res.retired ? ' <span style="color:var(--red);font-size:9px">OUT</span>' : '') + '</div></td>'
+      + '<td style="color:var(--text2)">' + (car ? car.model : '?') + '</td>'
+      + '<td style="font-variant-numeric:tabular-nums;font-weight:600;color:' + (i === 0 ? 'var(--amber)' : res.bestTime !== null ? 'var(--green)' : 'var(--text3)') + '">' + (res.bestTime !== null ? fmtTime(res.bestTime) : 'No time') + '</td>'
+      + '<td style="color:var(--text3)">' + gap + '</td>'
+      + '<td style="color:var(--text3)">' + (res.bestLapNum !== null ? 'Lap ' + res.bestLapNum : res.retired ? 'Retired' : '\u2014') + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+// ════════════════════════════════
+// HELPERS
+// ════════════════════════════════
+var NAT_TO_FLAG={
+  "GB":"gb","US":"us","DE":"de","FR":"fr","IT":"it","ES":"es","NL":"nl",
+  "BE":"be","AT":"at","AU":"au","BR":"br","MX":"mx","CA":"ca","JP":"jp",
+  "HR":"hr","GR":"gr","UA":"ua","PL":"pl","FI":"fi","DK":"dk","SE":"se",
+  "NO":"no","PT":"pt","CH":"ch","AR":"ar","RU":"ru","CN":"cn","IN":"in",
+  "ZA":"za","NZ":"nz","TR":"tr","KP":"kp","KR":"kr","HU":"hu","CZ":"cz",
+  "SK":"sk","RO":"ro","BG":"bg","RS":"rs","SI":"si","LT":"lt","LV":"lv",
+  "EE":"ee","IS":"is","IE":"ie","LU":"lu","MT":"mt","CY":"cy","SM":"sm",
+  "MC":"mc","AD":"ad","LI":"li","MK":"mk","BA":"ba","AL":"al","ME":"me"
+};
+function flagUrl(nat){
+  if(!nat) return '';
+  var code=(NAT_TO_FLAG[nat.toUpperCase()]||nat.toLowerCase()).toLowerCase();
+  return 'https://raw.githubusercontent.com/AshF195/atracer/main/flag%201/'+code+'.png';
+}
+
+function fmtTime(s){
+  if (s === null || s === undefined || isNaN(s)) return '--';
+  var m = Math.floor(s / 60);
+  var sec = (s % 60).toFixed(3).padStart(6, '0');
+  return m + ':' + sec;
+}
+</script>
+</body>
+</html>

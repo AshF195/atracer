@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&T Racer -- Qualifying Simulator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#17171e;--bg3:#1e1e28;--bg4:#252530;
+  --border:#2e2e3e;--border2:#3a3a4e;
+  --text:#e8e8f0;--text2:#9898b0;--text3:#5a5a72;
+  --accent:#6c8fff;--accent2:#4a6ee0;--accentbg:rgba(108,143,255,0.08);
+  --green:#3ecf6e;--greenbg:rgba(62,207,110,0.12);--greenbdr:rgba(62,207,110,0.35);
+  --amber:#f0a030;--amberbg:rgba(240,160,48,0.12);--amberbdr:rgba(240,160,48,0.35);
+  --red:#f05060;--redbg:rgba(240,80,96,0.12);--redbdr:rgba(240,80,96,0.35);
+  --purple:#c060ff;--purplebg:rgba(192,96,255,0.12);--purplebdr:rgba(192,96,255,0.35);
+}
+html[data-theme="light"]:root{
+  --bg:#f0f0f4;--bg2:#fff;--bg3:#f5f5f9;--bg4:#e8e8ef;
+  --border:#d4d4e0;--border2:#b8b8cc;
+  --text:#1a1a2e;--text2:#4a4a6a;--text3:#8a8aaa;
+  --accent:#4a6ee0;--accent2:#3858c0;
+  --green:#18a048;--greenbg:rgba(24,160,72,0.08);--greenbdr:rgba(24,160,72,0.3);
+  --amber:#b07010;--amberbg:rgba(176,112,16,0.08);--amberbdr:rgba(176,112,16,0.3);
+  --red:#c82030;--redbg:rgba(200,32,48,0.08);--redbdr:rgba(200,32,48,0.3);
+  --purple:#8030d0;--purplebg:rgba(128,48,208,0.08);--purplebdr:rgba(128,48,208,0.3);
+}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+.topbar{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.topbar h1{font-size:14px;font-weight:700;margin-right:4px}
+.topbar-sub{font-size:11px;color:var(--text3)}
+.btn{padding:5px 12px;border:1px solid var(--border2);border-radius:6px;background:var(--bg3);font-size:11px;cursor:pointer;color:var(--text);white-space:nowrap;font-family:inherit;transition:all 0.15s}
+.btn:hover{background:var(--bg4)}
+.btn-primary{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.btn-primary:hover{background:var(--accent)}
+.btn-red{border-color:var(--redbdr);color:var(--red);background:transparent}
+.btn-sm{padding:3px 7px;font-size:10px}
+/* layout */
+.layout{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 43px);align-items:start}
+.panel-l{background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding-bottom:56px;position:sticky;top:0;max-height:100vh}
+.panel-r{padding:16px;display:flex;flex-direction:column;gap:12px}
+.sb{padding:10px 13px;border-bottom:1px solid var(--border)}
+.st{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+label{display:block;font-size:10px;color:var(--text2);margin-bottom:2px;margin-top:6px}
+label:first-child{margin-top:0}
+select,input[type=number]{width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:5px;font-size:12px;background:var(--bg3);color:var(--text);font-family:inherit}
+select:focus,input:focus{outline:none;border-color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+/* driver cards */
+.dcard{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:9px 11px;margin-bottom:6px}
+.dcard-hdr{display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none}
+.dcard-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dcard-name{font-size:12px;font-weight:600;flex:1}
+.dcard-sum{font-size:10px;color:var(--text3)}
+.dcard-chev::before{content:'▼';font-size:9px;color:var(--text3)}
+.dcard.open .dcard-chev::before{content:'▲'}
+.dcard-body{display:none;margin-top:8px}
+.dcard.open .dcard-body{display:block}
+.lap-row{display:grid;grid-template-columns:28px 1fr 64px 52px 24px;gap:4px;align-items:center;margin-bottom:4px}
+.lap-lbl{font-size:10px;color:var(--text3);font-weight:600;text-align:center}
+/* tyre rows */
+.tyre-row{display:flex;align-items:center;gap:5px;padding:4px 7px;background:var(--bg4);border-radius:4px;margin-bottom:3px;font-size:11px}
+.tyre-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.wear-bar{flex:1;height:3px;background:var(--bg2);border-radius:2px;overflow:hidden}
+.wear-fill{height:100%;border-radius:2px}
+/* engine weight rows */
+.wr{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.wl{font-size:10px;color:var(--text2);min-width:170px}
+.wv{font-size:10px;font-weight:600;color:var(--accent);min-width:28px;text-align:right}
+/* run bar */
+.run-bar{position:fixed;bottom:0;left:0;width:340px;background:var(--bg2);border-top:1px solid var(--border);padding:7px 13px;z-index:20;display:none}
+/* cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:13px}
+.ctitle{font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+/* timeline */
+.tl-scroll{overflow-x:auto;margin-bottom:10px}
+.tl-track{display:flex;gap:2px;min-width:max-content;padding:2px}
+.tl-sq{width:24px;height:24px;border-radius:3px;background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text3);font-weight:600;transition:all 0.1s;flex-shrink:0;border:1px solid transparent;position:relative}
+.tl-sq:hover{border-color:var(--border2)}
+.tl-sq.active{border-color:var(--accent)!important;color:var(--accent)}
+.tl-sq.has-lap{background:var(--greenbg);color:var(--green)}
+.tl-sq.has-acc{background:var(--redbg);color:var(--red)}
+.tl-sq.has-inc{background:var(--amberbg);color:var(--amber)}
+.tl-sq.has-out{background:var(--bg4);color:var(--text3)}
+/* viewer layout */
+.viewer-layout{display:grid;grid-template-columns:auto 300px;gap:16px;align-items:start}
+@media(max-width:900px){.viewer-layout{grid-template-columns:1fr}}
+/* timing tower */
+.tower{width:100%}
+.tower-wrap{
+  border-radius:10px;
+  border:1px solid var(--border2);
+  overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+  max-width:1100px;
+}
+/* Header -- distinct dark strip */
+.tower-hdr{
+  display:grid;
+  grid-template-columns:38px 12px 141px 24px minmax(160px,auto) minmax(100px,1fr) minmax(100px,auto) minmax(68px,auto) minmax(100px,auto) 44px;
+  gap:0;
+  align-items:center;
+  padding:7px 12px;
+  background:#0a0a10;
+  font-size:9px;color:rgba(255,255,255,0.35);
+  font-weight:700;text-transform:uppercase;letter-spacing:0.1em;
+  border-bottom:2px solid rgba(255,255,255,0.06);
+}
+html[data-theme="light"] .tower-hdr{
+  background:#1a1a2e;
+  color:rgba(255,255,255,0.5);
+  border-bottom-color:rgba(255,255,255,0.1);
+}
+/* Rows */
+.tower-row{
+  display:grid;
+  grid-template-columns:38px 12px 141px 24px minmax(160px,auto) minmax(100px,1fr) minmax(100px,auto) minmax(68px,auto) minmax(100px,auto) 44px;
+  gap:0;
+  align-items:center;
+  padding:0;
+  border-bottom:1px solid var(--border);
+  transition:background 0.4s;
+  font-size:12px;
+  position:relative;
+  overflow:hidden;
+}
+.tower-row:last-child{border-bottom:none}
+.tower-row:nth-child(even){background:rgba(255,255,255,0.015)}
+html[data-theme="light"] .tower-row:nth-child(even){background:rgba(0,0,0,0.02)}
+/* P1 row -- gold position number only, no border */
+/* inner cell padding */
+.tower-row > *{padding:10px 6px}
+.tower-row > *:first-child{padding-left:10px}
+.tower-row > *:last-child{padding-right:10px}
+.tower-hdr > *{padding:7px 6px;white-space:nowrap}
+.tower-hdr > *:first-child{padding-left:10px}
+/* bar column spacer in header -- no padding needed, bar col is display only */
+.tower-hdr .hdr-bar{padding:0}
+/* flashes */
+.tower-row.flash-purple{animation:flashP 3s ease}
+.tower-row.flash-green{animation:flashG 3s ease}
+.tower-row.flash-amber{animation:flashA 3s ease}
+@keyframes flashP{0%,30%{background:rgba(192,96,255,0.45)}100%{background:transparent}}
+@keyframes flashG{0%,30%{background:rgba(62,207,110,0.45)}100%{background:transparent}}
+@keyframes flashA{0%,30%{background:rgba(240,160,48,0.40)}100%{background:transparent}}
+/* position */
+.t-pos{font-size:15px;font-weight:800;color:var(--text3);text-align:center;font-variant-numeric:tabular-nums}
+.t-pos.p1{color:var(--amber);text-shadow:0 0 8px rgba(240,160,48,0.5)}
+.t-pos.p2{color:var(--text2)}
+.t-pos.p3{color:var(--amber);opacity:0.6}
+/* colour bar -- replaces dot */
+.t-bar{width:4px;height:100%;min-height:36px;border-radius:0;flex-shrink:0;align-self:stretch}
+.t-flag{width:22px;height:15px;object-fit:cover;border-radius:2px;display:block;margin:auto}
+.t-flag-wrap{display:flex;align-items:center;justify-content:center;padding:0 3px}
+.t-car-img{width:125px;height:36px;object-fit:contain;display:block;margin:auto}
+.t-car-img-wrap{display:flex;align-items:center;justify-content:center;padding:6px 10px}
+/* driver name */
+.t-name{font-weight:600;white-space:nowrap;font-size:14px}
+.t-name .t-initials{font-size:9px;color:var(--text3);font-weight:400;margin-left:4px;display:none}
+/* car */
+.t-car{font-size:12px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* times */
+.t-time{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;letter-spacing:-0.02em}
+.t-time.t-settled{color:var(--text2);font-weight:500;font-size:15px}
+.t-time.t-purple{color:var(--purple);text-shadow:0 0 10px rgba(192,96,255,0.4)}
+.t-time.t-none{color:var(--text3);font-weight:400;font-size:13px}
+.t-time.t-deleted{color:var(--red)}
+.t-gap{font-size:13px;color:var(--text3);font-variant-numeric:tabular-nums}
+/* last time */
+.t-last{font-variant-numeric:tabular-nums;font-size:14px}
+.t-last.tl-dash{color:var(--text3);opacity:0.4}
+.t-last.tl-yellow{color:var(--amber)}
+.t-last.tl-red{color:var(--red);text-decoration:line-through}
+.t-last.tl-purple{color:var(--purple);font-weight:700;text-shadow:0 0 8px rgba(192,96,255,0.4)}
+.t-last.tl-green{color:var(--green);font-weight:700}
+.t-last.tl-grey{color:var(--text3);font-variant-numeric:tabular-nums;font-size:12px}
+/* gain */
+.t-gain{font-size:10px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:2px}
+/* chat box */
+.chat-wrap{margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+.chat-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
+.chat-msgs{display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;margin-bottom:8px}
+.chat-msg-item{font-size:11px;background:var(--bg3);border-radius:5px;padding:5px 8px;border-left:3px solid var(--border2);line-height:1.4}
+.chat-msg-item .chat-who{font-weight:600;color:var(--accent);margin-right:4px}
+.chat-msg-item .chat-time{font-size:9px;color:var(--text3);margin-left:4px}
+.chat-input-row{display:flex;gap:6px}
+.chat-input-row input{flex:1;padding:5px 8px;border:1px solid var(--border);border-radius:5px;font-size:11px;background:var(--bg3);color:var(--text);font-family:inherit}
+.chat-input-row input:focus{outline:none;border-color:var(--accent)}
+.chat-send{padding:5px 10px;border:none;border-radius:5px;background:var(--accent2);color:#fff;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.chat-send:hover{background:var(--accent)}
+.t-flag{width:20px;height:14px;object-fit:cover;border-radius:2px;display:block;margin:auto}
+.t-flag-wrap{display:flex;align-items:center;justify-content:center}
+/* commentary box fix */
+
+.ev{padding:5px 8px;border-radius:5px;font-size:11px;background:var(--bg3);border-left:3px solid var(--border2);line-height:1.4;word-break:break-word}
+/* chat box */
+.chat-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:10px}
+.chat-box-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;padding:7px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.chat-log{max-height:200px;overflow-y:auto;padding:6px 10px;display:flex;flex-direction:column;gap:4px}
+.chat-entry{font-size:11px;color:var(--text2);line-height:1.4}
+.chat-entry .chat-author{font-weight:600;color:var(--accent);margin-right:5px}
+.chat-entry .chat-min{font-size:9px;color:var(--text3);margin-left:4px}
+.chat-input-row{display:flex;gap:6px;padding:6px 8px;border-top:1px solid var(--border)}
+.chat-input-row input{flex:1;padding:5px 8px;border:1px solid var(--border);border-radius:5px;font-size:11px;background:var(--bg2);color:var(--text);font-family:inherit}
+.chat-input-row input:focus{outline:none;border-color:var(--accent)}
+.chat-input-row button{padding:5px 10px;border:none;border-radius:5px;background:var(--accent2);color:#fff;font-size:11px;cursor:pointer;font-family:inherit}
+/* commentary */
+.commentary-list{display:flex;flex-direction:column;gap:4px;min-height:120px;max-height:340px;overflow-y:auto;word-break:break-word}
+.ev{padding:5px 8px;border-radius:5px;font-size:11px;background:var(--bg3);border-left:3px solid var(--border2);line-height:1.4}
+.ev strong{color:var(--text)}
+.ev.ev-lap-pb{border-left-color:var(--green)}
+.ev.ev-lap-best{border-left-color:var(--purple)}
+.ev.ev-lap-no-pb{border-left-color:var(--amber)}
+.ev.ev-invalid{border-left-color:var(--red)}
+.ev.ev-spin{border-left-color:var(--amber)}
+.ev.ev-accident{border-left-color:var(--red)}
+.ev.ev-traffic{border-left-color:var(--purple)}
+.ev.ev-session{border-left-color:var(--accent);font-weight:600;color:var(--text)}
+.ev.ev-out{border-left-color:var(--border2);color:var(--text3)}
+/* nav */
+.viewer-nav{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.min-lbl{font-size:20px;font-weight:700;color:var(--accent);min-width:70px}
+.ot-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:var(--greenbg);border:1px solid var(--greenbdr);color:var(--green)}
+.sess-status{font-size:10px;color:var(--text3)}
+.note{padding:8px 10px;border-radius:6px;font-size:11px;border:1px solid var(--border);color:var(--text2)}
+.note.info{background:var(--accentbg);border-color:rgba(108,143,255,0.2)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+/* legend */
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:10px;color:var(--text2)}
+.leg-item{display:flex;align-items:center;gap:4px}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+/* grid table */
+.grid-table{width:100%;border-collapse:collapse;font-size:12px}
+.grid-table th{padding:6px 8px;text-align:left;background:var(--bg3);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);font-weight:600}
+.grid-table td{padding:6px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.grid-table tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>&#9201; Qualifying Simulator <span class="topbar-sub">v0.2</span></h1>
+  <button class="btn" onclick="document.getElementById('qcFile').click()">&#8593; Load carset</button>
+  <input type="file" id="qcFile" accept=".json" style="display:none" onchange="loadCarset(event)">
+  <span id="csLabel" style="font-size:11px;color:var(--text3)">No carset loaded</span>
+  <button class="btn btn-sm" onclick="toggleTheme()" id="themeBtn">&#9790; Light</button>
+</div>
+
+<div class="layout">
+<!-- LEFT -->
+<div class="panel-l">
+  <div id="noCs" style="padding:24px 14px;text-align:center;color:var(--text3)">
+    <div style="font-size:28px;opacity:0.4;margin-bottom:8px">&#128196;</div>
+    <p style="font-size:12px;margin-bottom:10px">Load a carset JSON to configure qualifying.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('qcFile').click()">Load carset JSON</button>
+  </div>
+  <div id="cfgInner" style="display:none">
+
+    <div class="sb">
+      <div class="st">Session</div>
+      <div class="g2">
+        <div><label>Circuit</label><select id="selCircuit" onchange="onCircuitChange()"></select></div>
+        <div><label>Session length (mins)</label><input type="number" id="sessLen" value="60" min="10" max="180"></div>
+      </div>
+      <div class="g2" style="margin-top:0">
+        <div><label>Max hot laps</label><input type="number" id="maxLaps" value="6" min="1" max="20"></div>
+        <div><label>Mins per flying lap</label><input type="number" id="minsPerLap" value="5" min="1" max="20"></div>
+      </div>
+      <div id="circInfo" style="font-size:10px;color:var(--text3);margin-top:6px"></div>
+    </div>
+
+    <div class="sb">
+      <div class="st">Tyre sets <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">-- edit wear to carry over from practice</span></div>
+      <div id="tyreSets"></div>
+    </div>
+
+    <div class="sb">
+      <div class="st">Drivers
+        <button class="btn btn-sm" onclick="addGenericDriver()">+ Add driver</button>
+        <button class="btn btn-sm" onclick="randomiseAll()">&#127922; Randomise all</button>
+        <button class="btn btn-sm" onclick="expandAll()">Expand all</button>
+      </div>
+      <div id="driverList"></div>
+    </div>
+
+    <div class="sb">
+      <div class="st">Engine weights</div>
+      <div id="engWeights"></div>
+    </div>
+    <div class="sb">
+      <div class="st">Tower display</div>
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+        <input type="checkbox" id="showColourBar" checked onchange="toggleColourBar()">
+        <label for="showColourBar" style="margin:0;font-size:12px;color:var(--text);cursor:pointer">Show team colour bar</label>
+      </div>
+    </div>
+
+    <div class="sb">
+      <div class="st">Incident settings</div>
+      <div class="note info" style="margin-bottom:8px;font-size:10px">Base % per lap at push 50. Traffic % is per extra car on track simultaneously.</div>
+      <div id="incSettings"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- RIGHT -->
+<div class="panel-r">
+  <div class="note info" id="noRunMsg">Load a carset, set up drivers then hit <strong>Run qualifying</strong>.</div>
+
+  <!-- VIEWER CARD -->
+  <div class="card" id="viewerCard" style="display:none">
+    <div class="ctitle">
+      Qualifying session
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="btn btn-sm" onclick="stepMin(-1)">&#9664;</button>
+        <button class="btn btn-sm" onclick="stepMin(1)">&#9654;</button>
+        <button class="btn btn-sm" onclick="togglePlay()" id="playBtn">&#9654;&#9654; Play</button>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="tl-scroll"><div class="tl-track" id="tlTrack"></div></div>
+
+    <!-- Nav row -->
+    <div class="viewer-nav">
+      <span class="min-lbl">MIN <span id="curMin">0</span></span>
+      <input type="range" id="scrubber" min="0" value="0" style="flex:1;accent-color:var(--accent);cursor:pointer"
+        oninput="goToMin(+this.value)">
+      <span class="ot-badge">&#128664; <span id="otCount">0</span> on track</span>
+      <span class="sess-status" id="sessStatus"></span>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div>Fastest overall</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Personal best</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--amber)"></div>No improvement</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Deleted / incident</div>
+    </div>
+
+    <!-- Viewer layout: tower + commentary -->
+    <div class="viewer-layout">
+
+      <!-- LEFT: Tower + Commentary + Chat -->
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px">Timing tower</div>
+          <div class="tower tower-wrap">
+            <div class="tower-hdr">
+              <span>P</span><span class="hdr-bar"></span><span></span><span></span><span>Driver</span><span>Team</span>
+              <span>Best time</span><span>Gap</span><span>Last time</span><span>&#9650;</span>
+            </div>
+            <div id="towerBody"></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px">
+            Minute <span id="commMinLbl">0</span> — events
+          </div>
+          <div class="commentary-list" id="commentary"></div>
+        </div>
+        <div class="chat-box">
+          <div class="chat-box-title">
+            <span>&#128172; Minute chat</span>
+            <span id="chatMinLbl" style="color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">Min 0</span>
+          </div>
+          <div class="chat-log" id="chatLog"></div>
+          <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Comment on this minute..." maxlength="140"
+              onkeydown="if(event.key==='Enter')sendChat()">
+            <button onclick="sendChat()">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Map + Weather (future) -->
+      <div style="display:flex;flex-direction:column;gap:10px;flex-shrink:0;width:300px">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em">&#128506; Circuit map</div>
+          <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px;opacity:0.5">Coming soon</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px">&#127780; Weather</div>
+          <div style="font-size:12px;color:var(--text3);opacity:0.5">Coming soon</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px">&#9201; Session info</div>
+          <div style="font-size:12px;color:var(--text3);opacity:0.5">Coming soon</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Final grid -->
+  <div class="card" id="gridCard" style="display:none">
+    <div class="ctitle">Starting grid — qualifying result
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="saveStatus" style="font-size:11px"></span>
+        <button class="btn btn-sm" id="saveBtn" onclick="saveResultsToDb()">Save to database</button>
+      </div>
+    </div>
+    <table class="grid-table">
+      <thead><tr><th>P</th><th>Driver</th><th>Car</th><th>Best lap</th><th>Gap</th><th>Set on</th></tr></thead>
+      <tbody id="finalGrid"></tbody>
+    </table>
+  </div>
+
+</div>
+</div>
+
+<div class="run-bar" id="runBar">
+  <button class="btn btn-primary" style="width:100%;padding:9px;font-size:13px;font-weight:600;border-radius:7px"
+    onclick="runQualifying()">&#9654; Run qualifying</button>
+</div>
+
+<script>
+
+// ================================================================
+// SUPABASE CONFIG
+// ================================================================
+var SUPABASE_URL = 'https://ycijvolkydyqbvcqxxch.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_sDSdIK5LqBtov6qbkQdxoA_I-avpHCq';
+var SEASON_ID    = '00000000-0000-0000-0000-000000000001';
+
+async function saveResultsToDb() {
+  var btn = document.getElementById('saveBtn');
+  var status = document.getElementById('saveStatus');
+  btn.disabled = true; btn.textContent = 'Saving...'; status.textContent = '';
+
+  var lastFrame = sessionTimeline[sessionTimeline.length - 1];
+  if (!lastFrame) { btn.disabled = false; btn.textContent = 'Save to database'; return; }
+
+  var circIdx = parseInt(document.getElementById('selCircuit').value);
+  var circ = carset.circuits && carset.circuits[circIdx];
+  var circuitName = circ ? circ.name : 'Unknown';
+  var round = circ ? (circ.round || circIdx + 1) : 1;
+  var sessLen = parseInt(document.getElementById('sessLen').value) || 60;
+
+  var ranked = lastFrame.ranked;
+  var driverRes = lastFrame.driverRes;
+  var leader = null;
+  ranked.forEach(function(r) { if (r.bestTime !== null && leader === null) leader = r.bestTime; });
+
+  var gridRows = ranked.map(function(r, i) {
+    var dr = drivers[r.di];
+    var res = driverRes[r.di];
+    var car = carset.cars && carset.cars[dr.carIdx];
+    return {
+      season_id: SEASON_ID, round: round, circuit: circuitName,
+      grid_position: i + 1, driver_name: dr.name,
+      car_model: car ? car.model : 'Unknown',
+      best_lap_time: res.bestTime !== null ? Math.round(res.bestTime * 1000) / 1000 : null,
+      gap_to_pole: (i === 0 || res.bestTime === null) ? null : Math.round((res.bestTime - leader) * 1000) / 1000,
+      retired: res.retired || false
+    };
+  });
+
+  var sessionRow = {
+    season_id: SEASON_ID, round: round, circuit: circuitName,
+    session_length_mins: sessLen, timeline: sessionTimeline, drivers: drivers,
+    carset_snapshot: { name: carset.name, cars: carset.cars, tyreCompounds: carset.tyreCompounds, circuits: carset.circuits }
+  };
+
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/qualifying_sessions?season_id=eq.' + SEASON_ID + '&round=eq.' + round, {
+      method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    await fetch(SUPABASE_URL + '/rest/v1/qualifying_results?season_id=eq.' + SEASON_ID + '&round=eq.' + round, {
+      method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+
+    var r1 = await fetch(SUPABASE_URL + '/rest/v1/qualifying_sessions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'return=minimal' },
+      body: JSON.stringify(sessionRow)
+    });
+    if (!r1.ok) throw new Error('Session save failed: ' + await r1.text());
+
+    var r2 = await fetch(SUPABASE_URL + '/rest/v1/qualifying_results', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'return=minimal' },
+      body: JSON.stringify(gridRows)
+    });
+    if (!r2.ok) throw new Error('Grid save failed: ' + await r2.text());
+
+    btn.textContent = 'Saved!';
+    status.style.color = 'var(--green)';
+    status.textContent = gridRows.length + ' drivers + full session timeline saved.';
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Save to database';
+    status.style.color = 'var(--red)'; status.textContent = 'Error: ' + e.message;
+  }
+}
+
+// ════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════
+// AI drivers loaded from GitHub at runtime
+var AI_DRIVERS = [];   // filled by fetchAIDrivers()
+var AI_DRIVERS_LOADED = false;
+
+var AI_DRIVERS_URL = 'https://raw.githubusercontent.com/AshF195/atracer/main/Assets/ai_drivers';
+
+function fetchAIDrivers(callback){
+  if(AI_DRIVERS_LOADED){ if(callback) callback(); return; }
+  fetch(AI_DRIVERS_URL)
+    .then(function(r){ return r.text(); })
+    .then(function(text){
+      AI_DRIVERS = text.split('\n')
+        .map(function(l){ return l.trim(); })
+        .filter(function(l){ return l.length>0; })
+        .map(function(l){
+          var parts = l.split(',');
+          var name = parts[0].trim();
+          var nat  = parts[1] ? parts[1].trim() : '';
+          var initials = name.split(' ').map(function(w){ return w[0]; }).join('');
+          return {name:name, initials:initials, nationality:nat};
+        });
+      AI_DRIVERS_LOADED = true;
+      console.log('Loaded '+AI_DRIVERS.length+' AI drivers from GitHub');
+      if(callback) callback();
+    })
+    .catch(function(err){
+      console.warn('Could not load AI drivers from GitHub, using fallback:', err);
+      // Fallback pool if fetch fails
+      AI_DRIVERS = [
+        'Marcus Holt','Jana Kovar','Pierre Gauthier','Luca Ferrini',
+        'Sam Rivers','Yuki Tanaka','Alex Brennan','Cara Volkov','Jay Patel',
+        'Finn Gallagher','Mia Okafor','Rene Dubois','Hiro Matsuda','Zara Patel',
+        'Seb Krause','Natasha Volkov','Omar Hassan','Lena Bauer','Chris Tanner'
+      ].map(function(n){
+        return {name:n, initials:n.split(' ').map(function(w){return w[0];}).join(''), nationality:''};
+      });
+      AI_DRIVERS_LOADED = true;
+      if(callback) callback();
+    });
+}
+
+// Shuffle helper
+function shuffleArr(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var tmp=a[i];a[i]=a[j];a[j]=tmp;
+  }
+  return a;
+}
+var CAR_COLOURS = ['#6c8fff','#3ecf6e','#f0a030','#f05060','#a060ff',
+  '#20c0c0','#f080c0','#c0a020','#60c0a0','#d0a060','#a0d060','#d06090','#90a0d0','#d09040'];
+
+var EW = [
+  {id:'carPerf',       label:'Car performance effect (s)', val:0.35,orig:0.35,min:0,max:2.0,step:0.05,desc:'Max seconds from car perf vs avg'},
+  {id:'setupBonus',    label:'Setup accuracy bonus (s)',   val:0.60,orig:0.60,min:0,max:3.0,step:0.05,desc:'Max seconds from setup accuracy'},
+  {id:'tyreGrip',      label:'Tyre grip effect (s)',       val:0.25,orig:0.25,min:0,max:1.0,step:0.05,desc:'Compound grip vs avg'},
+  {id:'tyreWear',      label:'Tyre wear penalty (s)',      val:0.50,orig:0.50,min:0,max:3.0,step:0.05,desc:'Seconds lost at 100% worn'},
+  {id:'warmupPen',     label:'Out-lap warm-up penalty (s)',val:1.50,orig:1.50,min:0,max:5.0,step:0.10,desc:'Extra seconds before tyres up to temp'},
+  {id:'trackEvoMax',   label:'Max track evolution (s)',    val:0.40,orig:0.40,min:0,max:2.0,step:0.05,desc:'Total time improvement across session'},
+  {id:'trafficPenMax', label:'Max traffic penalty (s)',    val:1.20,orig:1.20,min:0,max:5.0,step:0.10,desc:'Max time lost when heavily baulked'},
+  {id:'pushBonus',     label:'Max push speed bonus (s)',   val:0.25,orig:0.25,min:0,max:1.0,step:0.05,desc:'Max seconds saved at push 100'},
+  {id:'noise',         label:'Random noise per lap (s)',   val:0.06,orig:0.06,min:0,max:0.3,step:0.01,desc:'Lap-to-lap variation'}
+];
+
+var INC = [
+  {id:'trackLimits',label:'Track limits', basePct:8.0, pushMult:1.5, effect:'Lap deleted'},
+  {id:'traffic',    label:'Traffic',      basePct:0.0, pushMult:3.0, effect:'% chance per extra car on track'},
+  {id:'spin',       label:'Spin',         basePct:2.0, pushMult:3.0, effect:'Lap abandoned'},
+  {id:'accident',   label:'Accident',     basePct:0.8, pushMult:4.0, effect:'Out of qualifying'}
+];
+
+// ════════════════════════════════
+// STATE
+// ════════════════════════════════
+var carset=null, drivers=[], tyreSetsState=[];
+var sessionTimeline=[], currentMin=0, playTimer=null;
+
+function getEW(id){ var w=EW.find(function(x){return x.id===id;}); return w?w.val:0; }
+
+// ════════════════════════════════
+// THEME
+// ════════════════════════════════
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('themeBtn').textContent=t==='dark'?'\u263d Light':'\u2600 Dark';
+}
+
+// ════════════════════════════════
+// LOAD CARSET
+// ════════════════════════════════
+function loadCarset(ev){
+  var f=ev.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(e){
+    try{
+      carset=JSON.parse(e.target.result);
+      document.getElementById('csLabel').textContent=carset.name||'Unnamed';
+      document.getElementById('noCs').style.display='none';
+      document.getElementById('cfgInner').style.display='block';
+      document.getElementById('runBar').style.display='block';
+      if(carset.sessions&&carset.sessions.qualifying){
+        var q=carset.sessions.qualifying;
+        if(q.lengthMins) document.getElementById('sessLen').value=q.lengthMins;
+        if(q.maxHotLaps) document.getElementById('maxLaps').value=q.maxHotLaps;
+        if(q.minsPerLap) document.getElementById('minsPerLap').value=q.minsPerLap;
+      }
+      buildCircuitSelect();
+      buildTyreSets();
+      buildEngineWeights();
+      buildIncSettings();
+      // Fetch AI driver pool then build drivers
+      document.getElementById('csLabel').textContent=(carset.name||'Unnamed')+' — loading drivers...';
+      fetchAIDrivers(function(){
+        document.getElementById('csLabel').textContent=carset.name||'Unnamed';
+        drivers=[];
+        buildDrivers();
+      });
+    }catch(ex){alert('Load failed: '+ex.message);}
+  };
+  r.readAsText(f); ev.target.value='';
+}
+
+// ════════════════════════════════
+// CIRCUIT
+// ════════════════════════════════
+function buildCircuitSelect(){
+  var el=document.getElementById('selCircuit');
+  el.innerHTML=(carset.circuits||[]).map(function(c,i){
+    return '<option value="'+i+'">R'+(c.round||i+1)+' \u2014 '+c.name+'</option>';
+  }).join('');
+  onCircuitChange();
+}
+function onCircuitChange(){
+  var idx=parseInt(document.getElementById('selCircuit').value);
+  var c=carset.circuits&&carset.circuits[idx];
+  var el=document.getElementById('circInfo');
+  if(!c){el.innerHTML='';return;}
+  el.innerHTML=c.laps+' laps \u00b7 '+c.lapLength+'km \u00b7 Base: '
+    +'<span style="color:var(--accent)">'+fmtTime(c.baseLapTime||90)+'</span>'
+    +(c.poleTime?' \u00b7 Pole ref: '+fmtTime(c.poleTime):'');
+}
+
+// ════════════════════════════════
+// TYRE SETS
+// ════════════════════════════════
+function buildTyreSets(){
+  tyreSetsState=[];
+  var alloc=(carset.sessions&&carset.sessions.tyreAllocation)||[];
+  if(!alloc.length){
+    (carset.tyreCompounds||[]).forEach(function(t){alloc.push({compoundName:t.name,sets:4});});
+  }
+  alloc.forEach(function(a){
+    var compound=(carset.tyreCompounds||[]).find(function(t){return t.name===a.compoundName;});
+    for(var i=0;i<(a.sets||4);i++){
+      tyreSetsState.push({
+        compound:a.compoundName,
+        setId:(compound?a.compoundName[0]:'?')+(i+1),
+        colour:compound?compound.colour:'#888',
+        wear:0
+      });
+    }
+  });
+  renderTyreSets();
+}
+function renderTyreSets(){
+  var el=document.getElementById('tyreSets');
+  el.innerHTML=tyreSetsState.map(function(s,i){
+    var wc=s.wear===0?'var(--green)':s.wear<50?'var(--amber)':'var(--red)';
+    return '<div class="tyre-row">'
+      +'<div class="tyre-dot" style="background:'+s.colour+'"></div>'
+      +'<span style="min-width:28px;font-weight:500">'+s.setId+'</span>'
+      +'<div class="wear-bar"><div class="wear-fill" style="width:'+s.wear+'%;background:'+wc+'"></div></div>'
+      +'<input type="number" value="'+s.wear+'" min="0" max="100" class="twi" data-idx="'+i+'"'
+        +' style="width:42px;padding:2px 5px;font-size:10px" oninput="updTyre('+i+',+this.value)">'
+      +'<span style="font-size:10px;color:var(--text3);min-width:26px">'+s.wear+'%</span>'
+    +'</div>';
+  }).join('');
+}
+function updTyre(idx,val){
+  tyreSetsState[idx].wear=Math.max(0,Math.min(100,val));
+  renderTyreSets(); renderDriverList();
+}
+
+// ════════════════════════════════
+// DRIVERS
+// ════════════════════════════════
+function buildDrivers(){
+  if(drivers.length) return;
+  var cars=carset.cars||[];
+  var dpc=parseInt(carset.maxDriversPerCar)||2;
+  var maxT=(parseInt(carset.maxTeams)||14)*dpc; // total driver slots = teams x drivers per car
+  // Use shuffled AI_DRIVERS pool -- beta players always first if present
+  var betaNames=['Ashley Eyre','Thomas Eyre','Kieren Winter','Elliot Orme','Craig Charles'];
+  var betaPool=AI_DRIVERS.filter(function(d){ return betaNames.indexOf(d.name)!==-1; });
+  var genericPool=shuffleArr(AI_DRIVERS.filter(function(d){ return betaNames.indexOf(d.name)===-1; }));
+  var names=betaPool.concat(genericPool);
+  // Pad with numbered fallback if pool smaller than needed
+  while(names.length < maxT){
+    names.push({name:'Driver '+(names.length+1),initials:'D'+(names.length+1),nationality:''});
+  }
+  var d=0;
+  cars.forEach(function(car,ci){
+    for(var s=0;s<dpc&&d<maxT&&d<names.length;s++,d++){
+      var nm=names[d];
+      var carColour=(cars[ci]&&cars[ci].colour)||CAR_COLOURS[ci%CAR_COLOURS.length];
+      drivers.push({name:nm.name,initials:nm.initials,nationality:nm.nationality||'',carIdx:ci,
+        colour:carColour,champ:d+1,laps:[]});
+    }
+  });
+  drivers.forEach(function(dr){randomiseDriver(dr);});
+}
+
+function randomiseDriver(dr){
+  var maxL=parseInt(document.getElementById('maxLaps').value)||6;
+  var sessLen=parseInt(document.getElementById('sessLen').value)||60;
+  var mpl=parseInt(document.getElementById('minsPerLap').value)||5;
+  var numLaps=1+Math.floor(Math.random()*maxL);
+  dr.laps=[];
+  var lastHotLap=0;
+  for(var i=0;i<numLaps;i++){
+    // hotLapMin = when the flying lap is set (driver exits pits mpl minutes before this)
+    var minGap=Math.max(mpl, 5); // at least 5 mins between hot laps
+    var earliest=Math.max(mpl+1, lastHotLap+minGap+Math.floor(Math.random()*3)+1);
+    var latest=Math.max(earliest+1, sessLen-2);
+    var hotLapMin=earliest+Math.floor(Math.random()*(latest-earliest));
+    hotLapMin=Math.min(hotLapMin, sessLen-1);
+    lastHotLap=hotLapMin;
+    dr.laps.push({
+      tyreIdx:Math.floor(Math.random()*tyreSetsState.length),
+      push:40+Math.floor(Math.random()*55),
+      hotLapMin:hotLapMin   // minute they SET the lap (exit = hotLapMin - mpl)
+    });
+  }
+}
+
+function addGenericDriver(){
+  var cars=carset.cars||[], dpc=carset.maxDriversPerCar||2;
+  // Pick a car that has room (count current drivers per car)
+  var counts={};
+  drivers.forEach(function(dr){counts[dr.carIdx]=(counts[dr.carIdx]||0)+1;});
+  var carIdx=0;
+  for(var ci=0;ci<cars.length;ci++){ if((counts[ci]||0)<dpc){carIdx=ci;break;} }
+  // Pick a name not already used
+  var usedNames=drivers.map(function(d){return d.name;});
+  var available=shuffleArr(AI_DRIVERS.filter(function(d){ return usedNames.indexOf(d.name)===-1; }));
+  var nmObj=available.length>0?available[0]:{name:'Driver '+(drivers.length+1),initials:'D'+(drivers.length+1),nationality:''};
+  var nm=nmObj.name;
+  var initials=nmObj.initials;
+  var newDr={name:nm,initials:initials,carIdx:carIdx,
+    nationality:nmObj.nationality||'',colour:(cars[carIdx]&&cars[carIdx].colour)||CAR_COLOURS[carIdx%CAR_COLOURS.length],champ:drivers.length+1,laps:[]};
+  drivers.push(newDr);
+  randomiseDriver(newDr);
+  renderDriverList();
+}
+function randomiseAll(){ drivers.forEach(function(dr){randomiseDriver(dr);}); renderDriverList(); }
+function expandAll(){ document.querySelectorAll('.dcard').forEach(function(el){el.classList.add('open');}); }
+
+function renderDriverList(){
+  var maxL=parseInt(document.getElementById('maxLaps').value)||6;
+  var el=document.getElementById('driverList');
+  el.innerHTML=drivers.map(function(dr,di){
+    var car=carset.cars&&carset.cars[dr.carIdx];
+    var lapRows=dr.laps.map(function(lap,li){
+      var to=tyreSetsState.map(function(s,i){
+        return '<option value="'+i+'"'+(lap.tyreIdx===i?' selected':'')+'>'+s.setId+' ('+s.wear+'%)</option>';
+      }).join('');
+      return '<div class="lap-row">'
+        +'<span class="lap-lbl">L'+(li+1)+'</span>'
+        +'<select class="lp-tyre" data-di="'+di+'" data-li="'+li+'">'+to+'</select>'
+        +'<div style="display:flex;align-items:center;gap:3px">'
+          +'<input type="number" value="'+lap.push+'" min="0" max="100" class="lp-push" data-di="'+di+'" data-li="'+li+'" style="width:40px;padding:3px 5px;font-size:10px">'
+          +'<span style="font-size:9px;color:var(--text3)">push</span>'
+        +'</div>'
+        +'<div style="display:flex;align-items:center;gap:3px">'
+          +'<input type="number" value="'+lap.hotLapMin+'" min="1" max="59" class="lp-hot" data-di="'+di+'" data-li="'+li+'" style="width:34px;padding:3px 5px;font-size:10px">'
+          +'<span style="font-size:9px;color:var(--text3)">min</span>'
+        +'</div>'
+        +'<button class="btn btn-red btn-sm" onclick="rmLap('+di+','+li+')">x</button>'
+      +'</div>';
+    }).join('');
+    return '<div class="dcard" id="dc_'+di+'">'
+      +'<div class="dcard-hdr" onclick="toggleCard('+di+')">'
+        +'<div class="dcard-dot" style="background:'+dr.colour+'"></div>'
+        +'<span class="dcard-name">'+dr.name+'</span>'
+        +'<span class="dcard-sum">'+(car?car.model:'?')+' \u00b7 '+dr.laps.length+' lap'+(dr.laps.length!==1?'s':'')+'</span>'
+        +'<span class="dcard-chev"></span>'
+      +'</div>'
+      +'<div class="dcard-body">'
+        +'<div class="lap-row" style="margin-bottom:3px;padding-bottom:3px;border-bottom:1px solid var(--border)">'
+          +'<span></span>'
+          +'<span style="font-size:9px;color:var(--text3)">Tyre set</span>'
+          +'<span style="font-size:9px;color:var(--text3)">Push</span>'
+          +'<span style="font-size:9px;color:var(--text3)">Hot lap at min</span>'
+          +'<span></span>'
+        +'</div>'
+        +lapRows
+        +(dr.laps.length<maxL?'<button class="btn btn-sm" onclick="addLap('+di+')" style="margin-top:4px;width:100%">+ Add lap</button>':'')
+        +'<button class="btn btn-sm" onclick="rndOne('+di+')" style="margin-top:3px;width:100%">&#127922; Randomise</button>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+
+  document.querySelectorAll('.lp-tyre').forEach(function(s){
+    s.addEventListener('change',function(){drivers[+this.dataset.di].laps[+this.dataset.li].tyreIdx=+this.value;});
+  });
+  document.querySelectorAll('.lp-push').forEach(function(i){
+    i.addEventListener('input',function(){drivers[+this.dataset.di].laps[+this.dataset.li].push=+this.value;});
+  });
+  document.querySelectorAll('.lp-hot').forEach(function(i){
+    i.addEventListener('input',function(){drivers[+this.dataset.di].laps[+this.dataset.li].hotLapMin=+this.value;});
+  });
+}
+
+function toggleCard(di){ var el=document.getElementById('dc_'+di); if(el) el.classList.toggle('open'); }
+function addLap(di){
+  var dr=drivers[di], maxL=parseInt(document.getElementById('maxLaps').value)||6;
+  if(dr.laps.length>=maxL) return;
+  var mpl=parseInt(document.getElementById('minsPerLap').value)||5;
+  var last=dr.laps.length?dr.laps[dr.laps.length-1].hotLapMin:mpl+2;
+  dr.laps.push({tyreIdx:0,push:70,hotLapMin:Math.min(55,last+mpl+3)});
+  renderDriverList();
+}
+function rmLap(di,li){ drivers[di].laps.splice(li,1); renderDriverList(); }
+function rndOne(di){ randomiseDriver(drivers[di]); renderDriverList(); }
+
+// ════════════════════════════════
+// ENGINE WEIGHTS UI
+// ════════════════════════════════
+function buildEngineWeights(){
+  var el=document.getElementById('engWeights');
+  el.innerHTML=EW.map(function(w){
+    return '<div class="wr">'
+      +'<span class="wl">'+w.label+'</span>'
+      +'<input type="range" min="'+w.min+'" max="'+w.max+'" step="'+w.step+'" value="'+w.val+'"'
+        +' style="flex:1" oninput="updEW(\''+w.id+'\',+this.value)">'
+      +'<span class="wv" id="ewv_'+w.id+'">'+w.val.toFixed(2)+'</span>'
+    +'</div>'
+    +'<div style="font-size:9px;color:var(--text3);margin:-1px 0 4px 172px">'+w.desc+'</div>';
+  }).join('');
+}
+function toggleColourBar(){
+  var show=document.getElementById("showColourBar").checked;
+  document.querySelectorAll(".t-bar").forEach(function(el){
+    el.style.opacity=show?"1":"0";
+  });
+}
+function updEW(id,val){
+  var w=EW.find(function(x){return x.id===id;}); if(w) w.val=val;
+  var el=document.getElementById('ewv_'+id); if(el) el.textContent=val.toFixed(2);
+}
+
+function buildIncSettings(){
+  var el=document.getElementById('incSettings');
+  el.innerHTML=INC.map(function(inc){
+    return '<div style="margin-bottom:7px;padding:7px 9px;background:var(--bg3);border-radius:6px;border:1px solid var(--border)">'
+      +'<div style="font-size:11px;font-weight:600;margin-bottom:5px">'+inc.label
+        +' <span style="font-size:9px;font-weight:400;color:var(--text3)">\u2014 '+inc.effect+'</span></div>'
+      +'<div class="wr" style="margin-bottom:3px">'
+        +'<span class="wl" style="min-width:140px">Base % per lap</span>'
+        +'<input type="range" min="0" max="20" step="0.5" value="'+inc.basePct+'"'
+          +' style="flex:1" oninput="updInc(\''+inc.id+'\',\'basePct\',+this.value)">'
+        +'<span class="wv" id="ib_'+inc.id+'">'+inc.basePct.toFixed(1)+'%</span>'
+      +'</div>'
+      +'<div class="wr" style="margin-bottom:0">'
+        +'<span class="wl" style="min-width:140px">'+(inc.id==='traffic'?'% per extra car':'Push 100 multiplier')+'</span>'
+        +'<input type="range" min="'+(inc.id==='traffic'?'0':'1')+'" max="'+(inc.id==='traffic'?'10':'8')+'" step="0.5" value="'+inc.pushMult+'"'
+          +' style="flex:1" oninput="updInc(\''+inc.id+'\',\'pushMult\',+this.value)">'
+        +'<span class="wv" id="im_'+inc.id+'">'+inc.pushMult.toFixed(1)+(inc.id==='traffic'?'%':'x')+'</span>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+function updInc(id,field,val){
+  var inc=INC.find(function(x){return x.id===id;}); if(inc) inc[field]=val;
+  var sfx=field==='basePct'?'%':(id==='traffic'&&field==='pushMult'?'%':'x');
+  var elId=field==='basePct'?'ib_'+id:'im_'+id;
+  var el=document.getElementById(elId); if(el) el.textContent=val.toFixed(1)+sfx;
+}
+
+// ════════════════════════════════
+// SIMULATE
+// ════════════════════════════════
+function runQualifying(){
+  if(!carset||!drivers.length) return;
+  chatLog={};
+  var sessLen=parseInt(document.getElementById('sessLen').value)||60;
+  var mpl=parseInt(document.getElementById('minsPerLap').value)||5;
+  var circIdx=parseInt(document.getElementById('selCircuit').value);
+  var circ=carset.circuits&&carset.circuits[circIdx];
+  var baseLap=circ?circ.baseLapTime||90:90;
+
+  // Build events: for each driver lap, exitMin = hotLapMin - mpl, completesAt = hotLapMin
+  var lapEvents=[];
+  drivers.forEach(function(dr,di){
+    dr.laps.forEach(function(lap,li){
+      lapEvents.push({
+        di:di, li:li,
+        exitMin:Math.max(0,lap.hotLapMin-mpl),
+        hotLapMin:lap.hotLapMin,
+        tyreIdx:lap.tyreIdx,
+        push:lap.push
+      });
+    });
+  });
+
+  // Driver result state
+  var driverRes=drivers.map(function(dr,i){
+    return {di:i,bestTime:null,prevBestTime:null,lapCount:0,
+      bestLapNum:null,bestSetAt:null,retired:false,prevPos:null,
+      lastTime:null,lastTimeType:'none'};
+  });
+  var tyreWear=tyreSetsState.map(function(s){return s.wear;});
+  sessionTimeline=[];
+
+  for(var min=0;min<=sessLen;min++){
+    var events=[];
+
+    // on-track: exited and not yet returned (hotLapMin not yet reached) and not retired
+    var onTrack=lapEvents.filter(function(ev){
+      return ev.exitMin<=min && ev.hotLapMin>min && !driverRes[ev.di].retired;
+    }).length;
+
+    if(min===0) events.push({type:'session',text:'Qualifying begins. '+sessLen+' minutes on the clock.'});
+    if(min===sessLen) events.push({type:'session',text:'\u2713 Chequered flag \u2014 qualifying complete.'});
+
+    // SNAPSHOT every driver's position BEFORE any laps this minute are processed
+    var posSnapshot={};
+    var snapRanked=getRanked(JSON.parse(JSON.stringify(driverRes)),false);
+    snapRanked.forEach(function(r,i){ posSnapshot[r.di]=i+1; });
+
+    // Exits this minute
+    lapEvents.forEach(function(lev){
+      if(lev.exitMin===min&&!driverRes[lev.di].retired){
+        var dr=drivers[lev.di];
+        var car=carset.cars&&carset.cars[dr.carIdx];
+        events.push({type:'out',
+          text:'<strong>'+dr.name+'</strong> exits the pits \u2014 '+(car?car.model:'?')+', L'+(lev.li+1)+'.'});
+      }
+    });
+
+    // Laps completing this minute (hotLapMin === min)
+    lapEvents.forEach(function(lev){
+      if(lev.hotLapMin!==min) return;
+      var dr=drivers[lev.di];
+      var res=driverRes[lev.di];
+      if(res.retired) return;
+
+      res.lapCount++;
+      var push=lev.push;
+      var t=push/100;
+
+      // Accident
+      var accI=INC.find(function(x){return x.id==='accident';});
+      var accC=(accI.basePct*(1+(t*(accI.pushMult-1))))/100;
+      if(Math.random()<accC){
+        res.retired=true;
+        events.push({type:'accident',
+          text:'<strong>'+dr.name+'</strong> ('+( carset.cars&&carset.cars[dr.carIdx]?carset.cars[dr.carIdx].model:'?')
+            +') crashes heavily \u2014 <span style="color:var(--red)">OUT of qualifying.</span>'});
+        return;
+      }
+
+      // Spin
+      var spI=INC.find(function(x){return x.id==='spin';});
+      var spC=(spI.basePct*(1+(t*(spI.pushMult-1))))/100;
+      var spinPenalty=0;
+      if(Math.random()<spC){
+        spinPenalty=2.0+Math.random()*8.0; // +2 to +10 seconds
+      }
+
+      // Calculate time
+      var carOv=calcCarOv(lev.di);
+      var allOv=drivers.map(function(d2,i2){return calcCarOv(i2);});
+      var avgOv=allOv.reduce(function(a,b){return a+b;},0)/allOv.length;
+      var carDelta=-((carOv-avgOv)/100)*getEW('carPerf');
+
+      var ts=tyreSetsState[lev.tyreIdx];
+      var tyre=(carset.tyreCompounds||[]).find(function(tc){return tc.name===(ts?ts.compound:'');});
+      var allGrip=(carset.tyreCompounds||[]).map(function(tc){return tc.grip||70;});
+      var avgGrip=allGrip.reduce(function(a,b){return a+b;},0)/allGrip.length;
+      var gripDelta=tyre?-((tyre.grip-avgGrip)/100)*getEW('tyreGrip'):0;
+
+      var wearPct=(tyreWear[lev.tyreIdx]||0)/100;
+      var wearDelta=wearPct*getEW('tyreWear');
+
+      var evoPct=Math.min(1,min/sessLen);
+      var evoDelta=-evoPct*getEW('trackEvoMax');
+
+      // Traffic based on current on-track count
+      var trafficI=INC.find(function(x){return x.id==='traffic';});
+      var trafficDelta=0;
+      if(onTrack>1){
+        var extraCars=onTrack-1;
+        var trafficC=(trafficI.pushMult*extraCars)/100;
+        if(Math.random()<trafficC) trafficDelta=Math.random()*getEW('trafficPenMax');
+      }
+
+      var pushBonus=-(push/100)*getEW('pushBonus');
+      var setupDelta=0.30*getEW('setupBonus');
+      var noise=(Math.random()+Math.random()-1)*getEW('noise');
+      var lapTime=Math.max(0,baseLap+carDelta+gripDelta+wearDelta+evoDelta+pushBonus+setupDelta+noise+trafficDelta+spinPenalty);
+
+      // Spin commentary
+      if(spinPenalty>0){
+        events.push({type:'spin',
+          text:'<strong>'+dr.name+'</strong> runs wide — '
+            +'<span style="color:var(--amber)">spin costs '+spinPenalty.toFixed(1)+'s.</span>'});
+      }
+      // Wear tyres
+      var deg=tyre?tyre.degradation||40:40;
+      tyreWear[lev.tyreIdx]=Math.min(100,(tyreWear[lev.tyreIdx]||0)+deg*0.15);
+
+      // Track limits
+      var tlI=INC.find(function(x){return x.id==='trackLimits';});
+      var tlC=(tlI.basePct*(1+(t*(tlI.pushMult-1))))/100;
+      if(Math.random()<tlC){
+        res.lastTime=lapTime;
+        res.lastTimeType='deleted';
+        events.push({type:'invalid',
+          text:'<span style="color:var(--red)">LAP DELETED</span> \u2014 <strong>'+dr.name+'</strong>'
+            +' goes '+fmtTime(lapTime)+' but exceeds track limits.'});
+        if(trafficDelta>0.1) events.push({type:'traffic',
+          text:'<strong>'+dr.name+'</strong> also encountered traffic on the lap (+'+trafficDelta.toFixed(2)+'s).'});
+        return;
+      }
+
+      // Traffic comment
+      if(trafficDelta>0.1) events.push({type:'traffic',
+        text:'<strong>'+dr.name+'</strong> reports traffic \u2014 lap affected (+'+trafficDelta.toFixed(2)+'s).'});
+
+      // Determine colour: is this pb?
+      var isPB = res.bestTime===null||lapTime<res.bestTime;
+      res.prevBestTime=res.bestTime;
+      res.lastTime=lapTime;
+      res.lastTimeType=spinPenalty>0?'spin':isPB?'pb':'nopb';
+
+      if(isPB){
+        res.bestTime=lapTime;
+        res.bestLapNum=res.lapCount;
+        res.bestSetAt=min;
+      }
+
+      // Store lap event for commentary -- position change calculated after all laps
+      res._lapThisMin={lapTime:lapTime,isPB:isPB,spinPenalty:spinPenalty,trafficDelta:trafficDelta};
+    });
+
+    // NOW all laps for this minute are processed -- calculate position changes for everyone
+    var newRanked=getRanked(driverRes,false);
+    driverRes.forEach(function(r,i){
+      var newPos=newRanked.findIndex(function(x){return x.di===i;})+1;
+      var oldPos=posSnapshot[i]||newPos;
+      r.posGainActual=oldPos-newPos; // positive=moved up, negative=dropped
+    });
+
+    // Build commentary now that positions are settled
+    lapEvents.forEach(function(lev){
+      if(lev.hotLapMin!==min) return;
+      var res=driverRes[lev.di];
+      var lap=res._lapThisMin; if(!lap) return;
+      var dr=drivers[lev.di];
+      var car=carset.cars&&carset.cars[dr.carIdx];
+      var carName=car?car.model:'?';
+      var ranked2=getRanked(driverRes,false);
+      var isOverallBest=ranked2[0].di===lev.di&&lap.isPB;
+      var posAfter=ranked2.findIndex(function(r){return r.di===lev.di;})+1;
+      var gain=res.posGainActual;
+      var timeCls=isOverallBest?'purple':lap.isPB?'green':'amber';
+      var colStr=isOverallBest?'var(--purple)':lap.isPB?'var(--green)':'var(--amber)';
+      var msg='<strong>'+dr.name+'</strong> ('+carName+') sets '
+        +'<span style="color:'+colStr+';font-weight:700">'+fmtTime(lap.lapTime)+'</span>'
+        +(isOverallBest?' \u2014 <span style="color:var(--purple)">FASTEST OVERALL</span>':
+          lap.isPB?' \u2014 <span style="color:var(--green)">personal best</span>':
+          ' \u2014 <span style="color:var(--amber)">no improvement</span>')
+        +(posAfter>0?' \u2014 P'+posAfter:'')
+        +(gain>0?' <span style="color:var(--green)">\u25b2+'+gain+'</span>':
+          gain<0?' <span style="color:var(--red)">\u25bc'+gain+'</span>':'');
+      events.push({type:'lap-'+timeCls, text:msg});
+      res._lapThisMin=null;
+    });
+
+    var ranked=getRanked(driverRes,false);
+    sessionTimeline.push({
+      min:min, events:events, onTrack:onTrack,
+      ranked:ranked,
+      driverRes:JSON.parse(JSON.stringify(driverRes))
+    });
+  }
+
+  // Show UI
+  document.getElementById('noRunMsg').style.display='none';
+  document.getElementById('viewerCard').style.display='block';
+  // gridCard revealed by goToMin anti-spoiler logic
+  buildTimelineBar();
+  var sc=document.getElementById('scrubber');
+  sc.max=sessLen; sc.value=0;
+  goToMin(0);
+  renderFinalGrid();
+}
+
+// ════════════════════════════════
+// RANKINGS
+// ════════════════════════════════
+function getRanked(driverRes, usePrev){
+  return driverRes.map(function(r,i){
+    return {di:i, bestTime:usePrev?r.prevBestTime:r.bestTime,
+      bestSetAt:r.bestSetAt, champ:drivers[i].champ};
+  }).sort(function(a,b){
+    if(a.bestTime!==null&&b.bestTime!==null){
+      if(Math.abs(a.bestTime-b.bestTime)<0.0001) return a.bestSetAt-b.bestSetAt;
+      return a.bestTime-b.bestTime;
+    }
+    if(a.bestTime!==null) return -1;
+    if(b.bestTime!==null) return 1;
+    return a.champ-b.champ;
+  });
+}
+
+// ════════════════════════════════
+// TIMELINE BAR
+// ════════════════════════════════
+function buildTimelineBar(){
+  var el=document.getElementById('tlTrack');
+  el.innerHTML=sessionTimeline.map(function(m,i){
+    var hasLap=m.events.some(function(e){return e.type.startsWith('lap-');});
+    var hasAcc=m.events.some(function(e){return e.type==='accident';});
+    var hasInc=m.events.some(function(e){return e.type==='spin'||e.type==='invalid'||e.type==='traffic';});
+    var cls='tl-sq'+(hasAcc?' has-acc':hasLap?' has-lap':hasInc?' has-inc':m.onTrack>0?' has-out':'');
+    return '<div class="'+cls+'" id="tlm_'+i+'" onclick="goToMin('+i+')" title="Min '+i+': '+m.events.length+' event'+(m.events.length!==1?'s':'')+', '+m.onTrack+' on track">'+i+'</div>';
+  }).join('');
+}
+
+// ════════════════════════════════
+// VIEWER
+// ════════════════════════════════
+function goToMin(min){
+  min=Math.max(0,Math.min(sessionTimeline.length-1,+min));
+  currentMin=min;
+  document.getElementById('scrubber').value=min;
+  document.getElementById('curMin').textContent=min;
+  document.getElementById('commMinLbl').textContent=min;
+  renderChat(min);
+  document.getElementById('chatInput').value='';
+  var chatMinEl=document.getElementById('chatMinLbl');
+  if(chatMinEl) chatMinEl.textContent='Min '+min;
+
+  document.querySelectorAll('.tl-sq').forEach(function(el,i){el.classList.toggle('active',i===min);});
+
+  var frame=sessionTimeline[min];
+  if(!frame) return;
+
+  document.getElementById('otCount').textContent=frame.onTrack;
+  var sessLen=parseInt(document.getElementById('sessLen').value)||60;
+  document.getElementById('sessStatus').textContent=
+    min===0?'Session starting':min>=sessLen?'Session complete':
+    (sessLen-min)+' min'+(sessLen-min!==1?'s':'')+' remaining';
+
+  // Commentary -- this minute only
+  var cEl=document.getElementById('commentary');
+  if(!frame.events.length){
+    cEl.innerHTML='<div class="ev ev-out" style="color:var(--text3);font-style:italic">No events this minute.</div>';
+  } else {
+    cEl.innerHTML=frame.events.map(function(ev){
+      var cls='ev ev-'+(ev.type.startsWith('lap-')?ev.type:''+ev.type);
+      return '<div class="'+cls+'">'+ev.text+'</div>';
+    }).join('');
+  }
+
+  // Timing tower -- full field with positions and colours
+  renderTower(frame);
+
+  // Anti-spoiler: only show final grid when last minute is reached
+  var sessLen = parseInt(document.getElementById('sessLen').value) || 60;
+  var gridCard = document.getElementById('gridCard');
+  if (min >= sessLen) {
+    if (gridCard.style.display === 'none') {
+      renderFinalGrid();
+      gridCard.style.display = 'block';
+    }
+  } else {
+    gridCard.style.display = 'none';
+  }
+}
+
+function renderTower(frame){
+  var driverRes=frame.driverRes;
+  var leader=null;
+  frame.ranked.forEach(function(r){if(r.bestTime!==null&&leader===null) leader=r.bestTime;});
+
+  // Drivers who set or attempted a lap THIS minute
+  var setThisMin={};
+  driverRes.forEach(function(r,i){
+    if(r.bestSetAt===frame.min) setThisMin[i]='pb';
+    // Also check for non-pb/deleted/spin attempts this minute via lastTime
+    // If lastTime was set this min but bestSetAt is not this min, it's a nopb/deleted/spin
+    // We track this via events
+  });
+  // Also catch non-pb and deleted/spin from events
+  frame.events.forEach(function(ev){
+    if(ev.type==='lap-amber'||ev.type==='invalid'||ev.type==='spin'){
+      // Find matching driver by scanning driverRes for recent lastTime
+      driverRes.forEach(function(r,i){
+        if(setThisMin[i]) return; // already flagged as pb
+        // Heuristic: if their lastTimeType matches the event type
+        if(ev.type==='invalid'&&r.lastTimeType==='deleted') setThisMin[i]='deleted';
+        else if(ev.type==='spin'&&r.lastTimeType==='spin') setThisMin[i]='spin';
+        else if(ev.type==='lap-amber'&&r.lastTimeType==='nopb') setThisMin[i]='nopb';
+      });
+    }
+  });
+
+  var el=document.getElementById('towerBody');
+  el.innerHTML=frame.ranked.map(function(r,pos){
+    var dr=drivers[r.di];
+    var res=driverRes[r.di];
+    var car=carset.cars&&carset.cars[dr.carIdx];
+    var activity=setThisMin[r.di];
+    var isOverallBest = pos===0 && res.bestTime!==null;
+
+    // BEST TIME column colour:
+    // Purple = overall fastest (P1 and has time)
+    // Settled grey = has a best time but not P1, or was P1 in a prior minute
+    // No time = dim
+    var bestTimeCls='t-none';
+    var bestTimeStr='No time';
+    if(res.retired){
+      bestTimeCls='t-deleted'; bestTimeStr='OUT';
+    } else if(res.bestTime!==null){
+      bestTimeCls = isOverallBest ? 't-purple' : 't-settled';
+      bestTimeStr = fmtTime(res.bestTime);
+    }
+
+    // LAST TIME column:
+    // Green/purple = same as best time (just set a pb this minute)
+    // Yellow = spin (slow, not counted as best)
+    // Red strikethrough = deleted
+    // Amber = slower than pb (no improvement)
+    // Grey = same as best (pb but settled from prev minute)
+    // Dash = no lap attempted yet
+    var lastTimeCls='tl-dash';
+    var lastTimeStr='—';
+    if(res.lastTime!==null){
+      if(res.lastTimeType==='deleted'){
+        lastTimeCls='tl-red'; lastTimeStr=fmtTime(res.lastTime);
+      } else if(res.lastTimeType==='spin'){
+        lastTimeCls='tl-yellow'; lastTimeStr=fmtTime(res.lastTime);
+      } else if(res.lastTimeType==='pb'){
+        lastTimeCls=isOverallBest?'tl-purple':'tl-green';
+        lastTimeStr=fmtTime(res.lastTime);
+      } else if(res.lastTimeType==='nopb'){
+        lastTimeCls='tl-yellow'; lastTimeStr=fmtTime(res.lastTime);
+      }
+    }
+
+    // Flash class -- triggers on the minute a lap event happened
+    var flashCls='';
+    if(activity==='pb'){
+      flashCls = isOverallBest ? ' flash-purple' : ' flash-green';
+    } else if(activity==='nopb'){
+      flashCls=' flash-amber';
+    } else if(activity==='spin'){
+      flashCls=' flash-amber';
+    }
+    // Deleted gets no row flash (red strikethrough in last time col is enough)
+
+    // Gap to leader
+    var gap=pos===0||res.bestTime===null?'—':('+'+( res.bestTime-leader).toFixed(3)+'s');
+
+    // Position gain -- only show when PB set this minute
+    var gainStr='';
+    if(res.posGainActual&&res.posGainActual!==0){
+      gainStr=(res.posGainActual>0?'+':'')+res.posGainActual;
+    } else {
+      gainStr='';
+    }
+
+        var carImgUrl='';
+    if(carset&&carset.assetBase&&car&&car.imgFile){
+      carImgUrl=carset.assetBase.replace(/\/$/,'')+'/'+car.imgFile.replace(/^\//, '');
+    }
+    var rowCls='tower-row'+flashCls+(pos===0?' row-p1':'');
+    return '<div class="'+rowCls+'" id="trow_'+r.di+'">'
+      +'<span class="t-pos'+(pos===0?' p1':'')+'">'+(pos+1)+'</span>'
+      +'<div class="t-bar" style="background:'+dr.colour+'"></div>'
+      
+      +(carImgUrl?'<div class="t-car-img-wrap"><img class="t-car-img" src="'+carImgUrl+'" alt=""></div>':'<div class="t-car-img-wrap"></div>')
+      +(dr.nationality?'<div class="t-flag-wrap"><img class="t-flag" src="'+flagUrl(dr.nationality)+'" alt="'+dr.nationality+'" onerror="this.style.display=\'none\';"></div>':'<div class="t-flag-wrap"></div>')
+      +'<span class="t-name">'+dr.name+'</span>'
+      +'<span class="t-car">'+(car?(car.teamName||car.model):'?')+'</span>'
+      +'<span class="t-time '+bestTimeCls+'">'+bestTimeStr+'</span>'
+      +'<span class="t-gap">'+gap+'</span>'
+      +'<span class="t-last '+lastTimeCls+'">'+lastTimeStr+'</span>'
+      +(gainStr?(+gainStr>0?'<span class="t-gain">\u25b2'+gainStr+'</span>':'<span style="font-size:10px;font-weight:700;color:var(--red)">\u25bc'+gainStr+'</span>'):'')
+    +'</div>';
+  }).join('');
+}
+
+// Chat -- keyed by minute
+var chatLog = {}; // { 5: [{who,text,ts},...], 12: [...] }
+
+function sendChat(){
+  var inp = document.getElementById("chatInput");
+  var text = inp.value.trim();
+  if(!text) return;
+  var min = currentMin;
+  if(!chatLog[min]) chatLog[min]=[];
+  chatLog[min].push({who:"You", text:text, ts:new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})});
+  inp.value="";
+  renderChat(min);
+}
+
+function renderChat(min){
+  var el=document.getElementById("chatMsgs");
+  if(!el) return;
+  var msgs=chatLog[min]||[];
+  if(!msgs.length){
+    el.innerHTML='<div style="font-size:10px;color:var(--text3);font-style:italic">No comments for this minute.</div>';
+    return;
+  }
+  el.innerHTML=msgs.map(function(m){
+    return '<div class="chat-msg-item"><span class="chat-who">'+m.who+'</span>'+m.text+'<span class="chat-time">'+m.ts+'</span></div>';
+  }).join("");
+  el.scrollTop=el.scrollHeight;
+}
+
+function stepMin(dir){ goToMin(currentMin+dir); }
+
+function togglePlay(){
+  if(playTimer){
+    clearInterval(playTimer); playTimer=null;
+    document.getElementById('playBtn').textContent='\u23f5\u23f5 Play';
+    return;
+  }
+  document.getElementById('playBtn').textContent='\u23f9 Stop';
+  playTimer=setInterval(function(){
+    if(currentMin>=sessionTimeline.length-1){
+      clearInterval(playTimer); playTimer=null;
+      document.getElementById('playBtn').textContent='\u23f5\u23f5 Play';
+      return;
+    }
+    goToMin(currentMin+1);
+  },5000);
+}
+
+// ════════════════════════════════
+// FINAL GRID
+// ════════════════════════════════
+function renderFinalGrid(){
+  var lastFrame=sessionTimeline[sessionTimeline.length-1];
+  if(!lastFrame) return;
+  var ranked=lastFrame.ranked;
+  var driverRes=lastFrame.driverRes;
+  var leader=null;
+  ranked.forEach(function(r){if(r.bestTime!==null&&leader===null)leader=r.bestTime;});
+
+  document.getElementById('finalGrid').innerHTML=ranked.map(function(r,i){
+    var dr=drivers[r.di];
+    var res=driverRes[r.di];
+    var car=carset.cars&&carset.cars[dr.carIdx];
+    var gap=i===0||res.bestTime===null?'\u2014':('+'+( res.bestTime-leader).toFixed(3)+'s');
+    var timeCol=i===0?'var(--amber)':res.bestTime!==null?'var(--text)':'var(--text3)';
+    return '<tr>'
+      +'<td><strong style="color:'+(i<3?'var(--amber)':'var(--text3)');
+
+  }).join('') + '</tbody>';
+  // rebuild properly
+  document.getElementById('finalGrid').innerHTML=ranked.map(function(r,i){
+    var dr=drivers[r.di];
+    var res=driverRes[r.di];
+    var car=carset.cars&&carset.cars[dr.carIdx];
+    var gap=i===0||res.bestTime===null?'\u2014':('+'+( res.bestTime-leader).toFixed(3)+'s');
+    return '<tr>'
+      +'<td><strong style="color:'+(i===0?'var(--amber)':i<3?'var(--text)':'var(--text3)')+'">'+(i+1)+'</strong></td>'
+      +'<td><div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:8px;border-radius:50%;background:'+dr.colour+';flex-shrink:0"></div>'+dr.name+(res.retired?' <span style="color:var(--red);font-size:9px">OUT</span>':'')+'</div></td>'
+      +'<td style="color:var(--text2)">'+(car?car.model:'?')+'</td>'
+      +'<td style="font-variant-numeric:tabular-nums;font-weight:600;color:'+(i===0?'var(--amber)':res.bestTime!==null?'var(--green)':'var(--text3)')+'">'+( res.bestTime!==null?fmtTime(res.bestTime):'No time')+'</td>'
+      +'<td style="color:var(--text3)">'+gap+'</td>'
+      +'<td style="color:var(--text3)">'+( res.bestLapNum!==null?'Lap '+res.bestLapNum:res.retired?'Retired':'\u2014')+'</td>'
+    +'</tr>';
+  }).join('');
+}
+
+// ════════════════════════════════
+// HELPERS
+// ════════════════════════════════
+var NAT_TO_FLAG={
+  "GB":"gb","US":"us","DE":"de","FR":"fr","IT":"it","ES":"es","NL":"nl",
+  "BE":"be","AT":"at","AU":"au","BR":"br","MX":"mx","CA":"ca","JP":"jp",
+  "HR":"hr","GR":"gr","UA":"ua","PL":"pl","FI":"fi","DK":"dk","SE":"se",
+  "NO":"no","PT":"pt","CH":"ch","AR":"ar","RU":"ru","CN":"cn","IN":"in",
+  "ZA":"za","NZ":"nz","TR":"tr","KP":"kp","KR":"kr","HU":"hu","CZ":"cz",
+  "SK":"sk","RO":"ro","BG":"bg","RS":"rs","SI":"si","LT":"lt","LV":"lv",
+  "EE":"ee","IS":"is","IE":"ie","LU":"lu","MT":"mt","CY":"cy","SM":"sm",
+  "MC":"mc","AD":"ad","LI":"li","MK":"mk","BA":"ba","AL":"al","ME":"me"
+};
+function flagUrl(nat){
+  if(!nat) return "";
+  var code=(NAT_TO_FLAG[nat.toUpperCase()]||nat.toLowerCase()).toLowerCase();
+  return "https://raw.githubusercontent.com/AshF195/atracer/main/flag%201/"+code+".png";
+}
+function calcCarOv(di){
+  var carIdx=drivers[di]?drivers[di].carIdx:0;
+  var car=carset.cars&&carset.cars[carIdx];
+  if(!car) return 50;
+  var chassis=(car.chassis.handling+car.chassis.aerodynamics+car.chassis.driveability
+    +car.chassis.cornering+(car.chassis.downforce||50)+car.chassis.braking)/6;
+  return Math.round(chassis*0.4+(car.engine.topSpeed||50)*0.35+car.engine.reliability*0.25);
+}
+
+// Chat
+var chatLog = {}; // keyed by minute
+var chatUser = "You";
+
+
+function fmtTime(s){
+  if(s===null||s===undefined||isNaN(s)) return '--';
+  var m=Math.floor(s/60); var sec=(s%60).toFixed(3).padStart(6,'0');
+  return m+':'+sec;
+}
+</script>
+</body>
+</html>
