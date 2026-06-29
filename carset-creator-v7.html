@@ -1,0 +1,2451 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&T Racer -- Carset Creator v5</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#17171e;--bg3:#1e1e28;--bg4:#252530;
+  --border:#2e2e3e;--border2:#3a3a4e;
+  --text:#e8e8f0;--text2:#9898b0;--text3:#5a5a72;
+  --accent:#6c8fff;--accent2:#4a6ee0;
+  --green:#3ecf6e;--greenbg:rgba(62,207,110,0.08);--greenbdr:rgba(62,207,110,0.3);
+  --red:#f05060;--redbg:rgba(240,80,96,0.08);--redbdr:rgba(240,80,96,0.3);
+  --amber:#f0a030;--amberbg:rgba(240,160,48,0.08);--amberbdr:rgba(240,160,48,0.3);
+}
+html[data-theme="light"]:root{
+  --bg:#f0f0f4;--bg2:#ffffff;--bg3:#f5f5f9;--bg4:#e8e8ef;
+  --border:#d4d4e0;--border2:#b8b8cc;
+  --text:#1a1a2e;--text2:#4a4a6a;--text3:#8a8aaa;
+  --accent:#4a6ee0;--accent2:#3858c0;
+  --green:#1a9e4a;--greenbg:rgba(26,158,74,0.08);--greenbdr:rgba(26,158,74,0.3);
+  --red:#d03040;--redbg:rgba(208,48,64,0.08);--redbdr:rgba(208,48,64,0.3);
+  --amber:#c07010;--amberbg:rgba(192,112,16,0.08);--amberbdr:rgba(192,112,16,0.3);
+}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;display:flex;height:100vh;overflow:hidden}
+.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh}
+.sidebar-logo{padding:18px 16px 12px;border-bottom:1px solid var(--border)}
+.sidebar-logo h1{font-size:14px;font-weight:700;color:var(--text)}
+.sidebar-logo p{font-size:11px;color:var(--text3);margin-top:2px}
+.sidebar-nav{flex:1;overflow-y:auto;padding:8px 0}
+.nav-section{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;padding:12px 16px 4px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 16px;cursor:pointer;font-size:13px;color:var(--text2);border-left:2px solid transparent;transition:all 0.12s}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--bg3);color:var(--accent);border-left-color:var(--accent);font-weight:500}
+.n-icon{font-size:14px;min-width:18px;text-align:center}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0}
+.topbar h2{font-size:15px;font-weight:600}
+.content{flex:1;overflow-y:auto;padding:24px}
+.btn{padding:7px 14px;border:1px solid var(--border2);border-radius:6px;background:var(--bg3);font-size:12px;cursor:pointer;color:var(--text);white-space:nowrap;transition:all 0.15s;font-family:inherit}
+.btn:hover{background:var(--bg4)}
+.btn-primary{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.btn-primary:hover{background:var(--accent)}
+.btn-success{background:#1a3a22;color:var(--green);border-color:var(--greenbdr)}
+.btn-danger{border-color:var(--redbdr);color:var(--red);background:transparent}
+.btn-danger:hover{background:var(--redbg)}
+.btn-sm{padding:4px 9px;font-size:11px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.sec{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.sec:first-child{margin-top:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+label{display:block;font-size:11px;color:var(--text2);margin-bottom:3px;margin-top:10px;letter-spacing:0.03em}
+label:first-child{margin-top:0}
+input[type=text],input[type=number],input[type=url],select,textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg3);color:var(--text);font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+input[type=color]{width:40px;height:32px;border:1px solid var(--border);border-radius:6px;padding:3px;cursor:pointer;background:var(--bg3)}
+input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
+select option{background:var(--bg3);color:var(--text)}
+.stat-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.stat-lbl{font-size:12px;color:var(--text2);min-width:160px}
+.stat-val{font-size:12px;font-weight:500;color:var(--accent);min-width:26px;text-align:right}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.tr{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:6px;border:1px solid var(--border);margin-bottom:8px}
+.tr label{margin:0;font-size:12px;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;flex:1}
+.dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);flex-shrink:0}
+.note{background:rgba(108,143,255,0.07);border:1px solid rgba(108,143,255,0.2);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--text2);margin-bottom:12px}
+.note.amber{background:var(--amberbg);border-color:var(--amberbdr)}
+.note.green{background:var(--greenbg);border-color:var(--greenbdr);color:var(--green)}
+.bw{background:var(--bg4);border-radius:3px;height:6px;overflow:hidden;display:inline-block;vertical-align:middle}
+.bf{height:100%;border-radius:3px;transition:width 0.3s}
+.bf-blue{background:var(--accent)}.bf-green{background:var(--green)}.bf-amber{background:var(--amber)}
+.bn{font-size:11px;color:var(--text2);margin-left:6px}
+.pt{width:100%;border-collapse:collapse;font-size:12px}
+.pt th{text-align:left;padding:7px 10px;background:var(--bg3);font-weight:500;color:var(--text2);border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:0.04em}
+.pt td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.pt tr:last-child td{border-bottom:none}
+.val-box{border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13px;display:none}
+.val-box.errors{background:var(--redbg);border:1px solid var(--redbdr);color:var(--red)}
+.val-box.ok{background:var(--greenbg);border:1px solid var(--greenbdr);color:var(--green)}
+.val-box ul{padding-left:18px;margin-top:6px;font-size:12px}
+.panel{display:none}.panel.active{display:block}
+.ov-stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
+.ov-num{font-size:28px;font-weight:700;color:var(--accent)}
+.ov-lbl{font-size:11px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:0.05em}
+.wr{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:10px 12px;background:var(--bg3);border-radius:6px;border:1px solid var(--border)}
+.wl{font-size:12px;color:var(--text2);min-width:200px}
+.wv{font-size:12px;font-weight:600;color:var(--accent);min-width:28px;text-align:right}
+.wd{font-size:11px;color:var(--text3);flex:1}
+.it{width:100%;border-collapse:collapse;font-size:12px}
+.it th{padding:7px 10px;background:var(--bg4);font-size:11px;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left;font-weight:600}
+.it td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.it td input,.it td select{padding:5px 7px;font-size:12px}
+.it tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Carset Creator</h1>
+    <p>A&amp;T Racer -- v5.0</p>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Championship</div>
+    <div class="nav-item active" onclick="nav('basics',this)"><span class="n-icon">&#128203;</span>Basics</div>
+    <div class="nav-item" onclick="nav('points',this)"><span class="n-icon">&#127942;</span>Points system</div>
+    <div class="nav-item" onclick="nav('rules',this)"><span class="n-icon">&#128207;</span>Rules</div>
+    <div class="nav-item" onclick="nav('ai',this)"><span class="n-icon">&#129302;</span>AI Drivers</div>
+    <div class="nav-section">Grid</div>
+    <div class="nav-item" onclick="nav('powerunits',this)"><span class="n-icon">&#9881;</span>Power Units</div>
+    <div class="nav-item" onclick="nav('cars',this)"><span class="n-icon">&#127950;</span>Cars</div>
+    <div class="nav-item" onclick="nav('tyres',this)"><span class="n-icon">&#128734;</span>Tyre manufacturers</div>
+    <div class="nav-section">Calendar</div>
+    <div class="nav-item" onclick="nav('circuits',this)"><span class="n-icon">&#127937;</span>Circuits</div>
+    <div class="nav-section">Engine</div>
+    <div class="nav-item" onclick="nav('sessions',this)"><span class="n-icon">&#9201;</span>Session config</div>
+    <div class="nav-item" onclick="nav('sim',this)"><span class="n-icon">&#9881;</span>Simulation weights</div>
+    <div class="nav-item" onclick="nav('incidents',this)"><span class="n-icon">&#9888;</span>Incident table</div>
+    <div class="nav-item" onclick="nav('upgrades',this)"><span class="n-icon">&#128295;</span>Upgrade system</div>
+    <div class="nav-section">Practice</div>
+    <div class="nav-item" onclick="nav('setup',this)"><span class="n-icon">&#127921;</span>Setup sliders</div>
+    <div class="nav-section">Export</div>
+    <div class="nav-item" onclick="nav('overview',this)"><span class="n-icon">&#128065;</span>Overview</div>
+  </div>
+  <div class="sidebar-footer">
+    <div id="saveStatus" style="font-size:11px;color:var(--text3);margin-bottom:6px;min-height:16px;text-align:center"></div>
+    <button class="btn btn-success" onclick="saveToSupabase()" id="saveBtn">&#9729; Save to database</button>
+    <button class="btn" onclick="downloadJson()" title="Download as JSON file">&#8595; Download JSON</button>
+    <button class="btn" onclick="document.getElementById('importFile').click()" title="Load from JSON file">&#8593; Load JSON</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importCarset(event)">
+  </div>
+</div>
+
+<!-- CARSET PICKER MODAL -->
+<div id="pickerOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:540px;box-shadow:0 4px 40px rgba(0,0,0,0.5);overflow:hidden">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:15px;font-weight:700">A&amp;T Racer &mdash; Carset Creator</div>
+      <button class="nav-icon-btn" onclick="closePicker()" style="font-size:16px" title="Start new carset">&#10005;</button>
+    </div>
+    <div style="padding:18px">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px">Choose a carset to edit, or start a new one.</div>
+      <div id="pickerList" style="display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto;margin-bottom:14px">
+        <div style="color:var(--text3);font-size:12px;padding:12px;text-align:center">Loading from database...</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-success" onclick="closePicker()" style="flex:1">+ New carset</button>
+        <button class="btn" onclick="document.getElementById('importFilePicker').click()" style="flex:1">&#8593; Load from JSON</button>
+        <input type="file" id="importFilePicker" accept=".json" style="display:none" onchange="importFromPicker(event)">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h2 id="panelTitle">Championship Basics</h2>
+    <div style="display:flex;align-items:center;gap:10px"><span id="csNameDisplay" style="font-size:12px;color:var(--text3)">No name set</span><button class="btn btn-sm" id="themeBtn" onclick="toggleTheme()">Light mode</button></div>
+  </div>
+  <div class="content">
+    <div class="val-box" id="valBox"><strong id="valTitle"></strong><ul id="valList"></ul></div>
+
+    <!-- BASICS -->
+    <div class="panel active" id="panel-basics">
+      <div class="g2">
+        <div><label>Championship name</label><input type="text" id="csName" placeholder="e.g. City Car Challenge" oninput="document.getElementById('csNameDisplay').textContent=this.value||'No name set'"></div>
+        <div><label>Category</label><select id="csCategory"><option>Street</option><option>Touring</option><option>Single Seater</option><option>GT</option><option>Rally</option><option>Endurance</option><option>Custom</option></select></div>
+      </div>
+      <label>Description</label>
+      <textarea id="csDesc" rows="2" style="resize:vertical" placeholder="Brief overview shown to players..."></textarea>
+      <div class="g3" style="margin-top:2px">
+        <div><label>Season rounds</label><input type="number" id="csRaces" value="8" min="1" max="30"></div>
+        <div></div>
+        <div><label>Queue type</label><select id="csQueue"><option value="classic">Classic (24h cycle)</option><option value="fast">Fast (10min cycle)</option></select></div>
+      </div>
+      <div class="divider"></div>
+      <div class="sec">Grid size</div>
+      <div class="g4">
+        <div>
+          <label>Drivers per car</label>
+          <input type="number" id="csMaxDrivers" value="2" min="1" max="99" oninput="updateGridNote()">
+        </div>
+        <div>
+          <label>Max teams on grid</label>
+          <input type="number" id="maxTeams" value="7" min="1" max="50" oninput="updateGridNote()">
+        </div>
+        <div>
+          <label>Max teams per car model</label>
+          <select id="carsPerModel" onchange="updateGridNote()">
+            <option value="1" selected>1 only (one-make / historic)</option>
+            <option value="2">Up to 2 per model</option>
+            <option value="3">Up to 3 per model</option>
+            <option value="0">Unlimited</option>
+          </select>
+        </div>
+        <div>
+          <label>Total drivers on grid</label>
+          <div id="gridSizeNote" style="font-size:13px;font-weight:600;color:var(--accent);margin-top:8px;padding:8px 10px;background:var(--bg3);border-radius:6px;border:1px solid var(--border)">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POINTS -->
+    <div class="panel" id="panel-points">
+      <div class="note">Points awarded per finishing position. Customise as needed.</div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+        <button class="btn btn-sm" onclick="resetPoints()">Default (10-8-6...)</button>
+        <button class="btn btn-sm" onclick="setF1Points()">F1 (25-18-15...)</button>
+        <button class="btn btn-primary btn-sm" onclick="addPointsRow()">+ Add position</button>
+      </div>
+      <div id="pointsList" style="max-width:300px"></div>
+      <div class="divider"></div>
+      <div class="sec">Bonus points</div>
+      <div class="g3" style="max-width:460px">
+        <div><label>Fastest lap</label><input type="number" id="ptFL" value="1" min="0" max="10"></div>
+        <div><label>Pole position</label><input type="number" id="ptPole" value="0" min="0" max="10"></div>
+        <div><label>Fastest pit stop</label><input type="number" id="ptPit" value="0" min="0" max="10"></div>
+      </div>
+      <div class="tr" style="margin-top:10px;max-width:460px"><input type="checkbox" id="flChamp" checked><label for="flChamp">Fastest lap bonus counts toward championship</label></div>
+      <div class="divider"></div>
+      <div class="sec">ELO</div>
+      <div class="g2" style="max-width:460px">
+        <div><label>ELO system</label><select id="eloSys"><option value="classic">Classic ELO</option><option value="fast">Fast ELO</option><option value="both">Both Classic + Fast</option></select></div>
+        <div><label>Dropped scores (lowest results ignored)</label><input type="number" id="dropScores" value="0" min="0" max="10"></div>
+      </div>
+    </div>
+
+    <!-- RULES -->
+    <div class="panel" id="panel-rules">
+      <div class="note">Championship-level rules that affect how other tabs behave. Set these first before filling in cars, tyres and sessions.</div>
+
+      <div class="sec">Team identity</div>
+      <div class="tr"><input type="checkbox" id="fixedTeamNames" onchange="renderCars()"><label for="fixedTeamNames">Fixed team names &mdash; players drive <em>for</em> a team (e.g. Ferrari), not their own custom team</label></div>
+      <div class="tr"><input type="checkbox" id="separateEngine"><label for="separateEngine">Separate power unit choices (customer team series &mdash; teams pick engine independently)</label></div>
+
+      <div class="sec">Power units</div>
+      <div class="tr"><input type="checkbox" id="fixedPowerUnit" onchange="renderCars()"><label for="fixedPowerUnit">Fixed power unit per car &mdash; each car is locked to a specific power unit</label></div>
+
+      <div class="sec">Tyre supply</div>
+      <div class="tr"><input type="checkbox" id="fixedTyreSupplier" onchange="renderCars()"><label for="fixedTyreSupplier">Fixed tyre supplier per car &mdash; each car is locked to a specific tyre manufacturer</label></div>
+
+      <div class="sec">Assets</div>
+      <div class="note">Set the raw GitHub URL roots for each asset type. All image paths on the Cars, Power Units, Tyres and Circuits tabs are relative to these base URLs.</div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><label>Cars asset base URL</label><input type="url" id="assetBase" placeholder="https://raw.githubusercontent.com/AshF195/atracer/main/Assets/F1_1996/Cars"></div>
+        <div><label>Circuit maps asset base URL</label><input type="url" id="circuitAssetBase" placeholder="https://raw.githubusercontent.com/AshF195/atracer/main/Assets/F1_1996/Maps"></div>
+      </div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><label>Power unit badge asset base URL</label><input type="url" id="puAssetBase" placeholder="https://raw.githubusercontent.com/AshF195/atracer/main/Assets/F1_1996/PowerUnits"></div>
+        <div><label>Tyre logo asset base URL</label><input type="url" id="tyreAssetBase" placeholder="https://raw.githubusercontent.com/AshF195/atracer/main/Assets/F1_1996/Tyres"></div>
+      </div>
+      <div class="g2">
+        <div><label>Flag asset base URL</label><input type="url" id="flagAssetBase" placeholder="https://raw.githubusercontent.com/AshF195/atracer/main/flag%201"></div>
+      </div>
+    </div>
+
+    <!-- AI DRIVERS -->
+    <div class="panel" id="panel-ai">
+      <div class="note"><strong>AI driver list</strong> &mdash; paste the driver list below. Drivers with a specific car ID fill those seats; <code>random</code> drivers are assigned to empty seats when the season loads.</div>
+      <div class="note" style="margin-top:6px">Format: <code>Driver Name, NATIONALITY_CODE, car_id_or_random</code> &mdash; one driver per line.</div>
+      <div class="sec">Driver list</div>
+      <textarea id="aiDriverText" rows="16" placeholder="Damon Hill, GB, williams_fw18
+Jacques Villeneuve, CA, williams_fw18
+Michael Schumacher, DE, ferrari_f310
+Eddie Irvine, GB, ferrari_f310
+Mika Hakkinen, FI, mclaren_mp411
+David Coulthard, GB, mclaren_mp411" style="width:100%;font-family:monospace;font-size:12px;line-height:1.6;resize:vertical" oninput="renderAiPreview()"></textarea>
+      <div class="note amber" id="aiDriverNote" style="margin-top:8px;display:none"></div>
+      <div id="aiDriverPreview" style="display:none;margin-top:10px">
+        <div class="sec">Preview</div>
+        <table class="pt">
+          <thead><tr><th>Flag</th><th>Name</th><th>Team</th></tr></thead>
+          <tbody id="aiDriverTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- POWER UNITS -->
+    <div class="panel" id="panel-powerunits">
+      <div class="note">Define power unit specs. Each PU has custom components (e.g. Engine, Gearbox). Cars select a PU and its stats are combined into the car's overall performance and reliability.</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <button class="btn btn-primary" onclick="addPowerUnit()">+ Add power unit</button>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <label style="margin:0;font-size:11px;color:var(--text3);white-space:nowrap">Default components:</label>
+          <input type="text" id="puDefaultComponents" placeholder="e.g. Engine, MGU-K, Gearbox" style="width:300px" value="Engine, MGU-K, MGU-H, Turbo, ERS">
+        </div>
+      </div>
+      <div id="puList"><p style="color:var(--text3);font-size:13px">No power units added yet.</p></div>
+    </div>
+
+    <!-- CARS -->
+    <div class="panel" id="panel-cars">
+      <div class="note" id="carsNote"><strong>Player team names.</strong> Players create their own team name at signup.</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <button class="btn btn-primary" onclick="addCar()">+ Add car</button>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <label style="margin:0;font-size:11px;color:var(--text3);white-space:nowrap">Default components:</label>
+          <input type="text" id="carDefaultComponents" placeholder="e.g. Front Wing, Rear Wing, Suspension" style="width:300px" value="Front Wing, Rear Wing, Suspension, Brakes, Hydraulics, Exhaust, Radiators">
+        </div>
+      </div>
+      <div id="carsList"></div>
+      <div id="perfSection" style="display:none">
+        <div class="divider"></div>
+        <div class="sec">Performance baseline</div>
+        <table class="pt"><thead><tr><th>Car</th><th>Power Unit</th><th style="min-width:160px">Overall Performance</th><th style="min-width:160px">Overall Reliability</th></tr></thead><tbody id="perfBody"></tbody></table>
+      </div>
+    </div>
+    <!-- TYRES -->
+    <div class="panel" id="panel-tyres">
+      <div class="note">Add each tyre manufacturer then define their compounds. Allocation per driver per weekend is set in Session config.</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <button class="btn btn-primary" onclick="addTyreMaker()">+ Add manufacturer</button>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <label style="margin:0;font-size:11px;color:var(--text3);white-space:nowrap">Default compounds:</label>
+          <input type="text" id="tyreDefaultCompounds" value="Soft, Medium, Hard, Intermediate, Wet" style="width:280px">
+        </div>
+      </div>
+      <div id="tyreMakersList"></div>
+    </div>
+
+    <!-- CIRCUITS -->
+    <div class="panel" id="panel-circuits">
+      <div class="note">Each circuit can override global safety car chance, tyre wear and weather. Drag to reorder the calendar.</div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn btn-primary" onclick="addCircuit()">+ Add circuit</button></div>
+      <div id="circuitsList"></div>
+    </div>
+
+    <!-- SESSIONS -->
+    <div class="panel" id="panel-sessions">
+      <div class="note"><strong>Session parameters</strong> -- read directly by the simulation engine.</div>
+
+      <div class="sec">Race format</div>
+      <div class="g3">
+        <div><label>Distance unit</label><select id="distUnit"><option>Laps</option><option>Kilometres</option><option>Minutes</option></select></div>
+        <div><label>Min pitstops required</label><input type="number" id="minPits" value="1" min="0" max="10"></div>
+        <div><label>Min tyre compounds used</label><input type="number" id="minCompounds" value="2" min="1" max="4"></div>
+      </div>
+      <div class="g2" style="margin-top:8px">
+        <div class="tr"><input type="checkbox" id="ruleSC" checked><label for="ruleSC">Safety car enabled</label></div>
+        <div class="tr"><input type="checkbox" id="rulePits" checked><label for="rulePits">Pitstops compulsory</label></div>
+      </div>
+
+      <div class="sec">Practice</div>
+      <div class="g3">
+        <div><label>Setup runs allowed per driver</label><input type="number" id="practiceRuns" value="8" min="1" max="20"></div>
+        <div><label>Minutes per run</label><input type="number" id="practiceRunTime" value="10" min="1" max="60"></div>
+        <div><label>Tyre sets used per run</label><input type="number" id="practiceTyreUse" value="1" min="1" max="3"></div>
+      </div>
+      <div class="tr" style="margin-top:4px"><input type="checkbox" id="practiceRef"><label for="practiceRef">Practice results used as qualifying simulation reference</label></div>
+      <div class="sec">Qualifying</div>
+      <div class="g3">
+        <div><label>Format</label><select id="qualiFormat" onchange="updateQualiPhases()"><option>Single session</option><option>Q1/Q2/Q3 knockout</option><option>Superpole (single lap)</option><option>Best of multiple runs</option></select></div>
+        <div><label>Session length (mins)</label><input type="number" id="qualiSessLen" value="60" min="5" max="180"></div>
+        <div><label>Max hot laps per driver</label><input type="number" id="qualiHotLaps" value="6" min="1" max="20"></div>
+      </div>
+      <div class="g3" style="margin-top:8px">
+        <div><label>Tyre sets per hot lap</label><input type="number" id="qualiTyreSets" value="1" min="1" max="2"></div>
+      </div>
+      <div class="tr" style="margin-top:8px"><input type="checkbox" id="qualiTyre"><label for="qualiTyre">Qualifying tyre restriction (softest compound only)</label></div>
+      <div class="sec" id="qualiPhaseSec" style="display:none">Qualifying phases (Q1/Q2/Q3)</div>
+      <div id="qualiPhaseRows" style="display:none"></div>
+      <div class="sec">Warm-up</div>
+      <div class="g3">
+        <div><label>Setup runs allowed</label><input type="number" id="warmupRuns" value="4" min="1" max="10"></div>
+        <div><label>Minutes per run</label><input type="number" id="warmupRunTime" value="5" min="1" max="30"></div>
+        <div><label>Strategy locked after warm-up?</label><select id="stratLock"><option value="true">Yes</option><option value="false">No</option></select></div>
+      </div>
+      <div class="sec">Tyre allocation per driver per weekend</div>
+      <div class="note amber"><strong>Important:</strong> Sets are shared across all sessions. Each run/hot lap/race stint deducts wear.</div>
+      <div id="tyreAllocRows"></div>
+      <div class="note" style="margin-top:6px;font-size:11px">Compounds are synced from the <strong>Tyre compounds</strong> tab. Add compounds there first.</div>
+    </div>
+
+    <!-- SIM WEIGHTS -->
+    <div class="panel" id="panel-sim">
+      <div class="note"><strong>Simulation weights</strong> -- 0 = no effect, 100 = maximum. Fine-tune as you test the engine.</div>
+      <div class="note amber"><strong>ELO is not a lap time factor.</strong> ELO is a player ranking system controlling points gained/lost per race result. It belongs in the game engine, not here. Lap time is driven by car performance and setup accuracy.</div>
+      <div class="sec">Lap time factors</div><div id="simLap"></div>
+      <div class="sec">Overtaking model</div><div id="simOT"></div>
+      <div class="sec">Pitstop model</div><div id="simPit"></div>
+      <div class="sec">Randomness</div><div id="simRng"></div>
+    </div>
+
+    <!-- INCIDENTS -->
+    <div class="panel" id="panel-incidents">
+      <div class="note"><strong>Incident table</strong> &mdash; define what can go wrong and how likely each outcome is. Global incidents cover driver errors in any series. Series-specific incidents are generated from your car and power unit components, modified by their reliability ratings.</div>
+
+      <div class="sec">Global incidents <span style="font-size:11px;font-weight:400;color:var(--text3)">(driver error &mdash; applies to all series)</span></div>
+      <div id="globalIncList"></div>
+
+      <div class="sec" style="margin-top:16px">Series-specific incidents <span style="font-size:11px;font-weight:400;color:var(--text3)">(mechanical &mdash; pulled from car &amp; power unit components)</span></div>
+      <div class="note">Base chance is modified by the component&apos;s reliability stat. Lower reliability = higher actual chance. Components are defined in the Cars and Power Units tabs.</div>
+      <div id="seriesIncList"></div>
+    </div>
+
+    <!-- UPGRADES -->
+    <div class="panel" id="panel-upgrades">
+      <div class="note"><strong>Upgrade system</strong> &mdash; controls when and how car performance improves mid-season. Components are pulled from the Cars, Power Units and Tyre Manufacturers tabs.</div>
+
+      <div class="sec" style="margin-top:0">System settings</div>
+      <div class="tr"><input type="checkbox" id="upgradesOn" checked><label for="upgradesOn">Team upgrades enabled this championship</label></div>
+      <div class="g3" style="margin-top:10px">
+        <div><label>Base chance per round (%)</label><input type="number" id="upgChance" value="25" min="0" max="100"></div>
+        <div><label>Earliest round upgrades can fire</label><input type="number" id="upgEarliest" value="2" min="1" max="20"></div>
+        <div><label>Max upgrades per team per season</label><input type="number" id="upgMaxSteps" value="3" min="0" max="20"></div>
+      </div>
+      <div class="g2" style="margin-top:8px">
+        <div><label>Regression chance (%) &mdash; upgrade can make things worse</label><input type="number" id="upgRegress" value="5" min="0" max="50"></div>
+        <div><label>Announcement style</label>
+          <select id="upgAnnounce">
+            <option value="hidden">Hidden &mdash; no announcement</option>
+            <option value="vague">Vague &mdash; "Team X received an upgrade"</option>
+            <option value="partial">Partial &mdash; area known, not stat</option>
+            <option value="full">Full &mdash; component and amount revealed</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sec">Car components</div>
+      <div class="note">Each component can independently receive performance or reliability upgrades. Gearbox lives here even for customer engine teams.</div>
+      <div id="upgCarList"></div>
+
+      <div class="sec">Power unit components</div>
+      <div class="note">Upgrades apply to all cars running that power unit.</div>
+      <div id="upgPuList"></div>
+
+      <div class="sec">Tyre upgrades</div>
+      <div class="note">Upgrades apply equally across all compounds from that manufacturer.</div>
+      <div id="upgTyreList"></div>
+    </div>
+
+    <!-- SETUP SLIDERS -->
+    <div class="panel" id="panel-setup">
+      <div class="note"><strong>Setup sliders</strong> \u2014 define the parameters players dial in during practice. Each slider has a global default optimal zone, which can be overridden per circuit below.</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <button class="btn btn-primary" onclick="addSetupSlider()">+ Add slider</button>
+      </div>
+      <div id="setupSliderList"></div>
+      <div class="note amber" style="margin-top:8px"><strong>How it works:</strong> Each team gets a randomly assigned target within the optimal zone. The closer their practice setting is, the bigger their lap time benefit.</div>
+      <div class="sec" style="margin-top:16px">Circuit-specific optimal zones</div>
+      <div class="note">Override the optimal zone per slider for specific circuits. Leave as "Use default" to inherit the global setting above.</div>
+      <div style="margin-bottom:10px">
+        <label>Circuit</label>
+        <select id="setupCircuitSel" onchange="renderCircuitSetup()" style="max-width:320px"></select>
+      </div>
+      <div id="circuitSetupList"></div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="panel" id="panel-overview">
+      <div class="g4" style="margin-bottom:18px">
+        <div class="ov-stat"><div class="ov-num" id="ovCars">0</div><div class="ov-lbl">Cars</div></div>
+        <div class="ov-stat"><div class="ov-num" id="ovCircuits">0</div><div class="ov-lbl">Circuits</div></div>
+        <div class="ov-stat"><div class="ov-num" id="ovTyres">0</div><div class="ov-lbl">Compounds</div></div>
+        <div class="ov-stat"><div class="ov-num" id="ovRounds">0</div><div class="ov-lbl">Rounds</div></div>
+      </div>
+      <div id="ovBody"></div>
+    </div>
+
+  </div>
+</div>
+<script>
+var cars=[], circuits=[], tyres=[], powerUnits=[], tyreMakers=[], upgrades=[], points=[10,8,6,5,4,3,2,1], tyreAlloc=[], incidents=[];
+
+var SIM_WEIGHTS = {
+  lap:[
+    {id:'carPerf',     label:'Car overall performance', val:40, desc:'How much car stats affect raw lap time'},
+    {id:'setup',       label:'Setup accuracy bonus',     val:35, desc:'How much nailing the practice setup improves lap time'},
+    {id:'tyreGrip',    label:'Tyre grip contribution',   val:20, desc:'Effect of tyre compound on lap time'},
+    {id:'tyreWear',    label:'Tyre wear degradation',    val:25, desc:'How much worn tyres slow each lap'},
+    {id:'weather',     label:'Weather effect',           val:30, desc:'Wet/dry multiplier impact'},
+    {id:'specialist',  label:'Specialist circuit bonus', val:10, desc:'Home circuit advantage modifier'},
+    {id:'fuel',        label:'Fuel load effect',         val:8,  desc:'Heavier fuel = slower early laps'},
+    {id:'char',        label:'Driver characteristic',    val:15, desc:'Active characteristic modifier'}
+  ],
+  overtake:[
+    {id:'carGap',      label:'Car performance gap',      val:50, desc:'Bigger gap = easier overtake'},
+    {id:'aggression',  label:'Aggression slider',        val:30, desc:'Higher aggression = more attempts'},
+    {id:'passing',     label:'Circuit passing places',   val:40, desc:'More places = easier overtake'},
+    {id:'drs',         label:'DRS effect (if applicable)',val:20, desc:'DRS zones increase overtake chance'}
+  ],
+  pit:[
+    {id:'pitSpeed',    label:'Pit stop speed slider',    val:30, desc:'Higher = faster stop, more risk'},
+    {id:'reliability', label:'Reliability stat',         val:20, desc:'Low reliability = higher error chance'},
+    {id:'pitDelta',    label:'Pit lane time loss (fixed)',val:100,desc:'Fixed time loss through pit lane'}
+  ],
+  rng:[
+    {id:'lapNoise',    label:'Lap time noise',           val:15, desc:'Random variation each lap (0=deterministic)'},
+    {id:'incRng',      label:'Incident randomness',      val:50, desc:'How random incident timing is'},
+    {id:'upgRng',      label:'Upgrade randomness',       val:60, desc:'How unpredictable upgrade timing is'}
+  ]
+};
+
+var GLOBAL_INCIDENTS = [
+  {id:'spin',      label:'Spin',       baseChance:3.0, timeLossMin:5,  timeLossMax:20, outcomes:{noEffect:20, pitRepair:10, safetyCar:10, retirement:10}},
+  {id:'crash',     label:'Crash',      baseChance:1.5, timeLossMin:10, timeLossMax:40, outcomes:{noEffect:5,  pitRepair:15, safetyCar:30, retirement:30}},
+  {id:'collision', label:'Collision',  baseChance:2.0, timeLossMin:5,  timeLossMax:30, outcomes:{noEffect:10, pitRepair:20, safetyCar:25, retirement:15}},
+  {id:'lockup',    label:'Lock up',    baseChance:3.5, timeLossMin:1,  timeLossMax:8,  outcomes:{noEffect:30, pitRepair:10, safetyCar:5,  retirement:0}},
+  {id:'stall',     label:'Stall',      baseChance:1.0, timeLossMin:2,  timeLossMax:8,  outcomes:{noEffect:10, pitRepair:10, safetyCar:5,  retirement:5}},
+  {id:'slowstart', label:'Slow start', baseChance:2.0, timeLossMin:1,  timeLossMax:5,  outcomes:{noEffect:20, pitRepair:0,  safetyCar:5,  retirement:0}},
+  {id:'puncture',  label:'Puncture',   baseChance:1.5, timeLossMin:15, timeLossMax:35, outcomes:{noEffect:5,  pitRepair:65, safetyCar:15, retirement:5}}
+];
+
+// Series-specific incidents are built dynamically from components
+// incidents[] holds both global overrides and series-specific incidents
+var incidents = [];
+
+var INC_DEFAULTS = GLOBAL_INCIDENTS; // legacy alias
+
+
+// UPG_STATS is now dynamic - built from car/PU components + tyre compounds
+
+var PANEL_TITLES = {
+  basics:'Championship Basics', points:'Points System', rules:'Championship Rules',
+  cars:'Cars', tyres:'Tyre Compounds', circuits:'Circuits',
+  sessions:'Session Config', sim:'Simulation Weights', incidents:'Incident Table',
+  upgrades:'Upgrade System', setup:'Setup Sliders', overview:'Overview & Export'
+};
+
+function uid(){ return '_'+Math.random().toString(36).substr(2,9); }
+
+function nav(id, el){
+  if(_isDirty) saveToSupabase(true);
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('panelTitle').textContent = PANEL_TITLES[id]||id;
+  if(id==='overview')  renderOverview();
+  if(id==='sim')       renderSim();
+  if(id==='incidents'){ renderIncidents(); }
+  if(id==='upgrades')  { if(!upgrades.length && (cars.length||powerUnits.length||tyreMakers.length)) {} renderUpgStats(); }
+  if(id==='sessions')  renderTyreAlloc();
+  if(id==='tyres')     renderTyreMakers();
+  if(id==='setup')     renderSetupCircuitDropdown();
+  if(id==='ai')        renderAiPreview();
+}
+
+// ---- CARS ----
+// ---- POWER UNITS ----
+var powerUnits = []; // [{id, name, colour, components:[{name,perf,rel}]}]
+
+function addPowerUnit(d){
+  powerUnits.push({
+    id: d&&d.id ? d.id : uid(),
+    name: d&&d.name ? d.name : '',
+    colour: d&&d.colour ? d.colour : '#888888',
+    imgFile: d&&d.imgFile ? d.imgFile : '',
+    components: d&&d.components ? d.components : []
+  });
+  renderPowerUnits();
+  renderCars(); // refresh PU dropdowns
+}
+
+function removePowerUnit(id){
+  powerUnits = powerUnits.filter(function(p){ return p.id !== id; });
+  // Unset any cars using this PU
+  cars.forEach(function(c){ if(c.powerUnitId === id) c.powerUnitId = null; });
+  renderPowerUnits();
+  renderCars();
+}
+
+function renderPowerUnits(){
+  var el = document.getElementById('puList');
+  if(!powerUnits.length){
+    el.innerHTML = '<p style="color:var(--text3);font-size:13px">No power units added yet.</p>';
+    return;
+  }
+  el.innerHTML = powerUnits.map(function(pu){
+    var avg = calcComponentAvg(pu.components);
+    var compRows = pu.components.map(function(comp, ci){
+      return '<div class="stat-row" style="gap:6px">'
+        + '<span class="stat-lbl" style="min-width:0;flex:1"><input type="text" class="pu-comp-name" data-puid="'+pu.id+'" data-ci="'+ci+'" value="'+comp.name+'" placeholder="Component name" style="padding:4px 7px;font-size:12px"></span>'
+        + '<span style="font-size:11px;color:var(--text3);white-space:nowrap">Perf</span>'
+        + '<input type="range" min="0" max="100" value="'+comp.perf+'" class="pu-comp-range" data-puid="'+pu.id+'" data-ci="'+ci+'" data-stat="perf" style="width:100px">'
+        + '<span class="pu-comp-val" data-puid="'+pu.id+'" data-ci="'+ci+'" data-stat="perf" style="font-size:12px;color:var(--accent);min-width:24px">'+comp.perf+'</span>'
+        + '<span style="font-size:11px;color:var(--text3);white-space:nowrap">Rel</span>'
+        + '<input type="range" min="0" max="100" value="'+comp.rel+'" class="pu-comp-range" data-puid="'+pu.id+'" data-ci="'+ci+'" data-stat="rel" style="width:100px">'
+        + '<span class="pu-comp-val" data-puid="'+pu.id+'" data-ci="'+ci+'" data-stat="rel" style="font-size:12px;color:var(--green);min-width:24px">'+comp.rel+'</span>'
+        + '<button class="btn btn-danger btn-sm pu-comp-remove" data-puid="'+pu.id+'" data-ci="'+ci+'">&#215;</button>'
+        + '</div>';
+    }).join('');
+    var puAssetBase = document.getElementById('puAssetBase') ? document.getElementById('puAssetBase').value.trim() : '';
+    var puImgUrl = pu.imgFile && puAssetBase ? puAssetBase.replace(/\/$/,'') + '/' + pu.imgFile : '';
+    return '<div class="card" id="pucard_'+pu.id+'">'
+      + '<div class="card-header">'
+        + '<div class="card-title"><div class="dot pu-dot" data-puid="'+pu.id+'" style="background:'+pu.colour+'"></div>'
+          + (pu.name||'Power unit')
+        + '</div>'
+        + '<button class="btn btn-danger btn-sm pu-remove" data-puid="'+pu.id+'">Remove</button>'
+      + '</div>'
+      + '<div class="g3">'
+        + '<div><label>Power unit name</label><input type="text" class="pu-name" data-puid="'+pu.id+'" value="'+pu.name+'" placeholder="e.g. Renault V10"></div>'
+        + '<div><label>Colour</label><div style="display:flex;align-items:center;gap:8px;margin-top:3px"><input type="color" class="pu-colour" data-puid="'+pu.id+'" value="'+pu.colour+'"></div></div>'
+        + '<div></div>'
+      + '</div>'
+      + '<div style="margin-top:10px"><label>Badge image (relative to PU asset base)</label>'
+        + '<input type="text" class="pu-field" data-puid="'+pu.id+'" data-f="imgFile" value="'+(pu.imgFile||'')+'" placeholder="e.g. renault-v10.png">'+(puImgUrl?'<img src="'+puImgUrl+'" style="height:40px;margin-top:6px;object-fit:contain;display:block">':'')
+      + '</div>'
+      + '<div style="margin-top:12px;display:flex;gap:24px;padding:10px 12px;background:var(--bg3);border-radius:7px;border:1px solid var(--border)">'
+        + '<div><span style="font-size:11px;color:var(--text3)">Avg Performance</span><br><div style="display:flex;align-items:center;gap:6px;margin-top:3px"><div class="bw" style="width:120px"><div class="bf bf-blue" style="width:'+avg.perf+'%"></div></div><span class="bn">'+avg.perf+'</span></div></div>'
+        + '<div><span style="font-size:11px;color:var(--text3)">Avg Reliability</span><br><div style="display:flex;align-items:center;gap:6px;margin-top:3px"><div class="bw" style="width:120px"><div class="bf bf-green" style="width:'+avg.rel+'%"></div></div><span class="bn">'+avg.rel+'</span></div></div>'
+      + '</div>'
+      + '<div class="sec">Components</div>'
+      + compRows
+      + '<button class="btn btn-sm pu-add-comp" data-puid="'+pu.id+'" style="margin-top:6px">+ Add component</button>'
+    + '</div>';
+  }).join('');
+  bindPUEvents();
+}
+
+function bindPUEvents(){
+  document.querySelectorAll('.pu-field').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var pu = powerUnits.find(function(p){ return p.id === this.dataset.puid; }, this);
+      if(pu) pu[this.dataset.f] = this.value;
+    });
+  });
+  document.querySelectorAll('.pu-name').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var pu = powerUnits.find(function(p){ return p.id === this.dataset.puid; }, this);
+      if(!pu) return;
+      pu.name = this.value;
+      renderCars();
+    });
+  });
+  document.querySelectorAll('.pu-colour').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var pu = powerUnits.find(function(p){ return p.id === this.dataset.puid; }, this);
+      if(!pu) return;
+      pu.colour = this.value;
+      var dot = document.querySelector('.pu-dot[data-puid="'+this.dataset.puid+'"]');
+      if(dot) dot.style.background = this.value;
+    });
+  });
+  document.querySelectorAll('.pu-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){ removePowerUnit(this.dataset.puid); });
+  });
+  document.querySelectorAll('.pu-add-comp').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pu = powerUnits.find(function(p){ return p.id === this.dataset.puid; }, this);
+      if(!pu) return;
+      // Suggest next component from default list
+      var defaults = (document.getElementById('puDefaultComponents').value||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+      var next = defaults[pu.components.length] || 'Component';
+      pu.components.push({ name: next, perf: 50, rel: 50 });
+      renderPowerUnits();
+      renderCars();
+    });
+  });
+  document.querySelectorAll('.pu-comp-name').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var pu = powerUnits.find(function(p){ return p.id === this.dataset.puid; }, this);
+      if(!pu) return;
+      pu.components[+this.dataset.ci].name = this.value;
+    });
+  });
+  document.querySelectorAll('.pu-comp-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var pu = powerUnits.find(function(p){ return p.id === this.dataset.puid; }, this);
+      if(!pu) return;
+      pu.components[+this.dataset.ci][this.dataset.stat] = +this.value;
+      var lbl = document.querySelector('.pu-comp-val[data-puid="'+this.dataset.puid+'"][data-ci="'+this.dataset.ci+'"][data-stat="'+this.dataset.stat+'"]');
+      if(lbl) lbl.textContent = this.value;
+      // Update avg bars
+      var avg = calcComponentAvg(pu.components);
+      var card = document.getElementById('pucard_'+this.dataset.puid);
+      if(card){
+        var bars = card.querySelectorAll('.bf');
+        if(bars[0]) bars[0].style.width = avg.perf + '%';
+        if(bars[1]) bars[1].style.width = avg.rel + '%';
+        var bns = card.querySelectorAll('.bn');
+        if(bns[0]) bns[0].textContent = avg.perf;
+        if(bns[1]) bns[1].textContent = avg.rel;
+      }
+      renderPerfTable();
+    });
+  });
+  document.querySelectorAll('.pu-comp-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pu = powerUnits.find(function(p){ return p.id === this.dataset.puid; }, this);
+      if(!pu) return;
+      pu.components.splice(+this.dataset.ci, 1);
+      renderPowerUnits();
+      renderCars();
+    });
+  });
+}
+
+function calcComponentAvg(components){
+  if(!components || !components.length) return { perf: 0, rel: 0 };
+  var tp = 0, tr = 0;
+  components.forEach(function(c){ tp += c.perf; tr += c.rel; });
+  return { perf: Math.round(tp / components.length), rel: Math.round(tr / components.length) };
+}
+
+function calcCarCombined(c){
+  var chassis = calcComponentAvg(c.components);
+  var pu = powerUnits.find(function(p){ return p.id === c.powerUnitId; });
+  var puAvg = pu ? calcComponentAvg(pu.components) : { perf: 0, rel: 0 };
+  var perfSources = c.components.length > 0 && pu ? [chassis.perf, puAvg.perf] : c.components.length > 0 ? [chassis.perf] : pu ? [puAvg.perf] : [0];
+  var relSources  = c.components.length > 0 && pu ? [chassis.rel,  puAvg.rel]  : c.components.length > 0 ? [chassis.rel]  : pu ? [puAvg.rel]  : [0];
+  var perf = Math.round(perfSources.reduce(function(a,b){ return a+b; }, 0) / perfSources.length);
+  var rel  = Math.round(relSources.reduce(function(a,b){  return a+b; }, 0) / relSources.length);
+  return { perf: perf, rel: rel, chassisPerf: chassis.perf, chassisRel: chassis.rel, puPerf: puAvg.perf, puRel: puAvg.rel, puName: pu ? pu.name : null };
+}
+
+// ---- CARS ----
+function addCar(d){
+  cars.push({
+    id: d&&d.id ? d.id : uid(),
+    model: d&&d.model ? d.model : '',
+    colour: d&&d.colour ? d.colour : '#6c8fff',
+    imgFile: d&&d.imgFile ? d.imgFile : '',
+    teamName: d&&d.teamName ? d.teamName : '',
+    powerUnitId: d&&d.powerUnitId ? d.powerUnitId : null,
+    tyreMakerId: d&&d.tyreMakerId ? d.tyreMakerId : null,
+    components: d&&d.components ? d.components : []
+  });
+  renderCars();
+}
+
+function removeCar(id){ cars = cars.filter(function(c){ return c.id !== id; }); renderCars(); }
+
+function renderCars(){
+  var fixed = document.getElementById('fixedTeamNames').checked;
+  document.getElementById('carsNote').innerHTML = fixed
+    ? '<strong>Fixed team names.</strong> Players drive <em>for</em> the team set here.'
+    : '<strong>Player team names.</strong> Players create their own team name at signup.';
+  var el = document.getElementById('carsList');
+  if(!cars.length){
+    el.innerHTML = '<p style="color:var(--text3);font-size:13px">No cars added yet.</p>';
+    document.getElementById('perfSection').style.display = 'none';
+    return;
+  }
+  document.getElementById('perfSection').style.display = 'block';
+
+  // Build PU options for dropdowns
+  var puOptions = '<option value="">-- None --</option>' + powerUnits.map(function(pu){
+    return '<option value="'+pu.id+'">'+pu.name+'</option>';
+  }).join('');
+
+  el.innerHTML = cars.map(function(c, i){
+    var assetBase = document.getElementById('assetBase').value.trim();
+    var previewUrl = c.imgFile && assetBase ? assetBase + '/' + c.imgFile : '';
+    var previewHtml = previewUrl ? '<img data-preview="'+c.id+'" src="'+previewUrl+'" style="height:44px;margin-top:6px;object-fit:contain;display:block" onerror="this.style.display=\'none\'">' : '';
+    var teamField = fixed
+      ? '<label>Fixed team name</label><input type="text" class="car-field" data-id="'+c.id+'" data-f="teamName" value="'+(c.teamName||'')+'" placeholder="e.g. Ferrari">'
+      : '<span style="font-size:11px;color:var(--text3);display:block;margin-top:12px">Team name set by player at signup</span>';
+
+    var combined = calcCarCombined(c);
+
+    var compRows = c.components.map(function(comp, ci){
+      return '<div class="stat-row" style="gap:6px">'
+        + '<span class="stat-lbl" style="min-width:0;flex:1"><input type="text" class="car-comp-name" data-id="'+c.id+'" data-ci="'+ci+'" value="'+comp.name+'" placeholder="Component name" style="padding:4px 7px;font-size:12px"></span>'
+        + '<span style="font-size:11px;color:var(--text3);white-space:nowrap">Perf</span>'
+        + '<input type="range" min="0" max="100" value="'+comp.perf+'" class="car-comp-range" data-id="'+c.id+'" data-ci="'+ci+'" data-stat="perf" style="width:100px">'
+        + '<span class="car-comp-val" data-id="'+c.id+'" data-ci="'+ci+'" data-stat="perf" style="font-size:12px;color:var(--accent);min-width:24px">'+comp.perf+'</span>'
+        + '<span style="font-size:11px;color:var(--text3);white-space:nowrap">Rel</span>'
+        + '<input type="range" min="0" max="100" value="'+comp.rel+'" class="car-comp-range" data-id="'+c.id+'" data-ci="'+ci+'" data-stat="rel" style="width:100px">'
+        + '<span class="car-comp-val" data-id="'+c.id+'" data-ci="'+ci+'" data-stat="rel" style="font-size:12px;color:var(--green);min-width:24px">'+comp.rel+'</span>'
+        + '<button class="btn btn-danger btn-sm car-comp-remove" data-id="'+c.id+'" data-ci="'+ci+'">&#215;</button>'
+        + '</div>';
+    }).join('');
+
+    var selectedPU = powerUnits.find(function(p){ return p.id === c.powerUnitId; });
+
+    return '<div class="card" id="cc_'+c.id+'">'
+      + '<div class="card-header">'
+        + '<div class="card-title"><div class="dot car-dot" data-id="'+c.id+'" style="background:'+c.colour+'"></div>'+(c.model||('Car '+(i+1)))+'</div>'
+        + '<button class="btn btn-danger btn-sm car-remove" data-id="'+c.id+'">Remove</button>'
+      + '</div>'
+      + '<div class="g3">'
+        + '<div><label>Car model</label><input type="text" class="car-field" data-id="'+c.id+'" data-f="model" value="'+c.model+'" placeholder="e.g. FW18"></div>'
+        + '<div><label>Car colour</label><div style="display:flex;align-items:center;gap:8px;margin-top:3px"><input type="color" class="car-colour" data-id="'+c.id+'" value="'+c.colour+'"></div></div>'
+        + '<div>'+teamField+'</div>'
+      + '</div>'
+      + '<div class="g2" style="margin-top:10px">'
+        + '<div><label>Image file path (relative to asset base)</label>'
+          + '<input type="text" class="car-field" data-id="'+c.id+'" data-f="imgFile" value="'+(c.imgFile||'')+'" placeholder="e.g. cars/fw18-blue.png">'
+          + previewHtml
+        + '</div>'
+        + '<div><label>Power unit</label>'
+          + '<select class="car-pu-select" data-id="'+c.id+'">'
+          + puOptions.replace('value="'+(c.powerUnitId||'')+'"', 'value="'+(c.powerUnitId||'')+'" selected')
+          + '</select>'
+          + (selectedPU ? '<div style="margin-top:6px;display:flex;gap:12px"><span style="font-size:11px;color:var(--text3)">PU Perf <span style="color:var(--accent);font-weight:600">'+combined.puPerf+'</span></span><span style="font-size:11px;color:var(--text3)">PU Rel <span style="color:var(--green);font-weight:600">'+combined.puRel+'</span></span></div>' : '')
+        + '</div>'
+        + (document.getElementById('fixedTyreSupplier')&&document.getElementById('fixedTyreSupplier').checked&&tyreMakers.length ? '<div style="margin-top:10px"><label>Tyre manufacturer (fixed)</label>' + '<select class="car-tyre-sel" data-id="'+c.id+'"><option value="">-- None --</option>'+tyreMakers.map(function(m){ return '<option value="'+m.id+'"'+(m.id===c.tyreMakerId?' selected':'')+'>'+m.name+'</option>'; }).join('')+'</select></div>' : '')
+      + '</div>'
+      + '<div class="sec">Chassis components</div>'
+      + compRows
+      + '<button class="btn btn-sm car-add-comp" data-id="'+c.id+'" style="margin-top:6px">+ Add component</button>'
+      + '<div style="margin-top:14px;padding:12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">'
+        + '<div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600">Combined (chassis + power unit)</div>'
+        + '<div style="display:flex;gap:24px">'
+          + '<div><span style="font-size:11px;color:var(--text3)">Overall Performance</span><br><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><div class="bw" style="width:160px"><div class="bf bf-blue" style="width:'+combined.perf+'%"></div></div><span class="bn" style="font-size:13px;font-weight:700;color:var(--accent)">'+combined.perf+'</span></div></div>'
+          + '<div><span style="font-size:11px;color:var(--text3)">Overall Reliability</span><br><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><div class="bw" style="width:160px"><div class="bf bf-green" style="width:'+combined.rel+'%"></div></div><span class="bn" style="font-size:13px;font-weight:700;color:var(--green)">'+combined.rel+'</span></div></div>'
+        + '</div>'
+      + '</div>'
+    + '</div>';
+  }).join('');
+  renderPerfTable();
+  bindCarEvents();
+}
+
+function bindCarEvents(){
+  document.querySelectorAll('.car-field').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var c = cars.find(function(x){ return x.id === this.dataset.id; }, this);
+      if(!c) return;
+      c[this.dataset.f] = this.value;
+      if(this.dataset.f === 'model') renderPerfTable();
+    });
+  });
+  document.querySelectorAll('.car-colour').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var c = cars.find(function(x){ return x.id === this.dataset.id; }, this);
+      if(!c) return;
+      c.colour = this.value;
+      var dot = document.querySelector('.car-dot[data-id="'+this.dataset.id+'"]');
+      if(dot) dot.style.background = this.value;
+    });
+  });
+  document.querySelectorAll('.car-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){ removeCar(this.dataset.id); });
+  });
+  document.querySelectorAll('.car-pu-select').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var c = cars.find(function(x){ return x.id === this.dataset.id; }, this);
+      if(!c) return;
+      c.powerUnitId = this.value || null;
+      renderCars();
+    });
+    var c = cars.find(function(x){ return x.id === sel.dataset.id; });
+    if(c && c.powerUnitId) sel.value = c.powerUnitId;
+  });
+  document.querySelectorAll('.car-tyre-sel').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var c = cars.find(function(x){ return x.id === this.dataset.id; }, this);
+      if(!c) return;
+      c.tyreMakerId = this.value || null;
+    });
+  });
+  document.querySelectorAll('.car-add-comp').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var c = cars.find(function(x){ return x.id === this.dataset.id; }, this);
+      if(!c) return;
+      var defaults = (document.getElementById('carDefaultComponents').value||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+      var next = defaults[c.components.length] || 'Component';
+      c.components.push({ name: next, perf: 50, rel: 50 });
+      renderCars();
+    });
+  });
+  document.querySelectorAll('.car-comp-name').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var c = cars.find(function(x){ return x.id === this.dataset.id; }, this);
+      if(!c) return;
+      c.components[+this.dataset.ci].name = this.value;
+    });
+  });
+  document.querySelectorAll('.car-comp-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var c = cars.find(function(x){ return x.id === this.dataset.id; }, this);
+      if(!c) return;
+      c.components[+this.dataset.ci][this.dataset.stat] = +this.value;
+      var lbl = document.querySelector('.car-comp-val[data-id="'+this.dataset.id+'"][data-ci="'+this.dataset.ci+'"][data-stat="'+this.dataset.stat+'"]');
+      if(lbl) lbl.textContent = this.value;
+      // Update combined bars in card
+      var combined = calcCarCombined(c);
+      var card = document.getElementById('cc_'+this.dataset.id);
+      if(card){
+        var bars = card.querySelectorAll('.bf');
+        // Last two bars are the combined ones
+        var n = bars.length;
+        if(bars[n-2]) bars[n-2].style.width = combined.perf + '%';
+        if(bars[n-1]) bars[n-1].style.width = combined.rel + '%';
+        var bns = card.querySelectorAll('.bn');
+        var m = bns.length;
+        if(bns[m-2]) bns[m-2].textContent = combined.perf;
+        if(bns[m-1]) bns[m-1].textContent = combined.rel;
+      }
+      renderPerfTable();
+    });
+  });
+  document.querySelectorAll('.car-comp-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var c = cars.find(function(x){ return x.id === this.dataset.id; }, this);
+      if(!c) return;
+      c.components.splice(+this.dataset.ci, 1);
+      renderCars();
+    });
+  });
+}
+
+function renderPerfTable(){
+  var body = document.getElementById('perfBody');
+  if(!body) return;
+  body.innerHTML = cars.map(function(c){
+    var combined = calcCarCombined(c);
+    var puName = combined.puName || '(none)';
+    return '<tr>'
+      + '<td><div style="display:flex;align-items:center;gap:8px"><div class="dot" style="background:'+c.colour+'"></div>'+(c.model||'--')+'</div></td>'
+      + '<td style="font-size:12px;color:var(--text2)">'+puName+'</td>'
+      + '<td><div class="bw" style="width:140px"><div class="bf bf-blue" style="width:'+combined.perf+'%"></div></div><span class="bn">'+combined.perf+'</span></td>'
+      + '<td><div class="bw" style="width:140px"><div class="bf bf-green" style="width:'+combined.rel+'%"></div></div><span class="bn">'+combined.rel+'</span></td>'
+      + '</tr>';
+  }).join('');
+}
+
+// ---- TYRES ----
+// ---- TYRE MANUFACTURERS ----
+function addTyreMaker(d){
+  tyreMakers.push({
+    id: d&&d.id ? d.id : uid(),
+    name: d&&d.name ? d.name : '',
+    imgFile: d&&d.imgFile ? d.imgFile : '',
+    compounds: d&&d.compounds ? d.compounds.map(function(c){
+      return {id:c.id||uid(),name:c.name||'',colour:c.colour||'#aaaaaa',
+        peakGrip:c.peakGrip||c.grip||70, degradationRate:c.degradationRate||c.degradation||40,
+        wetPerformance:c.wetPerformance||20, wearFailureWindow:c.wearFailureWindow||7};
+    }) : []
+  });
+  rebuildTyresFlat();
+  renderTyreMakers();
+  renderCars();
+}
+
+function removeTyreMaker(id){
+  tyreMakers = tyreMakers.filter(function(m){ return m.id !== id; });
+  cars.forEach(function(c){ if(c.tyreMakerId===id) c.tyreMakerId=null; });
+  rebuildTyresFlat();
+  renderTyreMakers();
+  renderCars();
+}
+
+function addCompoundToMaker(makerId){
+  var m = tyreMakers.find(function(x){ return x.id===makerId; });
+  if(!m) return;
+  var defStr = document.getElementById('tyreDefaultCompounds') ? document.getElementById('tyreDefaultCompounds').value : 'Soft,Medium,Hard,Intermediate,Wet';
+  var defaults = defStr.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  var next = defaults[m.compounds.length] || 'Compound';
+  var colours = {Soft:'#e8392a',Medium:'#f0c020',Hard:'#cccccc',Intermediate:'#2ecf72',Wet:'#4a8fff'};
+  var gripMap   = {Soft:90,Medium:75,Hard:60,Intermediate:65,Wet:55};
+  var degradMap = {Soft:70,Medium:45,Hard:25,Intermediate:40,Wet:30};
+  var wetMap    = {Soft:20,Medium:25,Hard:20,Intermediate:65,Wet:90};
+  var failMap   = {Soft:10,Medium:7,Hard:5,Intermediate:8,Wet:6};
+  m.compounds.push({
+    id: uid(), name: next,
+    colour: colours[next] || '#aaaaaa',
+    peakGrip: gripMap[next] || 70,
+    degradationRate: degradMap[next] || 40,
+    wetPerformance: wetMap[next] || 20,
+    wearFailureWindow: failMap[next] || 7
+  });
+  rebuildTyresFlat();
+  renderTyreMakers();
+  renderTyreAlloc();
+}
+
+function removeCompound(makerId, compId){
+  var m = tyreMakers.find(function(x){ return x.id===makerId; });
+  if(m) m.compounds = m.compounds.filter(function(c){ return c.id!==compId; });
+  rebuildTyresFlat();
+  renderTyreMakers();
+  renderTyreAlloc();
+}
+
+function rebuildTyresFlat(){
+  tyres = [];
+  tyreMakers.forEach(function(m){
+    (m.compounds||[]).forEach(function(c){
+      tyres.push({
+        id:c.id, name:c.name, colour:c.colour,
+        makerId:m.id, makerName:m.name,
+        peakGrip:c.peakGrip, degradationRate:c.degradationRate,
+        wetPerformance:c.wetPerformance, wearFailureWindow:c.wearFailureWindow,
+        grip:c.peakGrip, degradation:c.degradationRate
+      });
+    });
+  });
+}
+
+function renderTyreMakers(){
+  var el = document.getElementById('tyreMakersList');
+  if(!el) return;
+  var tyreAssetBase = document.getElementById('tyreAssetBase') ? document.getElementById('tyreAssetBase').value.trim() : '';
+
+  if(!tyreMakers.length){
+    el.innerHTML = '<div class="note">No manufacturers added yet. Click <strong>+ Add manufacturer</strong> to begin.</div>';
+    return;
+  }
+
+  el.innerHTML = tyreMakers.map(function(m){
+    var imgUrl = m.imgFile && tyreAssetBase ? tyreAssetBase.replace(/\/$/,'') + '/' + m.imgFile : '';
+
+    var compCards = (m.compounds||[]).map(function(c){
+      return '<div class="card" style="margin-bottom:8px;border-left:3px solid '+c.colour+'">'
+        + '<div class="card-header">'
+          + '<div class="card-title">'
+            + '<div class="dot" style="background:'+c.colour+'"></div>'
+            + '<input type="text" class="comp-name" data-mid="'+m.id+'" data-cid="'+c.id+'" value="'+c.name+'" placeholder="e.g. Soft" style="border:none;background:transparent;font-weight:600;color:var(--text);width:150px">'
+          + '</div>'
+          + '<div style="display:flex;align-items:center;gap:6px">'
+            + '<input type="color" class="comp-colour" data-mid="'+m.id+'" data-cid="'+c.id+'" value="'+c.colour+'">'
+            + '<button class="btn btn-danger btn-sm comp-remove" data-mid="'+m.id+'" data-cid="'+c.id+'">&#215;</button>'
+          + '</div>'
+        + '</div>'
+        + '<div class="g2" style="margin-top:8px">'
+          + '<div>'
+            + '<div class="stat-row"><span class="stat-lbl">Peak grip</span>'
+              + '<input type="range" min="0" max="100" value="'+c.peakGrip+'" class="comp-range" data-mid="'+m.id+'" data-cid="'+c.id+'" data-f="peakGrip" style="flex:1">'
+              + '<span class="stat-val comp-rv" data-mid="'+m.id+'" data-cid="'+c.id+'" data-f="peakGrip">'+c.peakGrip+'</span></div>'
+            + '<div class="stat-row"><span class="stat-lbl">Degradation rate</span>'
+              + '<input type="range" min="0" max="100" value="'+c.degradationRate+'" class="comp-range" data-mid="'+m.id+'" data-cid="'+c.id+'" data-f="degradationRate" style="flex:1">'
+              + '<span class="stat-val comp-rv" data-mid="'+m.id+'" data-cid="'+c.id+'" data-f="degradationRate">'+c.degradationRate+'</span></div>'
+          + '</div>'
+          + '<div>'
+            + '<div class="stat-row"><span class="stat-lbl">Wet performance</span>'
+              + '<input type="range" min="0" max="100" value="'+c.wetPerformance+'" class="comp-range" data-mid="'+m.id+'" data-cid="'+c.id+'" data-f="wetPerformance" style="flex:1">'
+              + '<span class="stat-val comp-rv" data-mid="'+m.id+'" data-cid="'+c.id+'" data-f="wetPerformance">'+c.wetPerformance+'</span></div>'
+            + '<div class="stat-row"><span class="stat-lbl">Wear failure window</span>'
+              + '<input type="range" min="0" max="30" value="'+c.wearFailureWindow+'" class="comp-range" data-mid="'+m.id+'" data-cid="'+c.id+'" data-f="wearFailureWindow" style="flex:1">'
+              + '<span class="stat-val comp-rv" data-mid="'+m.id+'" data-cid="'+c.id+'" data-f="wearFailureWindow">'+c.wearFailureWindow+'%</span></div>'
+          + '</div>'
+        + '</div>'
+      + '</div>';
+    }).join('');
+
+    return '<div class="card" id="tmaker_'+m.id+'" style="margin-bottom:16px">'
+      + '<div class="card-header">'
+        + '<div class="card-title" style="gap:10px">'
+          + (imgUrl ? '<img src="'+imgUrl+'" style="height:28px;object-fit:contain">' : '')
+          + '<input type="text" class="maker-name" data-id="'+m.id+'" value="'+m.name+'" placeholder="e.g. Goodyear" style="border:none;background:transparent;font-size:14px;font-weight:700;color:var(--text)">'
+        + '</div>'
+        + '<div style="display:flex;align-items:center;gap:8px">'
+          + '<div style="display:flex;flex-direction:column;gap:2px">'
+            + '<label style="margin:0;font-size:10px;color:var(--text3)">Logo file</label>'
+            + '<input type="text" class="maker-img" data-id="'+m.id+'" value="'+m.imgFile+'" placeholder="goodyear.png" style="padding:3px 6px;font-size:11px;width:140px">'
+          + '</div>'
+          + '<button class="btn btn-danger btn-sm maker-remove" data-id="'+m.id+'">Remove</button>'
+        + '</div>'
+      + '</div>'
+      + '<div class="sec">Compounds</div>'
+      + (compCards || '<p style="font-size:12px;color:var(--text3);margin:6px 0">No compounds yet.</p>')
+      + '<button class="btn btn-sm comp-add" data-mid="'+m.id+'" style="margin-top:6px">+ Add compound</button>'
+    + '</div>';
+  }).join('');
+
+  bindTyreEvents();
+}
+
+function bindTyreEvents(){
+  document.querySelectorAll('.maker-name').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var m = tyreMakers.find(function(x){ return x.id===this.dataset.id; }, this);
+      if(m){ m.name=this.value; rebuildTyresFlat(); renderCars(); }
+    });
+  });
+  document.querySelectorAll('.maker-img').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var m = tyreMakers.find(function(x){ return x.id===this.dataset.id; }, this);
+      if(m) m.imgFile = this.value;
+    });
+  });
+  document.querySelectorAll('.maker-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){ removeTyreMaker(this.dataset.id); });
+  });
+  document.querySelectorAll('.comp-add').forEach(function(btn){
+    btn.addEventListener('click', function(){ addCompoundToMaker(this.dataset.mid); });
+  });
+  document.querySelectorAll('.comp-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){ removeCompound(this.dataset.mid, this.dataset.cid); });
+  });
+  document.querySelectorAll('.comp-name').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var m = tyreMakers.find(function(x){ return x.id===this.dataset.mid; }, this);
+      if(!m) return;
+      var c = m.compounds.find(function(x){ return x.id===this.dataset.cid; }, this);
+      if(c){ c.name=this.value; rebuildTyresFlat(); renderTyreAlloc(); }
+    });
+  });
+  document.querySelectorAll('.comp-colour').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var m = tyreMakers.find(function(x){ return x.id===this.dataset.mid; }, this);
+      if(!m) return;
+      var c = m.compounds.find(function(x){ return x.id===this.dataset.cid; }, this);
+      if(c){ c.colour=this.value; rebuildTyresFlat(); }
+    });
+  });
+  document.querySelectorAll('.comp-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var m = tyreMakers.find(function(x){ return x.id===this.dataset.mid; }, this);
+      if(!m) return;
+      var c = m.compounds.find(function(x){ return x.id===this.dataset.cid; }, this);
+      if(!c) return;
+      c[this.dataset.f] = +this.value;
+      rebuildTyresFlat();
+      var rv = document.querySelector('.comp-rv[data-mid="'+this.dataset.mid+'"][data-cid="'+this.dataset.cid+'"][data-f="'+this.dataset.f+'"]');
+      if(rv) rv.textContent = this.value + (this.dataset.f==='wearFailureWindow' ? '%' : '');
+    });
+  });
+}
+
+
+function addCircuit(d){
+  circuits.push({
+    id:d&&d.id?d.id:uid(), name:d&&d.name?d.name:'', location:d&&d.location?d.location:'',
+    country:d&&d.country?d.country:'', type:d&&d.type?d.type:'Street',
+    laps:d&&d.laps?d.laps:30, lapLength:d&&d.lapLength?d.lapLength:3.0,
+    pitLaneTimeLoss:d&&d.pitLaneTimeLoss?d.pitLaneTimeLoss:22,
+    totalCorners:d&&d.totalCorners?d.totalCorners:15,
+    slowCorners:d&&d.slowCorners?d.slowCorners:5, mediumCorners:d&&d.mediumCorners?d.mediumCorners:7,
+    fastCorners:d&&d.fastCorners?d.fastCorners:3, passingPlaces:d&&d.passingPlaces?d.passingPlaces:3,
+    tarmacGrip:d&&d.tarmacGrip?d.tarmacGrip:70, bumpiness:d&&d.bumpiness?d.bumpiness:30,
+    elevation:d&&d.elevation?d.elevation:20, weather:d&&d.weather?d.weather:'Dry',
+    rainChance:d&&d.rainChance?d.rainChance:15, tyreWear:d&&d.tyreWear?d.tyreWear:50,
+    fuelDemand:d&&d.fuelDemand?d.fuelDemand:50, engineStress:d&&d.engineStress?d.engineStress:50,
+    brakeStress:d&&d.brakeStress?d.brakeStress:50, safetyCarChance:d&&d.safetyCarChance?d.safetyCarChance:25, setupZones:d&&d.setupZones?d.setupZones:{},
+    drsZones:d&&d.drsZones?d.drsZones:0, mapFile:d&&d.mapFile?d.mapFile:'',
+    baseLapTime:d&&d.baseLapTime?d.baseLapTime:90.0,
+    poleTime:d&&d.poleTime?d.poleTime:null,
+    fastestRaceLap:d&&d.fastestRaceLap?d.fastestRaceLap:null
+  });
+  renderCircuits();
+}
+function removeCircuit(id){ circuits=circuits.filter(function(c){return c.id!==id;}); renderCircuits(); }
+function moveCircuit(id, dir){
+  var i=circuits.findIndex(function(c){return c.id===id;});
+  if(i+dir<0||i+dir>=circuits.length) return;
+  var tmp=circuits[i]; circuits[i]=circuits[i+dir]; circuits[i+dir]=tmp;
+  renderCircuits();
+}
+
+function renderCircuits(){
+  var el=document.getElementById('circuitsList');
+  if(!circuits.length){ el.innerHTML='<p style="color:var(--text3);font-size:13px">No circuits added.</p>'; return; }
+  var circuitAssetBase = document.getElementById('circuitAssetBase') ? document.getElementById('circuitAssetBase').value.trim() : '';
+  var flagAssetBase = document.getElementById('flagAssetBase') ? document.getElementById('flagAssetBase').value.trim() : '';
+  el.innerHTML=circuits.map(function(c,i){
+    var sliders=[
+      ['tarmacGrip','Tarmac grip',c.tarmacGrip],['bumpiness','Bumpiness',c.bumpiness],
+      ['elevation','Elevation change',c.elevation],['tyreWear','Tyre wear rate',c.tyreWear],
+      ['fuelDemand','Fuel demand',c.fuelDemand],['engineStress','Engine stress',c.engineStress],
+      ['brakeStress','Brake stress',c.brakeStress]
+    ].map(function(s){
+      return '<div class="stat-row"><span class="stat-lbl">'+s[1]+'</span>'
+        +'<input type="range" min="0" max="100" value="'+s[2]+'" class="circ-range" data-id="'+c.id+'" data-f="'+s[0]+'">'
+        +'<span class="stat-val circ-rv" data-id="'+c.id+'" data-f="'+s[0]+'">'+s[2]+'</span>'
+        +'</div>';
+    });
+    var typeOpts=['Street','Permanent','Oval','Rally'].map(function(t){
+      return '<option'+(c.type===t?' selected':'')+'>'+t+'</option>';
+    }).join('');
+    var upBtn=i>0?'<button class="btn btn-sm circ-move" data-id="'+c.id+'" data-dir="-1">up</button>':'';
+    var dnBtn=i<circuits.length-1?'<button class="btn btn-sm circ-move" data-id="'+c.id+'" data-dir="1">dn</button>':'';
+    return '<div class="card">'
+      +'<div class="card-header">'
+        +'<div class="card-title">R'+(i+1)+' -- '+(c.name||('Circuit '+(i+1)))+(c.location?' / '+c.location:'')+'</div>'
+        +'<div style="display:flex;gap:6px">'+upBtn+dnBtn+'<button class="btn btn-danger btn-sm circ-remove" data-id="'+c.id+'">Remove</button></div>'
+      +'</div>'
+      +'<div class="g4">'
+        +'<div><label>Circuit name</label><input type="text" class="circ-field" data-id="'+c.id+'" data-f="name" value="'+(c.name||'')+'" placeholder="e.g. Lakeside Park"></div>'
+        +'<div><label>Location</label><input type="text" class="circ-field" data-id="'+c.id+'" data-f="location" value="'+(c.location||'')+'"></div>'
+        +'<div><label>Country code</label><div style="display:flex;align-items:center;gap:6px;margin-top:3px">'
+          +'<input type="text" class="circ-field" data-id="'+c.id+'" data-f="country" value="'+(c.country||'')+'" placeholder="GB" maxlength="2" style="width:56px;text-transform:uppercase">'
+          +(c.country&&flagAssetBase?'<img src="'+flagAssetBase.replace(/\/$/,'')+'/'+c.country.toLowerCase()+'.png" style="height:18px;border-radius:2px">':'')
+          +'</div></div>'
+        +'<div><label>Type</label><select class="circ-select" data-id="'+c.id+'" data-f="type">'+typeOpts+'</select></div>'
+      +'</div>'
+      +'<div class="g4" style="margin-top:8px">'
+        +'<div><label>Laps</label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="laps" value="'+c.laps+'" min="1" max="200"></div>'
+        +'<div><label>Lap length (km)</label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="lapLength" value="'+c.lapLength+'" min="0.5" max="20" step="0.1"></div>'
+        +'<div><label>Pit lane loss (s)</label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="pitLaneTimeLoss" value="'+c.pitLaneTimeLoss+'" min="5" max="60"></div>'
+        +'<div><label>Safety car %</label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="safetyCarChance" value="'+c.safetyCarChance+'" min="0" max="100"></div>'
+      +'</div>'
+      +'<div class="g3" style="margin-top:8px">'
+        +'<div><label>Base lap time (s) <span style="color:var(--accent)">required</span></label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="baseLapTime" value="'+(c.baseLapTime||90.0)+'" min="30" max="600" step="0.001" placeholder="90.000"></div>'
+        +'<div><label>Pole time (s) <span style="color:var(--text3);font-size:10px">optional</span></label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="poleTime" value="'+(c.poleTime||'')+'" min="30" max="600" step="0.001" placeholder="88.234"></div>'
+        +'<div><label>Fastest race lap (s) <span style="color:var(--text3);font-size:10px">optional</span></label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="fastestRaceLap" value="'+(c.fastestRaceLap||'')+'" min="30" max="600" step="0.001" placeholder="89.112"></div>'
+      +'</div>'
+      +'<div class="g3" style="margin-top:8px">'
+        +'<div><label>Base lap time (s) <span style="color:var(--red)">*</span></label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="baseLapTime" value="'+(c.baseLapTime||90)+'" min="30" max="600" step="0.001" placeholder="e.g. 90.000"></div>'
+        +'<div><label>Pole time (s) <span style="color:var(--text3);font-size:10px">optional</span></label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="poleTime" value="'+(c.poleTime||'')+'" min="30" max="600" step="0.001" placeholder="e.g. 88.234"></div>'
+        +'<div><label>Fastest race lap (s) <span style="color:var(--text3);font-size:10px">optional</span></label><input type="number" class="circ-field" data-id="'+c.id+'" data-f="fastestRaceLap" value="'+(c.fastestRaceLap||'')+'" min="30" max="600" step="0.001" placeholder="e.g. 89.112"></div>'
+      +'</div>'
+      +'<div class="g2" style="margin-top:8px"><div>'+sliders.slice(0,4).join('')+'</div><div>'+sliders.slice(4).join('')
+        +'<div class="stat-row"><span class="stat-lbl">Passing places</span><input type="number" class="circ-field" data-id="'+c.id+'" data-f="passingPlaces" value="'+c.passingPlaces+'" min="0" max="20" style="width:60px;padding:5px 7px" onchange="renderPassingNames(\''+c.id+'\',+this.value)"></div>'
+        +'<div id="ppnames_'+c.id+'"></div>'
+        +'<div class="stat-row"><span class="stat-lbl">Rain chance (%)</span><input type="number" class="circ-field" data-id="'+c.id+'" data-f="rainChance" value="'+c.rainChance+'" min="0" max="100" style="width:60px;padding:5px 7px"></div>'
+      +'</div></div>'
+      +'<div style="margin-top:8px"><label>Circuit map file (relative to circuit maps asset base)</label>'
+        +'<input type="text" class="circ-field" data-id="'+c.id+'" data-f="mapFile" value="'+(c.mapFile||'')+'" placeholder="e.g. lakeside.png">'
+        +(c.mapFile&&circuitAssetBase?'<img src="'+circuitAssetBase.replace(/\/$/,'')+'/'+c.mapFile+'" style="max-height:80px;margin-top:6px;object-fit:contain;display:block">':'')
+        +'</div>'
+    +'</div>';
+  }).join('');
+  bindCircuitEvents();
+}
+
+function bindCircuitEvents(){
+  document.querySelectorAll('.circ-field').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var c=circuits.find(function(x){return x.id===this.dataset.id;},this);
+      var strFields=['name','location','country','mapFile'];
+      if(c) c[this.dataset.f]=strFields.indexOf(this.dataset.f)===-1?+this.value:this.value;
+    });
+  });
+  document.querySelectorAll('.circ-select').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var c=circuits.find(function(x){return x.id===this.dataset.id;},this);
+      if(c) c[this.dataset.f]=this.value;
+    });
+  });
+  document.querySelectorAll('.circ-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var c=circuits.find(function(x){return x.id===this.dataset.id;},this);
+      if(c) c[this.dataset.f]=+this.value;
+      var rv=document.querySelector('.circ-rv[data-id="'+this.dataset.id+'"][data-f="'+this.dataset.f+'"]');
+      if(rv) rv.textContent=this.value;
+    });
+  });
+  document.querySelectorAll('.circ-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){ removeCircuit(this.dataset.id); });
+  });
+  document.querySelectorAll('.circ-move').forEach(function(btn){
+    btn.addEventListener('click', function(){ moveCircuit(this.dataset.id, +this.dataset.dir); });
+  });
+}
+
+// ---- TYRE ALLOC ----
+function renderTyreAlloc(){
+  var el=document.getElementById('tyreAllocRows');
+  if(!tyres.length){
+    el.innerHTML='<p style="font-size:12px;color:var(--text3)">No tyre compounds defined yet. Add manufacturers and compounds in the Tyre manufacturers tab first.</p>';
+    return;
+  }
+  // Sync tyreAlloc with current tyres
+  tyres.forEach(function(t){
+    if(!tyreAlloc.find(function(a){ return a.compoundId===t.id; })){
+      tyreAlloc.push({compoundId:t.id, compoundName:t.name, sets:4});
+    }
+  });
+  tyreAlloc=tyreAlloc.filter(function(a){ return tyres.find(function(t){ return t.id===a.compoundId; }); });
+  // Sync names in case they changed
+  tyreAlloc.forEach(function(a){
+    var t=tyres.find(function(t){ return t.id===a.compoundId; });
+    if(t) a.compoundName=t.name;
+  });
+  el.innerHTML=tyreAlloc.map(function(a,i){
+    var tyre=tyres.find(function(t){ return t.id===a.compoundId; });
+    var colour=tyre?tyre.colour:'#888';
+    var maker=tyreMakers.find(function(m){ return tyre&&m.id===tyre.makerId; });
+    var makerLabel=maker?' <span style="font-size:10px;color:var(--text3)">('+maker.name+')</span>':'';
+    return '<div class="stat-row"><div class="dot" style="background:'+colour+';flex-shrink:0"></div>'
+      +'<span class="stat-lbl">'+a.compoundName+makerLabel+'</span>'
+      +'<input type="number" class="tyre-alloc-sets" data-idx="'+i+'" value="'+a.sets+'" min="0" max="30" style="width:70px;padding:5px 7px">'
+      +'<span style="font-size:12px;color:var(--text3)">sets per driver</span></div>';
+  }).join('');
+  document.querySelectorAll('.tyre-alloc-sets').forEach(function(inp){
+    inp.addEventListener('input', function(){ tyreAlloc[+this.dataset.idx].sets=+this.value; });
+  });
+}
+
+function renderSim(){
+  renderWG('simLap',SIM_WEIGHTS.lap);
+  renderWG('simOT',SIM_WEIGHTS.overtake);
+  renderWG('simPit',SIM_WEIGHTS.pit);
+  renderWG('simRng',SIM_WEIGHTS.rng);
+}
+
+function renderWG(elId, weights){
+  var el=document.getElementById(elId);
+  el.innerHTML=weights.map(function(w){
+    return '<div class="wr">'
+      +'<span class="wl">'+w.label+'</span>'
+      +'<input type="range" min="0" max="100" value="'+w.val+'" class="sim-range" data-wid="'+w.id+'" style="flex:1">'
+      +'<span class="wv" id="wv_'+w.id+'">'+w.val+'</span>'
+      +'<span class="wd">'+w.desc+'</span>'
+    +'</div>';
+  }).join('');
+  el.querySelectorAll('.sim-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var all=SIM_WEIGHTS.lap.concat(SIM_WEIGHTS.overtake,SIM_WEIGHTS.pit,SIM_WEIGHTS.rng);
+      var w=all.find(function(x){return x.id===this.dataset.wid;},this);
+      if(w) w.val=+this.value;
+      var ev=document.getElementById('wv_'+this.dataset.wid);
+      if(ev) ev.textContent=this.value;
+    });
+  });
+}
+
+// ---- INCIDENTS ----
+// Incident outcome keys and labels
+var INC_OUTCOMES = [
+  {key:'noEffect',  label:'No further effect', colour:'#2ecf72'},
+  {key:'pitRepair', label:'Pit for repairs',   colour:'#4a8fff'},
+  {key:'safetyCar', label:'Safety car',        colour:'#a060ff'},
+  {key:'retirement',label:'Retirement',        colour:'#e8392a'}
+];
+
+function makeOutcomeSliders(inc, prefix, idx){
+  var tMin = inc.timeLossMin != null ? inc.timeLossMin : 5;
+  var tMax = inc.timeLossMax != null ? inc.timeLossMax : 20;
+  var timeLossRow = '<div style="padding:8px 10px;background:var(--amberbg);border:1px solid var(--amberbdr);border-radius:7px;margin-bottom:8px">'
+    + '<div style="font-size:11px;font-weight:600;color:var(--amber);margin-bottom:6px">&#9201; Time loss (always applies)</div>'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+      + '<label style="margin:0;font-size:11px;color:var(--text3);white-space:nowrap">Min (s)</label>'
+      + '<input type="number" min="0" max="300" value="'+tMin+'" class="inc-tl-range" data-prefix="'+prefix+'" data-idx="'+idx+'" data-key="timeLossMin" style="width:65px;padding:3px 7px">'
+      + '<label style="margin:0;font-size:11px;color:var(--text3);white-space:nowrap">Max (s)</label>'
+      + '<input type="number" min="0" max="300" value="'+tMax+'" class="inc-tl-range" data-prefix="'+prefix+'" data-idx="'+idx+'" data-key="timeLossMax" style="width:65px;padding:3px 7px">'
+      + '<span style="font-size:11px;color:var(--text3)">sim rolls between these values</span>'
+    + '</div>'
+  + '</div>';
+  var outcomeRows = INC_OUTCOMES.map(function(o){
+    var val = inc.outcomes ? (inc.outcomes[o.key]||0) : 0;
+    return '<div class="stat-row" style="margin-bottom:4px">'
+      + '<span class="stat-lbl" style="min-width:140px;font-size:11px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+o.colour+';margin-right:5px"></span>'+o.label+'</span>'
+      + '<input type="range" min="0" max="100" value="'+val+'" class="inc-out-range" data-prefix="'+prefix+'" data-idx="'+idx+'" data-key="'+o.key+'" style="flex:1">'
+      + '<span class="inc-out-val" data-prefix="'+prefix+'" data-idx="'+idx+'" data-key="'+o.key+'" style="font-size:11px;min-width:28px;text-align:right">'+val+'</span>'
+    + '</div>';
+  }).join('');
+  return timeLossRow
+    + '<div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px">Additional outcome weights</div>'
+    + outcomeRows;
+}
+
+function renderIncidents(){
+  renderGlobalIncidents();
+  renderSeriesIncidents();
+  bindIncidentEvents();
+}
+
+function renderGlobalIncidents(){
+  var el = document.getElementById('globalIncList');
+  if(!el) return;
+  el.innerHTML = GLOBAL_INCIDENTS.map(function(def, i){
+    // Find any override in incidents[]
+    var ov = incidents.find(function(x){ return x.id===def.id && x.global; }) || {outcomes: Object.assign({}, def.outcomes), baseChance: def.baseChance, timeLossMin: def.timeLossMin, timeLossMax: def.timeLossMax};
+    return '<div class="card" style="margin-bottom:8px">'
+      + '<div class="card-header">'
+        + '<div class="card-title" style="font-size:13px;font-weight:600">'+def.label+'</div>'
+        + '<div style="display:flex;align-items:center;gap:10px">'
+          + '<label style="margin:0;font-size:11px;color:var(--text3)">Base chance % / lap</label>'
+          + '<input type="number" min="0" max="100" step="0.1" value="'+(ov.baseChance||def.baseChance)+'" class="global-inc-base" data-id="'+def.id+'" style="width:70px;padding:4px 7px">'
+        + '</div>'
+      + '</div>'
+      + '<div style="margin-top:8px"><div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Outcome weights</div>'
+      + makeOutcomeSliders(ov, 'g', i)
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+
+function getSeriesComponents(){
+  var seen = {}, list = [];
+  cars.forEach(function(c){
+    (c.components||[]).forEach(function(comp){
+      if(comp.name && !seen[comp.name]){
+        seen[comp.name]=true;
+        // Find reliability from this component across all cars (take average)
+        var vals = [];
+        cars.forEach(function(c2){ var found=(c2.components||[]).find(function(x){return x.name===comp.name;}); if(found) vals.push(found.rel); });
+        var avgRel = vals.length ? Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length) : 50;
+        list.push({name:comp.name, group:'Chassis', avgRel:avgRel});
+      }
+    });
+  });
+  powerUnits.forEach(function(pu){
+    (pu.components||[]).forEach(function(comp){
+      if(comp.name && comp.perf > 0 && !seen[comp.name]){
+        seen[comp.name]=true;
+        var vals = [];
+        powerUnits.forEach(function(p2){ var found=(p2.components||[]).find(function(x){return x.name===comp.name;}); if(found) vals.push(found.rel); });
+        var avgRel = vals.length ? Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length) : 50;
+        list.push({name:comp.name, group:'Power Unit', avgRel:avgRel});
+      }
+    });
+  });
+  return list;
+}
+
+function renderSeriesIncidents(){
+  var el = document.getElementById('seriesIncList');
+  if(!el) return;
+  var comps = getSeriesComponents();
+  if(!comps.length){
+    el.innerHTML = '<div class="note">No components defined yet. Add cars and power units first.</div>';
+    return;
+  }
+  el.innerHTML = comps.map(function(comp, i){
+    var ov = incidents.find(function(x){ return x.name===comp.name && !x.global; });
+    var baseChance = ov ? ov.baseChance : 2.0;
+    var outcomes = ov ? ov.outcomes : {noEffect:20, pitRepair:30, safetyCar:10, retirement:10};
+    var tlMin = ov ? (ov.timeLossMin||5) : 5;
+    var tlMax = ov ? (ov.timeLossMax||30) : 30;
+    // Effective chance = baseChance * (1 + (50 - avgRel) / 50)
+    // So rel=100 -> 0.5x, rel=50 -> 1x, rel=0 -> 2x
+    var relMult = Math.round((1 + (50 - comp.avgRel) / 50) * 10) / 10;
+    var effectiveChance = Math.round(baseChance * relMult * 10) / 10;
+    var relBar = '<div style="display:flex;align-items:center;gap:6px;margin-top:2px">'
+      + '<div style="flex:1;height:4px;background:var(--bg4);border-radius:2px">'
+        + '<div style="width:'+comp.avgRel+'%;height:100%;border-radius:2px;background:'+(comp.avgRel>66?'var(--green)':comp.avgRel>33?'var(--amber)':'var(--red)')+'"></div>'
+      + '</div><span style="font-size:10px;color:var(--text3);min-width:28px">'+comp.avgRel+'</span></div>';
+    return '<div class="card" style="margin-bottom:8px">'
+      + '<div class="card-header">'
+        + '<div>'
+          + '<div class="card-title" style="font-size:13px;font-weight:600">'+comp.name+' <span style="font-size:10px;color:var(--text3);font-weight:400">('+comp.group+')</span></div>'
+          + '<div style="font-size:11px;color:var(--text3);margin-top:2px">Avg reliability'+relBar+'</div>'
+        + '</div>'
+        + '<div style="display:flex;align-items:center;gap:10px">'
+          + '<div style="text-align:right">'
+            + '<label style="margin:0;font-size:10px;color:var(--text3)">Base chance % / lap</label>'
+            + '<input type="number" min="0" max="100" step="0.1" value="'+baseChance+'" class="series-inc-base" data-name="'+comp.name+'" style="width:70px;padding:4px 7px;display:block;margin-top:2px">'
+          + '</div>'
+          + '<div style="text-align:right">'
+            + '<div style="font-size:10px;color:var(--text3)">Effective chance</div>'
+            + '<div style="font-size:14px;font-weight:700;color:'+(effectiveChance>3?'var(--red)':effectiveChance>1.5?'var(--amber)':'var(--green)')+'">'+effectiveChance+'%</div>'
+            + '<div style="font-size:9px;color:var(--text3)">x'+relMult+' rel modifier</div>'
+          + '</div>'
+        + '</div>'
+      + '</div>'
+      + '<div style="margin-top:8px"><div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Outcome weights</div>'
+      + makeOutcomeSliders({outcomes:outcomes, timeLossMin:tlMin, timeLossMax:tlMax}, 's', i)
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+
+function bindIncidentEvents(){
+  // Time loss range inputs
+  document.querySelectorAll('.inc-tl-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var prefix = this.dataset.prefix, idx = +this.dataset.idx, key = this.dataset.key, val = +this.value;
+      if(prefix==='g'){
+        var def = GLOBAL_INCIDENTS[idx]; if(!def) return;
+        var ov = incidents.find(function(x){ return x.id===def.id&&x.global; });
+        if(!ov){ ov={id:def.id,global:true,baseChance:def.baseChance,timeLossMin:def.timeLossMin,timeLossMax:def.timeLossMax,outcomes:Object.assign({},def.outcomes)}; incidents.push(ov); }
+        ov[key] = val;
+      } else {
+        var comps = getSeriesComponents(); var comp = comps[idx]; if(!comp) return;
+        var ov = incidents.find(function(x){ return x.name===comp.name&&!x.global; });
+        if(!ov){ ov={name:comp.name,global:false,baseChance:2.0,timeLossMin:5,timeLossMax:20,outcomes:{noEffect:20,pitRepair:30,safetyCar:10,retirement:10}}; incidents.push(ov); }
+        ov[key] = val;
+      }
+    });
+  });
+  // Global base chance
+  document.querySelectorAll('.global-inc-base').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var id = this.dataset.id;
+      var ov = incidents.find(function(x){ return x.id===id && x.global; });
+      if(!ov){ ov={id:id,global:true,baseChance:+this.value,outcomes:Object.assign({},GLOBAL_INCIDENTS.find(function(d){return d.id===id;})||{}.outcomes)}; incidents.push(ov); }
+      else ov.baseChance = +this.value;
+    });
+  });
+  // Series base chance
+  document.querySelectorAll('.series-inc-base').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var name = this.dataset.name;
+      var ov = incidents.find(function(x){ return x.name===name && !x.global; });
+      if(!ov){ ov={name:name,global:false,baseChance:+this.value,timeLossMin:5,timeLossMax:30,outcomes:{noEffect:20,pitRepair:30,safetyCar:10,retirement:10}}; incidents.push(ov); }
+      else ov.baseChance = +this.value;
+      renderSeriesIncidents();
+    });
+  });
+  // Outcome sliders
+  document.querySelectorAll('.inc-out-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var prefix = this.dataset.prefix, idx = +this.dataset.idx, key = this.dataset.key;
+      var val = +this.value;
+      // Update display
+      var lbl = document.querySelector('.inc-out-val[data-prefix="'+prefix+'"][data-idx="'+idx+'"][data-key="'+key+'"]');
+      if(lbl) lbl.textContent = val;
+      // Store in incidents
+      if(prefix==='g'){
+        var def = GLOBAL_INCIDENTS[idx];
+        if(!def) return;
+        var ov = incidents.find(function(x){ return x.id===def.id && x.global; });
+        if(!ov){ ov={id:def.id,global:true,baseChance:def.baseChance,outcomes:Object.assign({},def.outcomes)}; incidents.push(ov); }
+        ov.outcomes[key] = val;
+      } else {
+        var comps = getSeriesComponents();
+        var comp = comps[idx];
+        if(!comp) return;
+        var ov = incidents.find(function(x){ return x.name===comp.name && !x.global; });
+        if(!ov){ ov={name:comp.name,global:false,baseChance:2.0,outcomes:{noEffect:20,pitRepair:30,safetyCar:10,retirement:10}}; incidents.push(ov); }
+        ov.outcomes[key] = val;
+      }
+    });
+  });
+}
+
+
+// ---- UPGRADE STATS ----
+// upgrades[] stores per-component settings
+// {type:'car'|'pu'|'tyre', name, perfChance, relChance, sizeMin, sizeMax}  (car/pu)
+// {type:'tyre', makerId, makerName, gripChance, gripMin, gripMax, durChance, durMin, durMax, wetChance, wetMin, wetMax}
+var upgrades = [];
+
+function getUpgSetting(type, name, field, def){
+  var u = upgrades.find(function(x){ return x.type===type && x.name===name; });
+  return u ? (u[field]!=null?u[field]:def) : def;
+}
+function setUpgSetting(type, name, field, val){
+  var u = upgrades.find(function(x){ return x.type===type && x.name===name; });
+  if(!u){ u={type:type,name:name}; upgrades.push(u); }
+  u[field]=val;
+}
+function getTyreUpgSetting(makerId, field, def){
+  var u = upgrades.find(function(x){ return x.type==='tyre' && x.makerId===makerId; });
+  return u ? (u[field]!=null?u[field]:def) : def;
+}
+function setTyreUpgSetting(makerId, makerName, field, val){
+  var u = upgrades.find(function(x){ return x.type==='tyre' && x.makerId===makerId; });
+  if(!u){ u={type:'tyre',makerId:makerId,makerName:makerName}; upgrades.push(u); }
+  u[field]=val;
+}
+
+function makeCompUpgRow(type, name, label){
+  var pc = getUpgSetting(type, name, 'perfChance', 40);
+  var rc = getUpgSetting(type, name, 'relChance', 30);
+  var sm = getUpgSetting(type, name, 'sizeMin', 1);
+  var sx = getUpgSetting(type, name, 'sizeMax', 4);
+  return '<div class="card" style="margin-bottom:8px">'
+    + '<div class="card-title" style="margin-bottom:10px;font-size:13px">'+label+'</div>'
+    + '<div class="g2">'
+      + '<div>'
+        + '<div class="stat-row" style="margin-bottom:6px"><span class="stat-lbl" style="min-width:160px">Performance upgrade chance %</span>'
+          + '<input type="range" min="0" max="100" value="'+pc+'" class="upg-comp-range" data-utype="'+type+'" data-name="'+encodeURIComponent(name)+'" data-f="perfChance" style="flex:1">'
+          + '<span class="upg-rv" data-utype="'+type+'" data-name="'+encodeURIComponent(name)+'" data-f="perfChance" style="font-size:11px;min-width:28px;text-align:right">'+pc+'%</span></div>'
+        + '<div class="stat-row"><span class="stat-lbl" style="min-width:160px">Reliability upgrade chance %</span>'
+          + '<input type="range" min="0" max="100" value="'+rc+'" class="upg-comp-range" data-utype="'+type+'" data-name="'+encodeURIComponent(name)+'" data-f="relChance" style="flex:1">'
+          + '<span class="upg-rv" data-utype="'+type+'" data-name="'+encodeURIComponent(name)+'" data-f="relChance" style="font-size:11px;min-width:28px;text-align:right">'+rc+'%</span></div>'
+      + '</div>'
+      + '<div style="padding:10px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">'
+        + '<div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Upgrade size (points added)</div>'
+        + '<div class="stat-row" style="margin-bottom:6px"><span class="stat-lbl">Min</span>'
+          + '<input type="number" min="0" max="20" value="'+sm+'" class="upg-comp-num" data-utype="'+type+'" data-name="'+encodeURIComponent(name)+'" data-f="sizeMin" style="width:60px;padding:4px 7px">'
+        + '</div>'
+        + '<div class="stat-row"><span class="stat-lbl">Max</span>'
+          + '<input type="number" min="0" max="20" value="'+sx+'" class="upg-comp-num" data-utype="'+type+'" data-name="'+encodeURIComponent(name)+'" data-f="sizeMax" style="width:60px;padding:4px 7px">'
+        + '</div>'
+      + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+function makeTyreUpgCard(m){
+  var gc = getTyreUpgSetting(m.id, 'gripChance', 35);
+  var gmin = getTyreUpgSetting(m.id, 'gripMin', 1);
+  var gmax = getTyreUpgSetting(m.id, 'gripMax', 3);
+  var dc = getTyreUpgSetting(m.id, 'durChance', 35);
+  var dmin = getTyreUpgSetting(m.id, 'durMin', 1);
+  var dmax = getTyreUpgSetting(m.id, 'durMax', 3);
+  var wc = getTyreUpgSetting(m.id, 'wetChance', 25);
+  var wmin = getTyreUpgSetting(m.id, 'wetMin', 1);
+  var wmax = getTyreUpgSetting(m.id, 'wetMax', 3);
+  var mid = m.id;
+  var mname = m.name;
+  function row(label, fChance, fMin, fMax, defC, colour){
+    var cv = getTyreUpgSetting(mid, fChance, defC);
+    var minv = getTyreUpgSetting(mid, fMin, 1);
+    var maxv = getTyreUpgSetting(mid, fMax, 3);
+    return '<div style="padding:10px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);margin-bottom:8px">'
+      + '<div style="font-size:11px;font-weight:600;margin-bottom:8px;color:'+colour+'">'+label+'</div>'
+      + '<div class="stat-row" style="margin-bottom:4px"><span class="stat-lbl" style="min-width:140px">Chance per round %</span>'
+        + '<input type="range" min="0" max="100" value="'+cv+'" class="upg-tyre-range" data-mid="'+mid+'" data-mname="'+encodeURIComponent(mname)+'" data-f="'+fChance+'" style="flex:1">'
+        + '<span class="upg-rv" data-mid="'+mid+'" data-f="'+fChance+'" style="font-size:11px;min-width:28px;text-align:right">'+cv+'%</span></div>'
+      + '<div style="display:flex;gap:12px;align-items:center">'
+        + '<label style="margin:0;font-size:11px;color:var(--text3)">Size min</label>'
+        + '<input type="number" min="0" max="20" value="'+minv+'" class="upg-tyre-num" data-mid="'+mid+'" data-mname="'+encodeURIComponent(mname)+'" data-f="'+fMin+'" style="width:60px;padding:4px 7px">'
+        + '<label style="margin:0;font-size:11px;color:var(--text3)">max</label>'
+        + '<input type="number" min="0" max="20" value="'+maxv+'" class="upg-tyre-num" data-mid="'+mid+'" data-mname="'+encodeURIComponent(mname)+'" data-f="'+fMax+'" style="width:60px;padding:4px 7px">'
+      + '</div>'
+    + '</div>';
+  }
+  return '<div class="card" style="margin-bottom:12px">'
+    + '<div class="card-title" style="margin-bottom:10px;font-size:13px">'+m.name+'</div>'
+    + row('Peak grip', 'gripChance','gripMin','gripMax', 35, 'var(--accent)')
+    + row('Durability (lower degradation rate)', 'durChance','durMin','durMax', 35, 'var(--green)')
+    + row('Wet weather performance', 'wetChance','wetMin','wetMax', 25, 'var(--blue)')
+  + '</div>';
+}
+
+function renderUpgStats(){
+  // Car components
+  var carEl = document.getElementById('upgCarList');
+  var seen = {};
+  var carComps = [];
+  cars.forEach(function(c){
+    (c.components||[]).forEach(function(comp){
+      if(comp.name && !seen[comp.name]){ seen[comp.name]=true; carComps.push(comp.name); }
+    });
+  });
+  if(carEl){
+    if(!carComps.length) carEl.innerHTML='<div class="note">No car components defined. Go to the Cars tab first.</div>';
+    else carEl.innerHTML = carComps.map(function(name){ return makeCompUpgRow('car', name, name); }).join('');
+  }
+
+  // PU components
+  var puEl = document.getElementById('upgPuList');
+  var puComps = [];
+  powerUnits.forEach(function(pu){
+    (pu.components||[]).forEach(function(comp){
+      if(comp.name && comp.perf > 0 && !seen[comp.name]){ seen[comp.name]=true; puComps.push({name:comp.name, puName:pu.name}); }
+    });
+  });
+  if(puEl){
+    if(!puComps.length) puEl.innerHTML='<div class="note">No power unit components defined. Go to the Power Units tab first.</div>';
+    else puEl.innerHTML = puComps.map(function(c){ return makeCompUpgRow('pu', c.name, c.name+' <span style="font-size:10px;color:var(--text3)">('+c.puName+')</span>'); }).join('');
+  }
+
+  // Tyre manufacturers
+  var tyreEl = document.getElementById('upgTyreList');
+  if(tyreEl){
+    if(!tyreMakers.length) tyreEl.innerHTML='<div class="note">No tyre manufacturers defined. Go to the Tyre Manufacturers tab first.</div>';
+    else tyreEl.innerHTML = tyreMakers.map(function(m){ return makeTyreUpgCard(m); }).join('');
+  }
+
+  bindUpgEvents();
+}
+
+function bindUpgEvents(){
+  document.querySelectorAll('.upg-comp-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var name = decodeURIComponent(this.dataset.name);
+      setUpgSetting(this.dataset.utype, name, this.dataset.f, +this.value);
+      var rv = document.querySelector('.upg-rv[data-utype="'+this.dataset.utype+'"][data-name="'+this.dataset.name+'"][data-f="'+this.dataset.f+'"]');
+      if(rv) rv.textContent = this.value+'%';
+    });
+  });
+  document.querySelectorAll('.upg-comp-num').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var name = decodeURIComponent(this.dataset.name);
+      setUpgSetting(this.dataset.utype, name, this.dataset.f, +this.value);
+    });
+  });
+  document.querySelectorAll('.upg-tyre-range').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var mname = decodeURIComponent(this.dataset.mname);
+      setTyreUpgSetting(this.dataset.mid, mname, this.dataset.f, +this.value);
+      var rv = document.querySelector('.upg-rv[data-mid="'+this.dataset.mid+'"][data-f="'+this.dataset.f+'"]');
+      if(rv) rv.textContent = this.value+'%';
+    });
+  });
+  document.querySelectorAll('.upg-tyre-num').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var mname = decodeURIComponent(this.dataset.mname);
+      setTyreUpgSetting(this.dataset.mid, mname, this.dataset.f, +this.value);
+    });
+  });
+}
+
+
+
+// ---- POINTS ----
+function renderPoints(){
+  document.getElementById('pointsList').innerHTML=points.map(function(p,i){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
+      +'<span style="font-size:12px;color:var(--text2);min-width:28px">P'+(i+1)+'</span>'
+      +'<input type="number" value="'+p+'" min="0" style="width:80px;padding:6px 8px" class="pts-inp" data-idx="'+i+'">'
+      +'<button class="btn btn-danger btn-sm pts-rm" data-idx="'+i+'">x</button>'
+    +'</div>';
+  }).join('');
+  document.querySelectorAll('.pts-inp').forEach(function(inp){
+    inp.addEventListener('input', function(){ points[+this.dataset.idx]=+this.value; });
+  });
+  document.querySelectorAll('.pts-rm').forEach(function(btn){
+    btn.addEventListener('click', function(){ points.splice(+this.dataset.idx,1); renderPoints(); });
+  });
+}
+function addPointsRow(){ points.push(0); renderPoints(); }
+function resetPoints(){ points=[10,8,6,5,4,3,2,1]; renderPoints(); }
+function setF1Points(){ points=[25,18,15,12,10,8,6,4,2,1]; renderPoints(); }
+
+// ---- OVERVIEW ----
+function renderOverview(){
+  document.getElementById('ovCars').textContent=cars.length;
+  document.getElementById('ovCircuits').textContent=circuits.length;
+  document.getElementById('ovTyres').textContent=tyres.length;
+  document.getElementById('ovRounds').textContent=document.getElementById('csRaces').value;
+  var errs=validate();
+  var el=document.getElementById('ovBody');
+  el.innerHTML=(errs.length?'<div class="note amber"><strong>'+errs.length+' issue'+(errs.length>1?'s':'')+' to fix before export.</strong><ul style="margin-top:6px;padding-left:16px">'+errs.map(function(e){return '<li style="font-size:12px;margin-bottom:2px">'+e+'</li>';}).join('')+'</ul></div>':'<div class="note green"><strong>Carset is valid and ready to export.</strong></div>')
+    +'<div class="sec">Car performance baseline</div>'
+    +'<table class="pt"><thead><tr><th>Car</th><th style="min-width:150px">Overall</th><th style="min-width:150px">Reliability</th><th style="min-width:150px">Top speed</th></tr></thead><tbody>'
+    +cars.map(function(c){var p=calcPerf(c);return '<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dot" style="background:'+c.colour+'"></div>'+(c.model||'--')+'</div></td><td><div class="bw" style="width:120px"><div class="bf bf-blue" style="width:'+p.perf+'%"></div></div><span class="bn">'+p.perf+'</span></td><td><div class="bw" style="width:120px"><div class="bf bf-green" style="width:'+p.rel+'%"></div></div><span class="bn">'+p.rel+'</span></td><td><div class="bw" style="width:120px"><div class="bf bf-amber" style="width:'+p.spd+'%"></div></div><span class="bn">'+p.spd+'</span></td></tr>';}).join('')
+    +'</tbody></table>'
+    +'<div class="sec" style="margin-top:16px">Race calendar</div>'
+    +(circuits.length?circuits.map(function(c,i){return '<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:var(--text3);min-width:24px;font-size:11px">R'+(i+1)+'</span><span style="font-weight:500">'+(c.name||'--')+'</span><span style="color:var(--text2)">'+(c.location||'')+'</span><span style="background:var(--bg4);padding:2px 7px;border-radius:4px;font-size:11px">'+c.type+'</span><span style="color:var(--text3);margin-left:auto;font-size:12px">'+c.laps+' laps / '+c.lapLength+'km</span></div>';}).join(''):'<p style="color:var(--text3);font-size:13px">No circuits added.</p>');
+}
+
+// ---- VALIDATE ----
+function validate(){
+  var errs=[];
+  if(!document.getElementById('csName').value.trim()) errs.push('Championship name required');
+  if(cars.length<2) errs.push('At least 2 cars required');
+  cars.forEach(function(c,i){ if(!c.model) errs.push('Car '+(i+1)+' needs a model name'); });
+  if(circuits.length<1) errs.push('At least 1 circuit required');
+  circuits.forEach(function(c,i){ if(!c.name) errs.push('Circuit '+(i+1)+' needs a name'); });
+  if(tyres.length<1) errs.push('At least 1 tyre compound required (add a manufacturer and compounds in Tyre manufacturers tab)');
+  if(points.length<1) errs.push('Points system needs at least 1 position');
+  return errs;
+}
+function validateAndShow(){
+  var errs=validate();
+  var box=document.getElementById('valBox');
+  box.style.display='block';
+  if(!errs.length){ box.className='val-box ok'; document.getElementById('valTitle').textContent='Carset is valid and ready to export'; document.getElementById('valList').innerHTML=''; }
+  else { box.className='val-box errors'; document.getElementById('valTitle').textContent=errs.length+' issue'+(errs.length>1?'s':'')+' to fix:'; document.getElementById('valList').innerHTML=errs.map(function(e){return '<li>'+e+'</li>';}).join(''); }
+}
+
+// ---- BUILD + EXPORT ----
+function buildCarset(){
+  var allW={};
+  SIM_WEIGHTS.lap.concat(SIM_WEIGHTS.overtake,SIM_WEIGHTS.pit,SIM_WEIGHTS.rng).forEach(function(w){allW[w.id]=w.val;});
+  var allComps=getUpgradeableComponents();
+  var upgStats=[];
+  Object.keys(allComps).forEach(function(g){ allComps[g].forEach(function(name){ var key=name.replace(/[^a-zA-Z0-9]/g,'_'); var el=document.getElementById('upg_'+key); if(el&&el.checked) upgStats.push(name); }); });
+  return {
+    id:document.getElementById('csName').value.trim().toLowerCase().replace(/\s+/g,'_'),
+    name:document.getElementById('csName').value.trim(),
+    description:document.getElementById('csDesc').value.trim(),
+    category:document.getElementById('csCategory').value,
+    queueType:document.getElementById('csQueue').value,
+    seasonRaces:+document.getElementById('csRaces').value,
+    maxTeams:+document.getElementById('maxTeams').value,
+    carsPerModel:document.getElementById('carsPerModel').value,
+
+    maxDriversPerCar:+document.getElementById('csMaxDrivers').value,
+    fixedTeamNames:document.getElementById('fixedTeamNames').checked,
+    separateEngine:document.getElementById('separateEngine').checked,
+    fixedPowerUnit:document.getElementById('fixedPowerUnit').checked,
+    fixedTyreSupplier:document.getElementById('fixedTyreSupplier').checked,
+    assetBase:document.getElementById('assetBase').value.trim(),
+    circuitAssetBase:document.getElementById('circuitAssetBase')?document.getElementById('circuitAssetBase').value.trim():'',
+    puAssetBase:document.getElementById('puAssetBase')?document.getElementById('puAssetBase').value.trim():'',
+    tyreAssetBase:document.getElementById('tyreAssetBase')?document.getElementById('tyreAssetBase').value.trim():'',
+    flagAssetBase:document.getElementById('flagAssetBase')?document.getElementById('flagAssetBase').value.trim():'',
+    aiDrivers:document.getElementById('aiDriverText')?document.getElementById('aiDriverText').value.trim():'',
+    pointsSystem:points.slice(),
+    bonusPoints:{
+      fastestLap:+document.getElementById('ptFL').value,
+      pole:+document.getElementById('ptPole').value,
+      fastestPit:+document.getElementById('ptPit').value,
+      fastestLapCountsToChampionship:document.getElementById('flChamp').checked
+    },
+    eloSystem:document.getElementById('eloSys').value,
+    droppedScores:+document.getElementById('dropScores').value,
+    rules:{
+      distanceUnit:document.getElementById('distUnit').value,
+      minPitStops:+document.getElementById('minPits').value,
+      minTyreCompounds:+document.getElementById('minCompounds').value,
+      safetyCar:document.getElementById('ruleSC').checked,
+      pitStopsCompulsory:document.getElementById('rulePits').checked,
+      qualiFormat:document.getElementById('qualiFormat').value,
+      qualiLengthMins:+document.getElementById('qualiSessLen').value,
+      maxQualiRuns:+document.getElementById('qualiHotLaps').value,
+      qualiTyreRestriction:document.getElementById('qualiTyre').checked
+    },
+    sessions:{
+      practice:{runsAllowed:+document.getElementById('practiceRuns').value,minutesPerRun:+document.getElementById('practiceRunTime').value,tyreSetsPerRun:+document.getElementById('practiceTyreUse').value,affectsQualifyingReference:document.getElementById('practiceRef').checked},
+      qualifying:{lengthMins:+document.getElementById('qualiSessLen').value,maxHotLaps:+document.getElementById('qualiHotLaps').value,tyreSetsPerLap:+document.getElementById('qualiTyreSets').value},
+      warmup:{runsAllowed:+document.getElementById('warmupRuns').value,minutesPerRun:+document.getElementById('warmupRunTime').value,strategyLockedAfter:document.getElementById('stratLock').value==='true'},
+      qualiPhases:getQualiPhaseData(),
+      tyreAllocation:tyreAlloc.slice()
+    },
+    simulationWeights:allW,
+    globalIncidents:GLOBAL_INCIDENTS.map(function(def){
+      var ov=incidents.find(function(x){return x.id===def.id&&x.global;});
+      return {id:def.id,label:def.label,baseChance:ov?ov.baseChance:def.baseChance,timeLossMin:ov?ov.timeLossMin:def.timeLossMin,timeLossMax:ov?ov.timeLossMax:def.timeLossMax,outcomes:ov?ov.outcomes:def.outcomes};
+    }),
+    seriesIncidents:(function(){
+      var comps=getSeriesComponents();
+      return comps.map(function(comp){
+        var ov=incidents.find(function(x){return x.name===comp.name&&!x.global;});
+        var relMult=Math.round((1+(50-comp.avgRel)/50)*10)/10;
+        return {name:comp.name,group:comp.group,avgRel:comp.avgRel,
+          baseChance:ov?ov.baseChance:2.0,
+          timeLossMin:ov?ov.timeLossMin:5,timeLossMax:ov?ov.timeLossMax:30,
+          effectiveChance:Math.round((ov?ov.baseChance:2.0)*relMult*10)/10,
+          reliabilityModifier:relMult,
+          outcomes:ov?ov.outcomes:{noEffect:20,pitRepair:30,safetyCar:10,retirement:10}};
+      });
+    })(),
+    upgradeSystem:{
+      enabled:document.getElementById('upgradesOn').checked,
+      baseChancePct:+document.getElementById('upgChance').value,
+      earliestRound:+document.getElementById('upgEarliest').value,
+      maxPerSeason:+document.getElementById('upgMaxSteps').value,
+      regressionChancePct:+document.getElementById('upgRegress').value,
+      announcement:document.getElementById('upgAnnounce').value,
+      components:upgrades.filter(function(u){return u.type!=='tyre';}),
+      tyres:upgrades.filter(function(u){return u.type==='tyre';})
+    },
+    tyreManufacturers:tyreMakers.map(function(m){ return {id:m.id,name:m.name,imgFile:m.imgFile||null,compounds:(m.compounds||[]).map(function(c){return {id:c.id,name:c.name,colour:c.colour,peakGrip:c.peakGrip,degradationRate:c.degradationRate,wetPerformance:c.wetPerformance,wearFailureWindow:c.wearFailureWindow};})}; }),
+    tyreCompounds:tyres.map(function(t){return {id:t.id,name:t.name,colour:t.colour,makerId:t.makerId,makerName:t.makerName,peakGrip:t.peakGrip,degradationRate:t.degradationRate,wetPerformance:t.wetPerformance,wearFailureWindow:t.wearFailureWindow};}),
+    powerUnits:powerUnits.map(function(pu){return {id:pu.id,name:pu.name,colour:pu.colour,imgFile:pu.imgFile||null,components:pu.components.slice()};}),
+    cars:cars.map(function(c){var combined=calcCarCombined(c);return {id:c.id,model:c.model,colour:c.colour,imgFile:c.imgFile||null,teamName:c.teamName||null,powerUnitId:c.powerUnitId||null,tyreMakerId:c.tyreMakerId||null,tyreMaker:(tyreMakers.find(function(m){return m.id===c.tyreMakerId;})||{}).name||null,components:c.components.slice(),performance:combined.perf,reliability:combined.rel};}),
+    setupSliders:setupSliders.slice(),
+    circuits:circuits.map(function(c,i){return {round:i+1,name:c.name,location:c.location,country:c.country,type:c.type,laps:c.laps,lapLength:c.lapLength,totalDistance:Math.round(c.laps*c.lapLength*10)/10,pitLaneTimeLoss:c.pitLaneTimeLoss,drsZones:c.drsZones,corners:{total:c.totalCorners,slow:c.slowCorners,medium:c.mediumCorners,fast:c.fastCorners},passingPlaces:c.passingPlaces,surface:{tarmacGrip:c.tarmacGrip,bumpiness:c.bumpiness,elevationChange:c.elevation},weather:{typical:c.weather,rainChance:c.rainChance},demands:{tyreWear:c.tyreWear,fuel:c.fuelDemand,engine:c.engineStress,brakes:c.brakeStress},safetyCarChance:c.safetyCarChance,mapFile:c.mapFile||null,passingPlaceNames:c.passingPlaceNames||[],
+        baseLapTime:c.baseLapTime||90.0,poleTime:c.poleTime||null,fastestRaceLap:c.fastestRaceLap||null,setupZones:c.setupZones||{}};})
+  };
+}
+// =============================================
+// SUPABASE CONFIG
+// =============================================
+var SUPABASE_URL = 'https://ycijvolkydyqbvcqxxch.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_sDSdIK5LqBtov6qbkQdxoA_I-avpHCq';
+var _currentCarsetDbId = null;
+var _saveTimer = null;
+var _isDirty = false;
+
+function setSaveStatus(msg, colour){
+  var el = document.getElementById('saveStatus');
+  if(el){ el.textContent = msg; el.style.color = colour || 'var(--text3)'; }
+}
+
+function markDirty(){
+  _isDirty = true;
+  setSaveStatus('Unsaved changes', 'var(--amber)');
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(function(){ saveToSupabase(true); }, 2000);
+}
+
+async function saveToSupabase(auto){
+  clearTimeout(_saveTimer);
+  var data;
+  try { data = buildCarset(); } catch(e) { setSaveStatus('Build error: '+e.message, 'var(--red)'); console.error(e); return; }
+  if(!data.id){ setSaveStatus('Set a carset name first', 'var(--red)'); return; }
+  setSaveStatus('Saving...', 'var(--text3)');
+  document.getElementById('saveBtn').disabled = true;
+  try {
+    var payload = { id: data.id, name: data.name, data: data };
+    var method, url;
+    if(_currentCarsetDbId){
+      method = 'PATCH';
+      url = SUPABASE_URL + '/rest/v1/carsets?id=eq.' + _currentCarsetDbId;
+    } else {
+      var check = await fetch(SUPABASE_URL + '/rest/v1/carsets?id=eq.' + data.id + '&limit=1', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      var existing = await check.json();
+      if(existing.length){
+        _currentCarsetDbId = existing[0].id;
+        method = 'PATCH';
+        url = SUPABASE_URL + '/rest/v1/carsets?id=eq.' + _currentCarsetDbId;
+      } else {
+        method = 'POST';
+        url = SUPABASE_URL + '/rest/v1/carsets';
+      }
+    }
+    var resp = await fetch(url, {
+      method: method,
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'return=representation' },
+      body: JSON.stringify(payload)
+    });
+    if(!resp.ok) throw new Error('HTTP ' + resp.status + ': ' + await resp.text());
+    var result = await resp.json();
+    if(result && result[0]) _currentCarsetDbId = result[0].id;
+    _isDirty = false;
+    var now = new Date();
+    setSaveStatus('Saved ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0'), 'var(--green)');
+  } catch(e) {
+    setSaveStatus('Save failed: ' + e.message, 'var(--red)');
+  }
+  document.getElementById('saveBtn').disabled = false;
+}
+
+async function loadCarsetList(){
+  var el = document.getElementById('pickerList');
+  if(!el) return;
+  try {
+    var resp = await fetch(SUPABASE_URL + '/rest/v1/carsets?select=id,name,created_at&order=created_at.desc', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    var rows = await resp.json();
+    if(!rows.length){
+      el.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:12px;text-align:center">No carsets saved yet. Start a new one or load from JSON.</div>';
+      return;
+    }
+    el.innerHTML = rows.map(function(r){
+      var date = new Date(r.created_at).toLocaleDateString();
+      return '<div class="picker-row" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px" data-id="'+r.id+'">'
+        + '<div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text)">'+r.name+'</div>'
+        + '<div style="font-size:11px;color:var(--text3)">'+r.id+' &middot; '+date+'</div></div>'
+        + '<button class="btn btn-sm picker-open" style="background:var(--accent);color:#fff;border-color:var(--accent)" data-id="'+r.id+'">Open</button>'
+        + '<button class="btn btn-sm btn-danger picker-del" data-id="'+r.id+'" title="Delete">&#128465;</button>'
+      + '</div>';
+    }).join('');
+    // Bind events after rendering
+    el.querySelectorAll('.picker-open').forEach(function(btn){
+      btn.addEventListener('click', function(e){ e.stopPropagation(); loadCarsetFromDb(this.dataset.id); });
+    });
+    el.querySelectorAll('.picker-del').forEach(function(btn){
+      btn.addEventListener('click', function(e){ e.stopPropagation(); deleteCarsetFromDb(this.dataset.id); });
+    });
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--red);font-size:12px;padding:12px">Failed to load: ' + e.message + '</div>';
+  }
+}
+
+async function loadCarsetFromDb(id){
+  try {
+    var resp = await fetch(SUPABASE_URL + '/rest/v1/carsets?id=eq.' + id + '&limit=1', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    var rows = await resp.json();
+    if(!rows.length) throw new Error('Not found');
+    _currentCarsetDbId = rows[0].id;
+    importCarsetData(rows[0].data);
+    closePicker();
+    setSaveStatus('Loaded: ' + rows[0].name, 'var(--green)');
+  } catch(e) {
+    alert('Load failed: ' + e.message);
+  }
+}
+
+async function deleteCarsetFromDb(id){
+  if(!confirm('Delete this carset from the database? This cannot be undone.')) return;
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/carsets?id=eq.' + id, {
+      method: 'DELETE',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    loadCarsetList();
+// Mark dirty on any input change
+document.addEventListener('input', function(e){
+  if(e.target.closest('.sidebar-footer')) return;
+  if(e.target.id==='importFile'||e.target.id==='importFilePicker') return;
+  markDirty();
+});
+document.addEventListener('change', function(e){
+  if(e.target.closest('.sidebar-footer')) return;
+  if(e.target.type==='file') return;
+  markDirty();
+});
+  } catch(e) {
+    alert('Delete failed: ' + e.message);
+  }
+}
+
+function closePicker(){
+  var el = document.getElementById('pickerOverlay');
+  if(el) el.style.display = 'none';
+}
+
+function downloadJson(){
+  var data;
+  try { data = buildCarset(); } catch(e) { alert('Build error: '+e.message); console.error(e); return; }
+  var blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = (data.id||'carset') + '.json'; a.click();
+}
+
+function importFromPicker(event){
+  var file = event.target.files[0]; if(!file) return;
+  var r = new FileReader();
+  r.onload = function(e){
+    try{
+      importCarsetData(JSON.parse(e.target.result));
+      closePicker();
+      _currentCarsetDbId = null;
+      setSaveStatus('Loaded from file -- not yet saved to database', 'var(--amber)');
+    } catch(err){ alert('Import failed: '+err.message); }
+  };
+  r.readAsText(file);
+  event.target.value = '';
+}
+
+
+// ---- IMPORT ----
+function importCarsetData(d){
+  try{
+
+      document.getElementById('csName').value=d.name||'';
+      document.getElementById('csNameDisplay').textContent=d.name||'No name set';
+      document.getElementById('csDesc').value=d.description||'';
+      if(d.category) document.getElementById('csCategory').value=d.category;
+      if(d.queueType) document.getElementById('csQueue').value=d.queueType;
+      document.getElementById('csRaces').value=d.seasonRaces||8;
+      document.getElementById('csMaxDrivers').value=d.maxDriversPerCar||2;
+      document.getElementById('fixedTeamNames').checked=!!d.fixedTeamNames;
+      document.getElementById('separateEngine').checked=!!d.separateEngine;
+      if(document.getElementById('fixedPowerUnit')) document.getElementById('fixedPowerUnit').checked=!!d.fixedPowerUnit;
+      if(document.getElementById('fixedTyreSupplier')) document.getElementById('fixedTyreSupplier').checked=!!d.fixedTyreSupplier;
+      // ---- AI DRIVERS ----
+function renderAiPanel(){
+  renderAiPreview();
+}
+
+function renderAiPreview(){
+  var text = document.getElementById('aiDriverText') ? document.getElementById('aiDriverText').value : '';
+  var lines = text.split(/\r?\n/).map(function(l){ return l.trim(); }).filter(Boolean);
+  var note = document.getElementById('aiDriverNote');
+  var preview = document.getElementById('aiDriverPreview');
+  var tbody = document.getElementById('aiDriverTable');
+  if(!tbody) return;
+
+  if(!lines.length){
+    preview.style.display = 'none';
+    note.style.display = 'none';
+    return;
+  }
+
+  // Flag base - read from Rules tab field, fall back to known GitHub path
+  var flagBase = (document.getElementById('flagAssetBase') && document.getElementById('flagAssetBase').value.trim())
+    || 'https://raw.githubusercontent.com/AshF195/atracer/main/flag%201';
+
+  var fixed = [], random = [], unmatched = [];
+
+  var rows = lines.map(function(line){
+    if(line.charAt(0) === '#') return null; // comment lines
+    var parts = line.split(',').map(function(s){ return s.trim(); });
+    if(parts.length < 3) return null;
+    var name = parts[0], nat = parts[1].toUpperCase(), carId = parts[2].trim();
+    var isRandom = carId.toLowerCase() === 'random';
+
+    var car = null;
+    if(!isRandom){
+      // Strip leading year digits and non-alphanumeric for fuzzy match
+      var slug = carId.toLowerCase().replace(/[^a-z0-9]/g, '').replace(/^[0-9]+/, '');
+      car = cars.find(function(c){
+        if(c.id === carId) return true;
+        if(c.id.toLowerCase() === carId.toLowerCase()) return true;
+        var cSlug = c.id.toLowerCase().replace(/[^a-z0-9]/g,'');
+        var tSlug = (c.teamName||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+        return slug.length > 2 && (cSlug.indexOf(slug) >= 0 || tSlug.indexOf(slug) >= 0);
+      });
+    }
+
+    if(isRandom) random.push(name);
+    else if(car) fixed.push(name);
+    else unmatched.push(carId);
+
+    var flagUrl = flagBase.replace(/\/$/, '') + '/' + nat.toLowerCase() + '.png';
+
+    return '<tr>'
+      + '<td><img src="'+flagUrl+'" style="height:16px;border-radius:2px" onerror="this.style.display=\'none\'" alt="'+nat+'"></td>'
+      + '<td style="font-weight:500">'+name+'</td>'
+      + '<td>'+(isRandom
+          ? '<span style="font-size:11px;color:var(--amber)">&#127922; Random</span>'
+          : car
+            ? '<div style="display:flex;align-items:center;gap:6px"><div class="dot" style="background:'+car.colour+'"></div><span style="font-size:12px">'+(car.teamName||car.model)+'</span></div>'
+            : '<span style="font-size:11px;color:var(--red)">&#9888; '+carId+'</span>')
+      + '</td>'
+      + '</tr>';
+  }).filter(Boolean);
+
+  tbody.innerHTML = rows.join('') || '<tr><td colspan="3" style="color:var(--text3)">No valid lines found.</td></tr>';
+
+  var msg = '<strong>'+lines.length+' drivers</strong> &mdash; '
+    + fixed.length+' assigned, '+random.length+' random';
+  if(unmatched.length) msg += ' &mdash; <span style="color:var(--red)">&#9888; '+unmatched.length+' unmatched: '+unmatched.join(', ')+'</span>';
+  if(!cars.length) msg += ' &mdash; <span style="color:var(--amber)">&#9888; No cars defined yet.</span>';
+  note.innerHTML = msg;
+  note.style.display = 'block';
+  preview.style.display = 'block';
+}
+
+document.getElementById('assetBase').value=d.assetBase||'';
+      if(document.getElementById('circuitAssetBase')) document.getElementById('circuitAssetBase').value=d.circuitAssetBase||'';
+      if(document.getElementById('puAssetBase')) document.getElementById('puAssetBase').value=d.puAssetBase||'';
+      if(document.getElementById('tyreAssetBase')) document.getElementById('tyreAssetBase').value=d.tyreAssetBase||'';
+      if(document.getElementById('flagAssetBase')) document.getElementById('flagAssetBase').value=d.flagAssetBase||'';
+      if(document.getElementById('aiDriverText')) { document.getElementById('aiDriverText').value=d.aiDrivers||''; renderAiPreview(); }
+      if(d.pointsSystem) points=d.pointsSystem;
+      if(d.sessions){
+        var s=d.sessions;
+        if(s.practice){document.getElementById('practiceRuns').value=s.practice.runsAllowed||8;document.getElementById('practiceRunTime').value=s.practice.minutesPerRun||10;document.getElementById('practiceTyreUse').value=s.practice.tyreSetsPerRun||1;document.getElementById('practiceRef').checked=!!s.practice.affectsQualifyingReference;}
+        if(s.qualifying){document.getElementById('qualiSessLen').value=s.qualifying.lengthMins||60;document.getElementById('qualiHotLaps').value=s.qualifying.maxHotLaps||6;document.getElementById('qualiTyreSets').value=s.qualifying.tyreSetsPerLap||1;}
+        if(s.warmup){document.getElementById('warmupRuns').value=s.warmup.runsAllowed||4;document.getElementById('warmupRunTime').value=s.warmup.minutesPerRun||5;document.getElementById('stratLock').value=s.warmup.strategyLockedAfter?'true':'false';}
+        if(s.tyreAllocation) tyreAlloc=s.tyreAllocation;
+      }
+      if(d.simulationWeights){
+        var all=SIM_WEIGHTS.lap.concat(SIM_WEIGHTS.overtake,SIM_WEIGHTS.pit,SIM_WEIGHTS.rng);
+        all.forEach(function(w){if(d.simulationWeights[w.id]!=null) w.val=d.simulationWeights[w.id];});
+      }
+      incidents=[];
+      if(d.globalIncidents) d.globalIncidents.forEach(function(gi){
+        var def=GLOBAL_INCIDENTS.find(function(x){return x.id===gi.id;});
+        if(def&&(gi.baseChance!==def.baseChance||JSON.stringify(gi.outcomes)!==JSON.stringify(def.outcomes))){
+          incidents.push({id:gi.id,global:true,baseChance:gi.baseChance,timeLossMin:gi.timeLossMin||5,timeLossMax:gi.timeLossMax||20,outcomes:gi.outcomes});
+        }
+      });
+      if(d.seriesIncidents) d.seriesIncidents.forEach(function(si){
+        incidents.push({name:si.name,global:false,baseChance:si.baseChance,timeLossMin:si.timeLossMin||5,timeLossMax:si.timeLossMax||30,outcomes:si.outcomes});
+      });
+      if(d.incidentTable) incidents=d.incidentTable; // legacy
+      cars=[]; circuits=[]; tyres=[]; powerUnits=[];
+      // Import power units (new format)
+      (d.powerUnits||[]).forEach(function(pu){ addPowerUnit({id:pu.id,name:pu.name,colour:pu.colour,imgFile:pu.imgFile||'',components:pu.components||[]}); });
+      (d.cars||[]).forEach(function(c){
+        if(c.components){
+          // New format
+          addCar({id:c.id,model:c.model,colour:c.colour,imgFile:c.imgFile||'',teamName:c.teamName||'',powerUnitId:c.powerUnitId||null,tyreMakerId:c.tyreMakerId||null,components:c.components||[]});
+        } else {
+          // Legacy format - convert chassis/engine to components
+          var comps=[];
+          if(c.chassis){ Object.keys(c.chassis).forEach(function(k){ if(k!=='weight') comps.push({name:k.charAt(0).toUpperCase()+k.slice(1),perf:c.chassis[k]||50,rel:c.chassis[k]||50}); }); }
+          addCar({id:c.id,model:c.model,colour:c.colour,imgFile:c.imgFile||'',teamName:c.teamName||'',powerUnitId:null,components:comps});
+        }
+      });
+      (d.circuits||[]).forEach(function(c){addCircuit({id:c.id,name:c.name,location:c.location,country:c.country,type:c.type,laps:c.laps,lapLength:c.lapLength,pitLaneTimeLoss:c.pitLaneTimeLoss,drsZones:c.drsZones,totalCorners:c.corners&&c.corners.total,slowCorners:c.corners&&c.corners.slow,mediumCorners:c.corners&&c.corners.medium,fastCorners:c.corners&&c.corners.fast,passingPlaces:c.passingPlaces,tarmacGrip:c.surface&&c.surface.tarmacGrip,bumpiness:c.surface&&c.surface.bumpiness,elevation:c.surface&&c.surface.elevationChange,weather:c.weather&&c.weather.typical,rainChance:c.weather&&c.weather.rainChance,tyreWear:c.demands&&c.demands.tyreWear,fuelDemand:c.demands&&c.demands.fuel,engineStress:c.demands&&c.demands.engine,brakeStress:c.demands&&c.demands.brakes,safetyCarChance:c.safetyCarChance,mapFile:c.mapFile||'',setupZones:c.setupZones||{},
+        baseLapTime:c.baseLapTime||90.0,poleTime:c.poleTime||null,fastestRaceLap:c.fastestRaceLap||null});});
+      tyreMakers=[];
+      (d.tyreManufacturers||[]).forEach(function(m){ addTyreMaker(m); });
+      // Legacy migration: old format had flat tyreCompounds without nested manufacturers
+      if((!d.tyreManufacturers||!d.tyreManufacturers.length) && d.tyreCompounds && d.tyreCompounds.length){
+        addTyreMaker({id:uid(),name:'Default',imgFile:'',compounds:d.tyreCompounds.map(function(t){
+          return {id:t.id||uid(),name:t.name,colour:t.colour,
+            peakGrip:t.peakGrip||t.grip||70,degradationRate:t.degradationRate||t.degradation||40,
+            wetPerformance:t.wetPerformance||20,wearFailureWindow:t.wearFailureWindow||t.peakWindow||7};
+        })});
+      }
+      rebuildTyresFlat();
+      if(d.setupSliders) { setupSliders=d.setupSliders; renderSetupSliders(); }
+      // Restore upgrade system
+      upgrades=[];
+      if(d.upgradeSystem){
+        var us=d.upgradeSystem;
+        if(us.enabled!=null) document.getElementById('upgradesOn').checked=!!us.enabled;
+        if(us.baseChancePct!=null) document.getElementById('upgChance').value=us.baseChancePct;
+        if(us.earliestRound!=null) document.getElementById('upgEarliest').value=us.earliestRound;
+        if(us.maxPerSeason!=null) document.getElementById('upgMaxSteps').value=us.maxPerSeason;
+        if(us.regressionChancePct!=null) document.getElementById('upgRegress').value=us.regressionChancePct;
+        if(us.announcement) document.getElementById('upgAnnounce').value=us.announcement;
+        if(us.components) upgrades=upgrades.concat(us.components);
+        if(us.tyres) upgrades=upgrades.concat(us.tyres);
+      }
+      if(d.maxTeams) document.getElementById('maxTeams').value=d.maxTeams;
+      if(d.carsPerModel) document.getElementById('carsPerModel').value=d.carsPerModel;
+      // restore passingPlaceNames
+      if(d.circuits) d.circuits.forEach(function(cd){
+        var c=circuits.find(function(x){return x.name===cd.name;});
+        if(c&&cd.passingPlaceNames) c.passingPlaceNames=cd.passingPlaceNames;
+      });
+      renderPoints();
+      alert('Imported: '+d.name);
+  }catch(err){alert('Import failed: '+err.message);}
+}
+function importCarset(event){
+  var file=event.target.files[0]; if(!file) return;
+  var r=new FileReader();
+  r.onload=function(e){ try{ importCarsetData(JSON.parse(e.target.result)); }catch(err){alert('Import failed: '+err.message);} };
+  r.readAsText(file);
+  event.target.value='';
+}
+
+
+// ---- GRID NOTE ----
+function updateGridNote(){
+  var dpc  = parseInt(document.getElementById('csMaxDrivers').value)||1;
+  var maxT = parseInt(document.getElementById('maxTeams').value)||0;
+  var cpm  = document.getElementById('carsPerModel').value;
+  var carCount = cars.length;
+  var totalDrivers = dpc * maxT;
+  var note = dpc + ' driver'+(dpc>1?'s':'')+' per car x ' + maxT + ' teams = ' + totalDrivers + ' drivers';
+  if(carCount>0 && cpm!=='0'){
+    var maxTeamsByModel = carCount * parseInt(cpm);
+    if(maxT > maxTeamsByModel) note += ' (capped at ' + maxTeamsByModel + ' by model limit)';
+  }
+  var el = document.getElementById('gridSizeNote');
+  if(el) el.textContent = note;
+}
+
+// ---- QUALIFYING PHASES ----
+function updateQualiPhases(){
+  var fmt = document.getElementById('qualiFormat').value;
+  var isKnockout = fmt.indexOf('Q1') !== -1 || fmt.indexOf('knockout') !== -1;
+  document.getElementById('qualiPhaseSec').style.display = isKnockout ? '' : 'none';
+  document.getElementById('qualiPhaseRows').style.display = isKnockout ? '' : 'none';
+  if(isKnockout) renderQualiPhases();
+}
+
+function renderQualiPhases(){
+  var el = document.getElementById('qualiPhaseRows');
+  var phases = [{id:'q1',label:'Q1'},{id:'q2',label:'Q2'},{id:'q3',label:'Q3'}];
+  el.innerHTML = phases.map(function(p){
+    return '<div class="card" style="margin-bottom:8px">'
+      +'<div class="card-title" style="margin-bottom:12px">'+p.label+'</div>'
+      +'<div class="g3">'
+        +'<div><label>Session length (mins)</label><input type="number" id="'+p.id+'Len" value="18" min="5" max="60"></div>'
+        +'<div><label>Drivers eliminated</label><input type="number" id="'+p.id+'Elim" value="5" min="0" max="30"></div>'
+        +'<div><label>Tyre restriction</label><select id="'+p.id+'Tyre"><option value="none">No restriction</option><option value="soft">Softest compound only</option><option value="any">Any compound</option></select></div>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
+function getQualiPhaseData(){
+  var fmt = document.getElementById('qualiFormat').value;
+  var isKnockout = fmt.indexOf('Q1') !== -1 || fmt.indexOf('knockout') !== -1;
+  if(!isKnockout) return null;
+  return ['q1','q2','q3'].map(function(p){
+    var lenEl=document.getElementById(p+'Len');
+    var elimEl=document.getElementById(p+'Elim');
+    var tyreEl=document.getElementById(p+'Tyre');
+    return {
+      phase:p.toUpperCase(),
+      lengthMins:lenEl?+lenEl.value:18,
+      driversEliminated:elimEl?+elimEl.value:5,
+      tyreRestriction:tyreEl?tyreEl.value:'none'
+    };
+  });
+}
+
+// ---- PASSING PLACES (named slots) ----
+// Called from renderCircuits after setting passingPlaces value
+// Each circuit stores passingPlaceNames array
+function renderPassingNames(circId, count){
+  var c = circuits.find(function(x){return x.id===circId;});
+  if(!c) return;
+  if(!c.passingPlaceNames) c.passingPlaceNames=[];
+  // Pad/trim to match count
+  while(c.passingPlaceNames.length < count) c.passingPlaceNames.push('');
+  c.passingPlaceNames = c.passingPlaceNames.slice(0, count);
+  var el = document.getElementById('ppnames_'+circId);
+  if(!el) return;
+  if(count===0){ el.innerHTML=''; return; }
+  el.innerHTML = '<div style="margin-top:8px"><div class="sec" style="margin-top:0;margin-bottom:6px">Passing place names ('+count+')</div>'
+    + c.passingPlaceNames.map(function(name,i){
+      return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
+        +'<span style="font-size:12px;color:var(--text2);min-width:60px">Place '+(i+1)+'</span>'
+        +'<input type="text" value="'+name+'" placeholder="e.g. Turn 1 hairpin" class="ppname-inp" data-cid="'+circId+'" data-idx="'+i+'">'
+      +'</div>';
+    }).join('')
+  +'</div>';
+  // Bind
+  el.querySelectorAll('.ppname-inp').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var circ=circuits.find(function(x){return x.id===this.dataset.cid;},this);
+      if(circ && circ.passingPlaceNames) circ.passingPlaceNames[+this.dataset.idx]=this.value;
+    });
+  });
+}
+
+// ---- SETUP SLIDERS ----
+var setupSliders = [];
+
+function renderSetupCircuitDropdown(){
+  var sel = document.getElementById('setupCircuitSel');
+  if(!sel) return;
+  if(!circuits.length){
+    sel.innerHTML = '<option>No circuits defined yet</option>';
+    document.getElementById('circuitSetupList').innerHTML = '<p style="font-size:12px;color:var(--text3)">Add circuits first in the Circuits tab.</p>';
+    return;
+  }
+  var prev = sel.value;
+  sel.innerHTML = circuits.map(function(c,i){
+    return '<option value="'+c.id+'">'+( (i+1)+'. '+(c.name||'Circuit '+(i+1)))+'</option>';
+  }).join('');
+  if(prev && circuits.find(function(c){return c.id===prev;})) sel.value = prev;
+  renderCircuitSetup();
+}
+
+function renderCircuitSetup(){
+  var el = document.getElementById('circuitSetupList');
+  if(!el) return;
+  var sel = document.getElementById('setupCircuitSel');
+  if(!sel || !sel.value) return;
+  var circ = circuits.find(function(c){ return c.id===sel.value; });
+  if(!circ) return;
+  if(!setupSliders.length){
+    el.innerHTML = '<p style="font-size:12px;color:var(--text3)">Add setup sliders above first.</p>';
+    return;
+  }
+  var zones = circ.setupZones || {};
+  var zoneOpts = '<option value="">Use default</option>' + SETUP_ZONES.map(function(z){
+    return '<option value="'+z.value+'">'+z.label+'</option>';
+  }).join('');
+  el.innerHTML = '<div class="card"><div class="card-title" style="margin-bottom:12px">'+(circ.name||'Circuit')+' \u2014 optimal zones</div>'
+    + setupSliders.map(function(s){
+      var opts = zoneOpts.replace('value="'+( zones[s.id]||'')+'">', 'value="'+( zones[s.id]||'')+'" selected>');
+      return '<div class="stat-row" style="margin-bottom:6px"><span class="stat-lbl" style="min-width:160px">'+( s.name||'Slider')+'</span>'
+        + '<select class="circ-zone-sel" data-cid="'+circ.id+'" data-sid="'+s.id+'" style="flex:1">'+opts+'</select>'
+        + (zones[s.id] ? '<span style="font-size:11px;color:var(--accent);margin-left:8px">overridden</span>' : '<span style="font-size:11px;color:var(--text3);margin-left:8px">default</span>')
+      + '</div>';
+    }).join('')
+    + '</div>';
+  el.querySelectorAll('.circ-zone-sel').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var c = circuits.find(function(x){ return x.id===this.dataset.cid; }, this);
+      if(!c) return;
+      if(!c.setupZones) c.setupZones = {};
+      if(this.value) c.setupZones[this.dataset.sid] = this.value;
+      else delete c.setupZones[this.dataset.sid];
+      renderCircuitSetup();
+    });
+  });
+}
+
+var SETUP_ZONES = [
+  {value:'very_low',  label:'Very Low (0-19)'},
+  {value:'low',       label:'Low (20-39)'},
+  {value:'medium',    label:'Medium (40-59)'},
+  {value:'high',      label:'High (60-79)'},
+  {value:'very_high', label:'Very High (80-100)'}
+];
+
+function addSetupSlider(d){
+  setupSliders.push({
+    id:d&&d.id?d.id:uid(),
+    name:d&&d.name?d.name:'',
+    description:d&&d.description?d.description:'',
+    lowLabel:d&&d.lowLabel?d.lowLabel:'',
+    highLabel:d&&d.highLabel?d.highLabel:'',
+    affects:d&&d.affects?d.affects:'laptime',
+    optimalZone:d&&d.optimalZone?d.optimalZone:'medium'
+  });
+  renderSetupSliders();
+}
+function removeSetupSlider(id){ setupSliders=setupSliders.filter(function(s){return s.id!==id;}); renderSetupSliders(); }
+
+function renderSetupSliders(){
+  var el=document.getElementById('setupSliderList');
+  if(!setupSliders.length){
+    el.innerHTML='<p style="color:var(--text3);font-size:13px">No setup sliders defined yet. Add sliders to define what players must configure in practice and warm-up.</p>';
+    return;
+  }
+  var zonesHtml = SETUP_ZONES.map(function(z){return '<option value="'+z.value+'">'+z.label+'</option>';}).join('');
+  var affectsHtml = '<option value="laptime">Lap time</option><option value="reliability">Reliability</option><option value="tyreWear">Tyre wear</option><option value="all">All (lap time + reliability)</option>';
+  el.innerHTML = setupSliders.map(function(s,i){
+    var zoneOpts = SETUP_ZONES.map(function(z){return '<option value="'+z.value+'"'+(s.optimalZone===z.value?' selected':'')+'>'+z.label+'</option>';}).join('');
+    var affOpts = [
+      {v:'laptime',label:'Lap time'},{v:'reliability',label:'Reliability'},
+      {v:'tyreWear',label:'Tyre wear'},{v:'all',label:'All (lap time + reliability)'}
+    ].map(function(a){return '<option value="'+a.v+'"'+(s.affects===a.v?' selected':'')+'>'+a.label+'</option>';}).join('');
+    return '<div class="card">'
+      +'<div class="card-header">'
+        +'<div class="card-title">'+(s.name||('Setup slider '+(i+1)))+'</div>'
+        +'<button class="btn btn-danger btn-sm ss-remove" data-id="'+s.id+'">Remove</button>'
+      +'</div>'
+      +'<div class="g2">'
+        +'<div><label>Slider name</label><input type="text" class="ss-field" data-id="'+s.id+'" data-f="name" value="'+(s.name||'')+'" placeholder="e.g. Suspension stiffness"></div>'
+        +'<div><label>Affects</label><select class="ss-sel" data-id="'+s.id+'" data-f="affects">'+affOpts+'</select></div>'
+      +'</div>'
+      +'<div class="g2" style="margin-top:0">'
+        +'<div><label>Low end label (0)</label><input type="text" class="ss-field" data-id="'+s.id+'" data-f="lowLabel" value="'+(s.lowLabel||'')+'" placeholder="e.g. Very soft"></div>'
+        +'<div><label>High end label (100)</label><input type="text" class="ss-field" data-id="'+s.id+'" data-f="highLabel" value="'+(s.highLabel||'')+'" placeholder="e.g. Very stiff"></div>'
+      +'</div>'
+      +'<label>Description (shown to player during practice)</label>'
+      +'<input type="text" class="ss-field" data-id="'+s.id+'" data-f="description" value="'+(s.description||'')+'" placeholder="e.g. Controls how stiff the suspension is. Affects car stability and tyre wear.">'
+      +'<div class="g2" style="margin-top:0">'
+        +'<div><label>Optimal zone for this carset</label><select class="ss-sel" data-id="'+s.id+'" data-f="optimalZone">'+zoneOpts+'</select></div>'
+        +'<div style="padding-top:18px"><div style="font-size:12px;color:var(--text2)">The game picks a random target value within this zone per team per round. Players find it through practice runs.</div></div>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+  // Bind events
+  el.querySelectorAll('.ss-field').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var s=setupSliders.find(function(x){return x.id===this.dataset.id;},this);
+      if(s) s[this.dataset.f]=this.value;
+      if(this.dataset.f==='name') renderSetupSliders();
+    });
+  });
+  el.querySelectorAll('.ss-sel').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var s=setupSliders.find(function(x){return x.id===this.dataset.id;},this);
+      if(s) s[this.dataset.f]=this.value;
+    });
+  });
+  el.querySelectorAll('.ss-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){ removeSetupSlider(this.dataset.id); });
+  });
+}
+
+// ---- LIGHT/DARK MODE ----
+function initTheme(){
+  var saved = localStorage.getItem('atrc_theme')||'dark';
+  applyTheme(saved);
+}
+function toggleTheme(){
+  var curr = document.documentElement.getAttribute('data-theme')||'dark';
+  var next = curr==='dark' ? 'light' : 'dark';
+  applyTheme(next);
+  localStorage.setItem('atrc_theme', next);
+}
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  var btn = document.getElementById('themeBtn');
+  if(btn) btn.textContent = t==='dark' ? 'Light mode' : 'Dark mode';
+}
+
+// ---- INIT (CCC pre-loaded) ----
+document.getElementById('csName').value='City Car Challenge';
+document.getElementById('csNameDisplay').textContent='City Car Challenge';
+document.getElementById('csDesc').value='A tight street-circuit championship for small hatchbacks. Cars are closely matched -- setup, strategy and driver characteristics matter more than outright pace.';
+// Set default asset URLs
+document.getElementById('assetBase').value='https://raw.githubusercontent.com/AshF195/atracer/main/Assets/city_car_challenge';
+document.getElementById('flagAssetBase').value='https://raw.githubusercontent.com/AshF195/atracer/main/flag%201';
+// Load carset list from Supabase
+loadCarsetList();
+// Mark dirty on any input change
+document.addEventListener('input', function(e){
+  if(e.target.closest('.sidebar-footer')) return;
+  if(e.target.id==='importFile'||e.target.id==='importFilePicker') return;
+  markDirty();
+});
+document.addEventListener('change', function(e){
+  if(e.target.closest('.sidebar-footer')) return;
+  if(e.target.type==='file') return;
+  markDirty();
+});
+
+[
+  {model:'Ford Fiesta',     colour:'#e03030',imgFile:'cars/fiesta-red.png',       handling:72,aerodynamics:55,driveability:70,cornering:68,downforce:45,braking:65,weight:1080,power:60,reliability:72,torque:58,topSpeed:62,fuelConsumption:55},
+  {model:'VW Polo',         colour:'#3060d0',imgFile:'cars/polo-blue.png',        handling:70,aerodynamics:58,driveability:72,cornering:66,downforce:44,braking:67,weight:1090,power:62,reliability:74,torque:60,topSpeed:63,fuelConsumption:54},
+  {model:'Renault Clio',    colour:'#d0b000',imgFile:'cars/clio-yellow.png',      handling:74,aerodynamics:56,driveability:68,cornering:70,downforce:46,braking:66,weight:1070,power:58,reliability:68,torque:56,topSpeed:60,fuelConsumption:57},
+  {model:'Honda Jazz',      colour:'#c02070',imgFile:'cars/jazz-pink.png',        handling:65,aerodynamics:50,driveability:74,cornering:62,downforce:40,braking:64,weight:1110,power:55,reliability:78,torque:54,topSpeed:57,fuelConsumption:52},
+  {model:'Fiat 500',        colour:'#20a040',imgFile:'cars/fiat500-yellow-medium.png',handling:68,aerodynamics:52,driveability:72,cornering:66,downforce:42,braking:63,weight:1050,power:54,reliability:66,torque:52,topSpeed:58,fuelConsumption:58},
+  {model:'Toyota Yaris',    colour:'#e06010',imgFile:'cars/toyotayaris-yellow.png',   handling:69,aerodynamics:54,driveability:73,cornering:65,downforce:43,braking:65,weight:1075,power:57,reliability:76,torque:55,topSpeed:59,fuelConsumption:53},
+  {model:'Citroën C3 Cactus',colour:'#7030c0',imgFile:'cars/cactus-purple.png', handling:64,aerodynamics:60,driveability:70,cornering:62,downforce:48,braking:62,weight:1100,power:56,reliability:70,torque:57,topSpeed:60,fuelConsumption:56}
+].forEach(function(c){addCar(c);});
+
+[
+  {name:'Marina Street Circuit',baseLapTime:88.4,location:'Marina District',type:'Street',laps:28,lapLength:3.1,pitLaneTimeLoss:24,tarmacGrip:65,bumpiness:45,elevation:15,tyreWear:60,fuelDemand:50,engineStress:45,brakeStress:70,safetyCarChance:35,rainChance:20,passingPlaces:2},
+  {name:'Riverside Loop',       location:'Riverside',      type:'Street',laps:30,lapLength:3.3,pitLaneTimeLoss:22,tarmacGrip:70,bumpiness:35,elevation:20,tyreWear:55,fuelDemand:48,engineStress:50,brakeStress:65,safetyCarChance:30,rainChance:25,passingPlaces:3},
+  {name:'Harbour Gate',         location:'Harbour District',type:'Street',laps:32,lapLength:3.2,pitLaneTimeLoss:26,tarmacGrip:68,bumpiness:40,elevation:10,tyreWear:58,fuelDemand:52,engineStress:48,brakeStress:68,safetyCarChance:32,rainChance:30,passingPlaces:2},
+  {name:'Lakeside Park',        location:'Lakeside',        type:'Street',laps:32,lapLength:3.4,pitLaneTimeLoss:23,tarmacGrip:72,bumpiness:30,elevation:25,tyreWear:52,fuelDemand:46,engineStress:55,brakeStress:60,safetyCarChance:28,rainChance:18,passingPlaces:4}
+].forEach(function(c){addCircuit(c);});
+
+tyreAlloc=[];
+incidents=[];
+setupSliders=[];
+[
+  {name:'Suspension stiffness', description:'Controls suspension rigidity. Affects car stability and tyre wear.', lowLabel:'Very soft', highLabel:'Very stiff', affects:'laptime', optimalZone:'medium'},
+  {name:'Aerodynamic balance',  description:'Front/rear downforce balance. Affects corner entry and exit.', lowLabel:'Full understeer', highLabel:'Full oversteer', affects:'laptime', optimalZone:'medium'},
+  {name:'Camber angle',         description:'Wheel tilt relative to vertical. Affects grip and tyre wear rate.', lowLabel:'Zero camber', highLabel:'Max camber', affects:'tyreWear', optimalZone:'low'},
+  {name:'Gear ratios',          description:'Overall gearing spread. Affects acceleration and top speed balance.', lowLabel:'Short gearing', highLabel:'Long gearing', affects:'laptime', optimalZone:'medium'},
+  {name:'Brake bias',           description:'Front/rear brake distribution. Affects braking stability.', lowLabel:'All rear', highLabel:'All front', affects:'laptime', optimalZone:'high'}
+].forEach(function(s){addSetupSlider(s);});
+renderPoints();
+initTheme();
+updateGridNote();
+renderSetupSliders();
+</script>
+
+</body>
+</html>
